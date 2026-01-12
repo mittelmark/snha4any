@@ -24,21 +24,27 @@ will be placed here:
 - [julia](https://julialang.org/)
 - [octave](https://octave.org/)
 
+Using generated C code, for instance of Nim, we can use [Swig](https://www.swig.org) interface generator to add support for more languages, here an example:
+
+![](https://kroki.io/plantuml/svg/eNqFkLFOwzAQhvc-heWODVVgAQmZgVQqQggi2q3K4MRHfOoljhynJUK8O3HT4Ta82N_3353kM1h73VlRi5-FmM6FDmc0waqHNC0u0uv2aNAruX-Wj9G0zsCht7oDBUTY9ZD0YSRQX0gEJpn7b9d3iQWsbVDp-j6JWeXIedUfx5IGKOKsd2zEzZOQ2WolOTJ41Se9qzx2YXJZNLsz1tM7XnP1UnLccNo6Hm0HJOBxHM7wbeD0kemGOFdBn4CJHDzP85ec0xisa5n45O-hHBnuK5o_fF2rLN235CvT1Li2uHb8U_S7-ANaGInn)
 
 The following features will be implemented:
 
-- Data structures
-    - Data frame with row and colnames features
-    - Matrix with rownames and colnames features
-    - Graph structure with degree and harmonic centrality measures
-- Graph generation for regular, random and explicit graph types
-- Generate data with a normal distribution
-- Data generation for graphs using Monte Carlo simulation
-- Command line support for generating graphs and data
-- Reading data from CSV files
-- SNHA algorithm implementation
-- Quality measures for predicting graphs if the real structure is known
-
+- Data structures:
+    - Data frame with row and colnames features.
+    - Matrix with rownames and colnames features.
+    - Graph structure with degree and harmonic centrality measures.
+    - Reading data from CSV files into data frames.
+- Graph and data generation:
+    - Graph generation for regular, random and explicit graph types.
+    - Generate data with a normal distribution.
+    - Data generation for graphs using Monte Carlo simulation.
+    - Command line support for generating graphs and data.
+    - Generating of [GraphViz](https://www.graphviz.org) code for creating plots.
+- Graph prediction:    
+    - SNHA algorithm implementation.
+    - Quality measures for graph prediction if the real structure is known.
+    - Command line support for data reading and prediction
 
 Here is the process diagram:
 
