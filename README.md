@@ -5,10 +5,10 @@ SNHA algorithm implented in various programming languages.
 We will use the check following language transpilers to create code for
 several programming languages from one code base:
 
-- [Haxe](https://labs.perplexity.ai/) - using Haxe programming language it
+- [Haxe](https://haxe.org/) - using Haxe programming language it
   should create code for C++, C-sharp, the Haxe interpreter, Java, Lua,
   Python and Neko
-- [Py2many](https://labs.perplexity.ai/) - using the Python programming
+- [Py2many](https://github.com/py2many/py2many) - using the Python programming
   language it should create code for C, C++, D, Dart, Go, Julia, Kotlin, Nim,
   Rust and V - where C++ and Rust are currently considered production ready
 - [Fusion](https://github.com/fusionlanguage/fut) - Fusion programming
