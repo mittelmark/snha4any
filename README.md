@@ -5,17 +5,19 @@ SNHA algorithm implented in various programming languages.
 We will use the check following language transpilers to create code for
 several programming languages from one code base:
 
-- [Haxe](https://haxe.org/) - using Haxe programming language it
-  should create code for C++, C-sharp, the Haxe interpreter, Java, Lua,
-  Python and Neko
-- [Py2many](https://github.com/py2many/py2many) - using the Python programming
-  language it should create code for C, C++, D, Dart, Go, Julia, Kotlin, Nim,
-  Rust and V - where C++ and Rust are currently considered production ready
 - [Fusion](https://github.com/fusionlanguage/fut) - Fusion programming
   language, it should create code for C, Cpp, C#, D, Java, Javascript,
-  Python, Swift, Typescript, Zig
-- [Nim](https://nim-lang.org/) - Nim programming language compiles to C, C++ and Javascript
-- [V](https://vlang.io/) - V programming language compiles to C
+  Python, Swift, Typescript and OpenCL C
+- [Haxe](https://haxe.org/) - Haxe programming language it
+  should create code for C++, C-sharp, the Haxe interpreter, Java, Lua,
+  Python and Neko
+- [Temper](https://temperlang.dev/) - Temper programming language transpiles to
+  C-Sharp, Java, Javascript, Typescript, Lua, Python and Rust (C++)
+- [Py2many](https://github.com/py2many/py2many) - using the Python programming
+  language it should create code for C, C++, D, Dart, Go, Julia, Kotlin, Nim,
+  Rust and V - where C++ and Rust are currently considered production ready, however not ready to be used yet
+- [Nim](https://nim-lang.org/) - Nim programming language compiles to C, C++ and Javascript, C code seems hard to use
+- [V](https://vlang.io/) - V programming language compiles to C and can import C
 - [Dafny](https://github.com/dafny-lang/dafny) - Dafny programming language compiles to C#, Go, Python, Java or Javascript
 
 Further the following direct implementations in other programming languages which seems not to have a high level programming language transpiler
@@ -24,9 +26,10 @@ will be placed here:
 - [julia](https://julialang.org/)
 - [octave](https://octave.org/)
 
-Using generated C code, for instance of Nim, we can use [Swig](https://www.swig.org) interface generator to add support for more languages, here an example:
+Using generated C code, for instance create by Fusion, we might then use the [Swig](https://www.swig.org) interface 
+generator to add support for more languages, here an example for that workflow:
 
-![](https://kroki.io/plantuml/svg/eNqFkLFOwzAQhvc-heWODVVgAQmZgVQqQggi2q3K4MRHfOoljhynJUK8O3HT4Ta82N_3353kM1h73VlRi5-FmM6FDmc0waqHNC0u0uv2aNAruX-Wj9G0zsCht7oDBUTY9ZD0YSRQX0gEJpn7b9d3iQWsbVDp-j6JWeXIedUfx5IGKOKsd2zEzZOQ2WolOTJ41Se9qzx2YXJZNLsz1tM7XnP1UnLccNo6Hm0HJOBxHM7wbeD0kemGOFdBn4CJHDzP85ec0xisa5n45O-hHBnuK5o_fF2rLN235CvT1Li2uHb8U_S7-ANaGInn)
+![](https://kroki.io/plantuml/svg/eNqFkk1vgzAMhu_9FVF6LKsYl02asgtonSakorY3xCGAC1Fdgvhoh6b99xGgk1kPyyV-Xr-2nI9UZZUsc5axrwXr10DhVaVNLp5tOxrEShanVFWC-zv-YpRCpxDWuSxBAKIqa7DqpkMQR4UIqTXWP64dKweV5Y2w10-WySUadSXqUxdjC5Hp9dbWShfs4ZVxd7XiMyXomlwXTq9NUYgyBhQjRTOv57CevZuFezz6030Zm-7DfjO5yzvXfIIPeZH7pFJlM5MPXQn1vby_quNc2ZZQuD4zo7mTI-tjs01DcYoepY2mqU2rEGjajEbQbyltXXlGykkjL0CEACqaD94DSsP9EmFH4zbuCB4S_D3x9CV4rD85fW6J5_G5TNE_pu_FDwyfwkc=)
 
 The following features will be implemented:
 
