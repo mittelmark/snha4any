@@ -53,14 +53,21 @@ js:
 	fut -D $(MAIN) $(FUFILES) -o jsm/$(app).js
 	node jsm/$(app).js
 
-ts:
-	[ -d tsm ] || mkdir tsm
-	fut -D $(MAIN) $(FUFILES) -o tsm/$(app).ts
-	bun tsm/$(app).ts
 	
 py:
 	[ -d pym ] || mkdir pym
 	fut -D $(MAIN) $(FUFILES) -o pym/$(app).py
 	python3 pym/$(app).py
 
+ts:
+	[ -d tsm ] || mkdir tsm
+	fut -D $(MAIN) $(FUFILES) -o tsm/$(app).ts
+	bun tsm/$(app).ts
 	
+swift:
+	[ -d swiftm/Sources/swift ]] || mkdir -p swiftm/Sources/swift
+	fut -D $(MAIN) $(FUFILES) -o swiftm/Sources/swift/swift.swift
+	cd swiftm && swift build
+	cd swiftm && swift run
+	./swiftm/.build/x86_64-unknown-linux-gnu/debug/swift
+
