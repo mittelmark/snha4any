@@ -58,6 +58,20 @@ Here is the process diagram:
 
 ![](https://kroki.io/graphviz/svg/eNqFks1OhDAURvfzFJU1YyIaY2K64GeA1TjRJZnFHdoRYuWSUoLE-O5SSussJrhqenLa-31p3yW0FcnI94YQASP2ijYcFE7bBhkvugpaTk_45Q81UxW9uw38To2C03MtBGe-XkoUKGkH4hOb43QyJEWLHfUC__7GOz5PJFrIgyPxQh4dSRby5Mic4GLAx3gSPdcTds4NFjd191mSuZmW5C6XJnPQ7ZZEBaslPaMcQDJfwIkL6oWHWYi0EK8IsRaSa0JuhEQLu2tC_OKZKpOQrgipFrIVIdNC_p8QFebdGCrF2dy-WLQ9H0xbC145iEz_DNPR4gQUmFKWxChNCQcqqJvO5LbsbZ-HJoclB8nZ3_25xWFZ9hLKUdPNzy_qBMRl)
 
+## Progress
+
+| Language   | Rand.fu | Stats.fu |
+|------------|---------|----------|
+| C          | [x]     | [x]      |
+| C++        | [x]     | [x]      |
+| C#         | [x]     | [x]      |
+| D+         | [x]     | [x]      |
+| Java       | [x]     | [x]      |
+| JavaScript | [x]     | [x]      |
+| Python     | [x]     | [x]      |
+| Swift      | nt      |  nt      |
+| TypeScript | [x]     | [x]      |
+
 ## Authors
 
 The following persons contribute to the project
