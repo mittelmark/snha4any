@@ -1,0 +1,147 @@
+public class Matrix {
+	List<List<float>()>() M;
+	int nc = 0;
+	int nr = 0;
+
+	// constructors can't take arguments so we do a create function
+	public void Create! (int nrow, int ncol, float value=0) {
+		for (int i = 0; i < nrow; i++) {
+			M.Add();
+			for (int j = 0; j < ncol; j++) {
+				M[i].Add(value);
+			}
+		}
+		nc = ncol;
+		nr = nrow;
+	}
+
+	// exclamation mark as object is modified
+	public void Set!(int row, int col, float value) {
+		M[row][col] = value;
+	}
+
+	public float Get(int row, int col) {
+		return(M[row][col]);
+	}
+
+	public List<float>() GetRow(int row) {
+		return(M[row]);
+	}
+
+	public List<float>() GetColumn(int col) {
+		List<float>() values;
+		for (int i = 0; i < nr; i++) {
+			values.Add(M[i][col]);
+		}
+		return(values);
+	}
+
+	public int Nrow() => nr;
+	public int Ncol() => nc;
+
+	public static Matrix() AsCorrelationMatrix(Matrix data, string method = "pearson") {
+		Matrix() corrMat;
+
+		int n = data.Ncol();
+		corrMat.Create(n, n, 0);
+
+		for (int i = 0; i < n; i++) {
+			corrMat.Set(i, i, 1);
+
+			List<float>() colI = null;
+			colI = data.GetColumn(i);
+
+			for (int j = i + 1; j < n; j++) {
+				List<float>() colJ = null;
+				colJ = data.GetColumn(j);
+
+				float corr = 0;
+
+				if (method == "pearson") {
+					corr = Stats.PearsonCorrelation(colI, colJ);
+				} else {
+					corr = Math.NaN;
+				}
+
+				corrMat.Set(i, j, corr);
+				corrMat.Set(j, i, corr);
+			}
+		}
+
+		return corrMat;
+	}
+
+	public static void PrintMatrix(Matrix() M) {
+		for (int i = 0; i < M.Nrow(); i++) {
+			for (int j = 0; j < M.Ncol(); j++) {
+				Console.Write($"{M.Get(i, j)}\t");
+			}
+			Console.WriteLine("");
+		}
+	}
+
+	public Matrix() Transpose() {
+		Matrix() T;
+		T.Create(nc, nr, 0);
+
+		for (int i = 0; i < nr; i++) {
+			for (int j = 0; j < nc; j++) {
+				T.Set(j, i, M[i][j]);
+			}
+		}
+
+		return T;
+	}
+
+	public static void Run(string[] args) {
+		Console.WriteLine("\nTesting matrix");
+
+		Matrix() M;
+		M.Create(3, 3, 0);
+
+		M.Set(0, 0, 1);
+		M.Set(0, 1, 2);
+		M.Set(0, 2, 3);
+
+		M.Set(1, 0, 4);
+		M.Set(1, 1, 5);
+		M.Set(1, 2, 6);
+
+		M.Set(2, 0, 7);
+		M.Set(2, 1, 8);
+		M.Set(2, 2, 9);
+
+		Console.WriteLine("Original matrix:");
+		Matrix.PrintMatrix(M);
+
+		Console.WriteLine("Transposed matrix:");
+		Matrix() T = null;
+		T = M.Transpose();
+		Matrix.PrintMatrix(T);
+
+		Console.WriteLine("Pearson test:");
+		List<float>() x;
+		List<float>() y;
+
+		x.Add(1.2);
+		x.Add(2.5);
+		x.Add(3.0);
+		x.Add(4.5);
+		y.Add(2.3);
+		y.Add(3.1);
+		y.Add(6.2);
+		y.Add(9.3);
+
+		Console.WriteLine(Stats.PearsonCorrelation(x, y));
+	}
+    
+    #if MATRIXMAIN
+        public static void Main(string[] args) {
+            Matrix.Run(args);
+        }
+    #endif
+}
+
+
+
+
