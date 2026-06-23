@@ -1,0 +1,589 @@
+// ------------------------------------------------------------------------
+// - - -
+// Title: Mgraph.fu
+// Author: Alba de Prada
+// Date: 21-04-2026
+// - - -
+//
+// MGraph - small helpers for graph creation and visualization.
+// ---------------------------m--------------------------------------------
+
+/// Graph creation and visualization helper class.
+///
+/// Available graph types currently implemented:
+///
+/// * "band"      : directed chain
+/// * "circle"    : directed cycle
+/// * "random"    : directed graph with a given number of edges
+/// * "nicholas"  : undirected St. Nicholas house graph
+/// * "werner"    : directed Werner graph
+/// * "regular"   : undirected regular graphs with k = 1, 2 or 3
+///
+/// General usage:
+///
+///     Mgraph() G;
+///     G.gnew("band", 5);
+///
+/// For regular graphs:
+///
+///     G.gnew("regular", 6, 0, 2);
+///
+/// Arguments of gnew(type, nnodes, nedges = 0, k = 0):
+///
+/// * type   : graph type
+/// * nnodes : number of nodes
+/// * nedges : only used for "random"
+/// * k      : only used for "regular"
+///
+/// Notes:
+/// * For "regular", nedges is ignored.
+/// * For "nicholas", at least 5 nodes are required.
+/// * For "werner", at least 6 nodes are required.
+
+public class Mgraph {
+	/// Adjacency matrix of the graph
+	Matrix() A;
+
+	/// Creates the adjacency matrix and automatically assigns node names.
+	List<string>() names;
+
+	/// Number of nodes in the graph
+	int n = 0;
+
+
+	/// Print available graph types and their usage
+	public void Help() {
+		Console.WriteLine("\nAvailable graph types:\n");
+
+		Console.WriteLine("--> band");
+		Console.WriteLine("     - gnew(\"band\", nnodes)");
+		Console.WriteLine("     - Creates a chain A -> B -> C -> ...\n");
+
+		Console.WriteLine("--> circle");
+		Console.WriteLine("     - gnew(\"circle\", nnodes)");
+		Console.WriteLine("     - Creates a closed chain (cycle)\n");
+
+		Console.WriteLine("--> random");
+		Console.WriteLine("     - gnew(\"random\", nnodes, nedges)");
+		Console.WriteLine("     - Creates a graph with a given number of edges\n");
+
+		Console.WriteLine("--> nicholas");
+		Console.WriteLine("     - gnew(\"nicholas\", nnodes >= 5)");
+		Console.WriteLine("     - Creates a generalized St. Nicholas house graph");
+		Console.WriteLine("     - For nnodes = 5, it matches the classical house\n");
+
+		Console.WriteLine("--> werner");
+		Console.WriteLine("     - gnew(\"werner\", nnodes >= 6)");
+		Console.WriteLine("     - Creates Werner graph structure\n");
+
+		Console.WriteLine("--> regular");
+		Console.WriteLine("     - gnew(\"regular\", nnodes, 0 (nedges) , k)");
+		Console.WriteLine("     * Warning: 'nedges' is ignored for regular graphs");
+		Console.WriteLine("     - k = 1, 2 or 3 (number of edges per node)\n");
+	}
+
+	/// Initialize a graph with a given number of nodes.
+	/// The graph is stored as an adjacency matrix.
+	///
+	/// A[i,j] != 0 means there is an edge from node i to j.
+	///
+	/// Creates the adjacency matrix and automatically assigns node names.
+	/// * n <= : A, B, C, ..., Z
+	/// * 27 <= n <=260: A1, B1, ..., Z1, A2, B2, ...
+	/// * n > 260      : V0, V1, V2, ...
+	///
+	public void Create! (int nnodes) {
+		// Number of given nodes.
+		n = nnodes;
+
+		// Create the adjacency matrix.
+		A.Create(nnodes, nnodes, 0);
+
+		// Reset names list.
+		names.Clear();
+
+		string() letters;
+		letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+		// Generate nodes names automatically.
+		for (int i = 0; i < nnodes; i++) {
+			// Case 1: simple letters.
+			if (n <= 26) {
+				names.Add(letters.Substring(i, 1));
+			}
+			// Case 2: letter + number (A1, B1, ...).
+			else if (n <= 260) {
+				int letter_index = i % 26;
+				int number = i / 26 + 1;
+
+				names.Add(letters.Substring(letter_index, 1) + $"{number}");
+			}
+			// Case 3: generic names (V0, V1, ...).
+			else {
+				names.Add($"V{i}");
+			}
+		}
+	}
+
+	/// Change the name of a specific node.
+	public void SetName! (int node, string name) {
+		names[node] = name;
+	}
+
+	/// Return the name of a specific node.
+	public string GetName(int node) {
+		return names[node];
+	}
+
+	/// Return the number of nodes in the graph.
+	public int Size() {
+		return n;
+	}
+
+	/// Add a directed edge from one node to another.
+	/// value represents the edge weight.
+	///     * Positive values create positive influence in Mcgraph.
+	///     * Negative values create inverse/negative influence.
+	public void SetEdge! (int from, int to, float value=1) {
+		A.Set(from, to, value);
+	}
+
+	/// Add an undirected edge between two nodes.
+	/// Internally stored as two directed edges.
+	/// value represents the edge weight.
+	///     * Positive values create positive influence in Mcgraph.
+	///     * Negative values create inverse/negative influence.
+	public void SetUndirectedEdge! (int from, int to, float value=1) {
+		A.Set(from, to, value);
+		A.Set(to, from, value);
+	}
+
+	/// Return the edge value from source node to target node.
+	public float GetEdge(int from, int to) {
+		return A.Get(from, to);
+	}
+
+	/// Create a BAND:
+	///
+	/// A -> B -> C -> D -> E
+	///
+	public void CreateBand! (float value = 1) {
+		for (int i = 0; i < n - 1; i++) {
+			SetEdge(i, i + 1, value);
+		}
+	}
+
+	/// Create CIRCLE:
+	///
+	/// A -> B -> C -> D
+	/// ^              |
+	/// |              v
+	///  --------------
+	///
+	public void CreateCircle! (float value = 1) {
+		for (int i = 0; i < n - 1; i++) {
+			SetEdge(i, i + 1, value);
+		}
+		SetEdge(n - 1, 0, value);
+	}
+
+	/// Create WERNER:
+	///
+	/// A -> C <- B
+	///      |
+	///      v
+	///      D
+	///     / \
+	///    E -> F
+	///
+	public bool CreateWerner! (float value = 1) {
+		// Returns false if the number of nodes is less than 6.
+		if (n < 6) {
+			return false;
+		} else {
+			// First convergence
+			SetEdge(0, 2, value);
+			SetEdge(1, 2, value);
+
+			// Central band from node 2 to node n-3
+			for (int i = 2; i < n - 3; i++) {
+				SetEdge(i, i + 1, value);
+			}
+
+			// Final ramification
+			SetEdge(n - 3, n - 2, value);
+			SetEdge(n - 3, n - 1, value);
+			SetEdge(n - 2, n - 1, value);
+
+			// Returns true if the graph was created.
+			return true;
+		}
+	}
+
+	/// Create a St. Nicholas House graph:
+	///
+	/// For 5 nodes:
+	///   V1
+	///  / \
+	/// V2-V3
+	/// |   |
+	/// V4-V5
+	///
+	/// For 7 nodes:
+	///   V0
+	///  /  \
+	/// V1--V2
+	/// |    |
+	/// V3   V5
+	/// |    |
+	/// V4---V6
+	///
+	public bool CreateStNicholas! (float value = 1) {
+		// Returns false if the number of nodes is less than 5.
+		if (n < 5) {
+			return false;
+		}
+
+		// Roof.
+		SetUndirectedEdge(0, 1, value);
+		SetUndirectedEdge(0, 2, value);
+
+		// Top horizontal edge.
+		SetUndirectedEdge(1, 2, value);
+
+		// Classical St. Nicholas house.
+		if (n == 5) {
+			SetUndirectedEdge(1, 3, value);
+			SetUndirectedEdge(2, 4, value);
+			SetUndirectedEdge(3, 4, value);
+			return true;
+		}
+
+		// Remaining nodes after roof/top.
+		int remaining = n - 3;
+
+		// Split remaining nodes into left wall and right wall.
+		int left_count = remaining / 2;
+		int right_count = remaining - left_count;
+
+		// If remaining is odd, force at least one node on the left.
+		if (left_count == 0) {
+			left_count = 1;
+			right_count = remaining - 1;
+		}
+
+		int left_start = 3;
+		int right_start = 3 + left_count;
+
+		// Left wall.
+		SetUndirectedEdge(1, left_start, value);
+		for (int i = left_start; i < left_start + left_count - 1; i++) {
+			SetUndirectedEdge(i, i + 1, value);
+		}
+
+		// Right wall.
+		SetUndirectedEdge(2, right_start, value);
+		for (int i = right_start; i < right_start + right_count - 1; i++) {
+			SetUndirectedEdge(i, i + 1, value);
+		}
+
+		// Bottom edge joining both walls.
+		int left_last = left_start + left_count - 1;
+		int right_last = right_start + right_count - 1;
+		SetUndirectedEdge(left_last, right_last, value);
+
+		// Returns true if the graph was created.
+		return true;
+	}
+
+	/// Create an undirected REGULAR graph.
+	///
+	/// Supported values:
+	/// * k = 1: pairs
+	/// * k = 2: undirected cycle
+	/// * k = 3: cycle + opposite connections
+	///
+	/// Returns false if the graph cannot be constructed.
+	public bool CreateRegular! (int k, float value = 1) {
+		if (k ==1 || k == 3) {
+			if (n % 2 != 0) {
+				return false;
+			}
+		}
+		if (k == 1) {
+			for (int i = 0; i < n -1; i = i + 2) {
+				SetUndirectedEdge(i, i + 1, value);
+			}
+			return true;
+		} else if (k == 2) {
+			for (int i = 0; i < n - 1; i++) {
+				SetUndirectedEdge(i, i + 1, value);
+			}
+			SetUndirectedEdge(n - 1, 0, value);
+			return true;
+		} else if (k == 3) {
+			for (int i = 0; i < n - 1; i++) {
+				SetUndirectedEdge(i, i + 1, value);
+			}
+			SetUndirectedEdge(n - 1, 0, value);
+
+			int half_n = n / 2;
+			for (int i = 0; i < half_n; i++) {
+				SetUndirectedEdge(i, i + half_n, value);
+			}
+			return true;
+		} else if (k > 3) {
+			Console.WriteLine("Error: Only values of k <= 3 are implemented for regular graphs");
+			return false;
+		} else {
+			return false;
+		}
+	}
+
+	/// Create negative band
+	public bool CreateBandNeg! (float value = 1) {
+		if (n < 2) {
+			return false;
+		}
+
+		SetEdge(0, 1, -value);
+
+		for (int i = 1; i < n - 1; i++) {
+			SetEdge(i, i + 1, value);
+		}
+
+		return true;
+	}
+
+	/// Print the adjacency matrix with node labels.
+	public void PrintMatrix() {
+		Console.Write("\t");
+		for (int j = 0; j < n; j++) {
+			Console.Write($"{names[j]}\t");
+		}
+		Console.WriteLine("");
+
+		for (int i = 0; i < n; i++) {
+			Console.Write($"{names[i]}\t");
+			for (int j = 0; j < n; j++) {
+				Console.Write($"{A.Get(i, j)}\t");
+			}
+			Console.WriteLine("");
+		}
+	}
+
+	/// Create a RANDOM directed graph with a given number of edges.
+	/// Results are stochastic: repeated calls may generate different graph structures.
+	public void CreateRandom! (int nedges, float value = 1) {
+		Rand() rnd;
+		rnd.SeedNow();
+
+		if (n <= 1) {
+			return;
+		}
+
+		int max_edges = n * (n - 1);
+		if (nedges > max_edges) {
+			Console.WriteLine($"Warning: too many edges requested ({nedges}), using maximum possible: {max_edges}");
+			nedges = max_edges;
+		}
+
+		int count = 0;
+
+		while (count < nedges) {
+			float ri = rnd.NextRandom();
+			float rj = rnd.NextRandom();
+
+			int i = Math.Floor(ri * n);
+			int j = Math.Floor(rj * n);
+
+			// Avoid self-loops and duplicate edges.
+			if (i != j && A.Get(i, j) == 0) {
+				SetEdge(i, j, value);
+				count = count + 1;
+			}
+		}
+	}
+
+	/// General graph generator.
+	/// Creates the selected graph type and returns true if successful.
+	public bool gnew! (string type, int nnodes, int nedges = 0, int k = 0) {
+		Create(nnodes);
+
+		if (type == "band") {
+			CreateBand(1);
+			return true;
+		}
+		else if (type == "circle") {
+			CreateCircle(1);
+			return true;
+		}
+		else if (type == "random") {
+			CreateRandom(nedges, 1);
+			return true;
+		}
+		else if (type == "nicholas") {
+			return CreateStNicholas(1);
+		}
+		else if (type == "werner") {
+			return CreateWerner(1);
+		}
+		else if (type == "regular") {
+			if (nedges != 0) {
+				Console.WriteLine("Warning: 'nedges' is ignored for regular graphs");
+			}
+			return CreateRegular(k, 1);
+		}
+		else if (type == "bandneg") {
+			return CreateBandNeg(1);
+		}
+		else {
+			Console.WriteLine("Error: a type must be given");
+			Help();
+			return false;
+		}
+	}
+
+	/// Convert the graph into DOT format for Graphviz visualization.
+	///
+	/// Arguments:
+	/// * mode      : "directed" or "undirected"
+	/// * type      : graph type used to select the layout
+	/// * custype   : optional custom DOT layout configuration
+	/// * shape     : node shape
+	/// * style     : node style
+	/// * fillcolor : node fill color
+	///
+	/// Returns a string containing the DOT representation.
+	///
+	/// Example:
+	///     string dot = G.Graph2Dot("directed", "werner");
+	///     Console.WriteLine(dot);
+	public string() Graph2Dot(
+		string mode = "directed",
+		string type = "custom",
+		string custype = "",
+		string shape = "circle",
+		string style = "filled",
+		string fillcolor = "salmon"
+	) {
+
+		// directed or undirected graph.
+		string() start;
+
+		// --> or --
+		string() conn;
+
+		// The result (DOT output).
+		string() str;
+
+		// Optional custom configuration
+		//string() conf;
+
+		start = "";
+		conn = "";
+		str = "";
+		//conf ="";
+
+		// 1) Directed or undirected.
+		if (mode == "directed") {
+			start = "digraph";
+			conn = "->";
+		} else {
+			start = "graph";
+			conn = "--";
+		}
+
+		str = start + " G {\n";
+
+		// 2) Layout configuration.
+		if (type == "circle" || type == "regular" || type == "band") {
+			str = str + "layout=circo;\n";
+		}
+		else if (type == "random") {
+			str = str + "layout=fdp;\noverlap=scalexy;\nsep=0.5;\nsplines=true;\n";
+		}
+		else if (type == "werner" || type == "nicholas") {
+			str = str + "layout=neato;\n";
+		}
+		else if (type == "custom") {
+			if (custype == "") {
+				str = str + "";
+			} else {
+				str = str + custype + "\n";
+			}
+		}
+
+		// 3) Header.
+		str = str + "node [shape=" + shape + ", style=" + style + ", fillcolor=\"" + fillcolor + "\"];\n";
+
+		// 4) Nodes.
+		if (type == "werner" && n>= 6) {
+			// Fixed positions for Werner graph.
+			str = str + "\"" + names[0] + "\" [pos=\"0,2!\", fillcolor=\"" + fillcolor + "\"];\n";
+			str = str + "\"" + names[1] + "\" [pos=\"0,0!\", fillcolor=\"" + fillcolor + "\"];\n";
+			str = str + "\"" + names[2] + "\" [pos=\"1,1!\", fillcolor=\"" + fillcolor + "\"];\n";
+			str = str + "\"" + names[3] + "\" [pos=\"2.5,1!\", fillcolor=\"" + fillcolor + "\"];\n";
+			str = str + "\"" + names[4] + "\" [pos=\"3.5,2!\", fillcolor=\"" + fillcolor + "\"];\n";
+			str = str + "\"" + names[5] + "\" [pos=\"3.5,0!\", fillcolor=\"" + fillcolor + "\"];\n";
+
+			for (int i = 0; i < n; i++) {
+				str = str + "\"" + names[i] + "\";\n";
+			}
+		}
+
+		// 5) Edges.
+		if (mode == "directed") {
+			for (int i = 0; i < n; i++) {
+				for (int j = 0; j < n; j++) {
+					if (A.Get(i, j) !=0) {
+						str = str + "\"" + names[i] + "\" " + conn + " \"" + names[j] + "\";\n";
+						continue;
+					}
+				}
+			}
+		} else {
+			for (int i = 0; i < n - 1; i++) {
+				for (int j = i + 1; j < n; j++) {
+					if (A.Get(i,j) != 0 || A.Get(j,i) !=0) {
+						str = str + names[i] + " " + conn + " " + names[j] + ";\n";
+					}
+				}
+			}
+		}
+
+		// 6) Special visual trick for band.
+		if (type == "band" && n > 1) {
+			str = str + "Vn [fillcolor=transparent, color=transparent, fontcolor=transparent];\n";
+			str = str + "\"" + names[n - 1] + "\" " + conn + " Vn [color=transparent];\n";
+			str = str + "Vn " + conn + " \"" + names[0] + "\" [color=transparent];\n";
+		}
+
+		str = str + "}\n";
+		return str;
+	}
+
+	public static void Run(string[] args) {
+		Console.WriteLine("\nTesting Mgraph");
+
+		Mgraph() G;
+		G.gnew("band", 5);
+
+		Console.WriteLine("Band adjacency matrix:");
+		G.PrintMatrix();
+
+		Console.WriteLine("DOT:");
+		Console.WriteLine(G.Graph2Dot("directed", "band"));
+
+		Mgraph() W;
+		W.gnew("werner", 6);
+
+		Console.WriteLine("Werner adjacency matrix:");
+		W.PrintMatrix();
+	}
+    #if MGRAPHMAIN
+        public static void Main(string[] args) {
+            Mgraph.Run(args);
+        }
+    #endif
+}

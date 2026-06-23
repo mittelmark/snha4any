@@ -66,23 +66,31 @@ Here is the process diagram:
 
 ## Progress
 
-| Language   | Rand.fu | Stats.fu | Matrix.fu |
-|------------|---------|----------|-----------|
-| C          | [x]     | [x]      |   [x]     |
-| C++        | [x]     | [x]      |   [x]     |
-| C#         | [x]     | [x]      |   [x]     |
-| D+         | [x]     | [x]      |   [x]     |
-| Java       | [x]     | [x]      |   [x]     |
-| JavaScript | [x]     | [x]      |   [x]     |
-| Python     | [x]     | [x]      |   [x]     |
-| Swift      | [x]     | [x]      |   [x]     |
-| TypeScript | [x]     | [x]      |   [x]     |
+| Language   | Rand.fu | Stats.fu | Matrix.fu | Mgraph.fu |
+|------------|---------|----------|-----------|-----------|
+| C          | [x]     | [x]      |   [x]     |   [x]     |
+| C++        | [x]     | [x]      |   [x]     |   [x]     |
+| C#         | [x]     | [x]      |   [x]     |   [x]     |
+| D+         | [x]     | [x]      |   [x]     |   [x]     |
+| Java       | [x]     | [x]      |   [x]     |   [x]     |
+| JavaScript | [x]     | [x]      |   [x]     |   [x]     |
+| Python     | [x]     | [x]      |   [x]     |   [x]     |
+| Swift      | [ ]     | [ ]      |   [ ]     |   [ ]     |
+| TypeScript | [x]     | [x]      |   [x]     |   [x]     |
+
+Currently there are problems with the Swift code. Error Console does not work and as well.
+
+```
+List<int> x = Method(); // creates problems
+```
+
 
 ## Authors
 
-The following persons contribute to the project
+The following persons contribute to the project:
 
 - Alba de Prada Hernandez (AP), University of Potsdam (graph and data generation modules)
 - Christopher Olvera (CO), University of Potsdam (implementation of SNHA algorithm and accuracy metrics)
 - Detlef Groth (DG), University of Potsdam (supervisor and random data generation)
 - Harsini Praveen Kumar (HP), University of Potsdam (statistics module)
+- Roberto Zarazua (RZ), University of Potsdam (Julia code, used for implementation)
