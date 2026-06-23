@@ -1,6 +1,11 @@
 # snha4any
 
-SNHA algorithm implented in various programming languages.
+SNHA algorithm implemented in various programming languages.
+
+## References
+
+- Groth, D.; Scheffler, C.; Hermanussen, M. (2019): Body height in stunted Indonesian children depends directly on parental education and not via a nutrition mediated pathway - Evidence from tracing association chains by St. Nicolas House Analysis. In Anthropologischer Anzeiger. [DOI: 10.1127/anthranz/2019/1027](https://doi.org/10.1127/anthranz/2019/1027)
+- Hermanussen, M., Aßmann, C., & Groth, D. (2021). Chain reversion for detecting associations in interacting variables—St. Nicolas House Analysis. International journal of environmental research and public health, 18(4), 1741. [DOI: 10.3390/ijerph18041741](https://doi.org/10.3390/ijerph18041741)
 
 We will use the check following language transpilers to create code for
 several programming languages from one code base:
@@ -60,4 +65,4 @@ The following persons contribute to the project
 - Alba de Prada Hernandez (AP), University of Potsdam (graph and data generation modules)
 - Christopher Olvera (CO), University of Potsdam (implementation of SNHA algorithm and accuracy metrics)
 - Detlef Groth (DG), University of Potsdam (supervisor and random data generation)
-- Harsini Praveen Kumar (HP), University of Potsdam (statisics module)
+- Harsini Praveen Kumar (HP), University of Potsdam (statistics module)
