@@ -1,0 +1,165 @@
+public class Rand {
+	/// Initialize the random number generator.
+	/// Will have same output with the same seed all the time.
+	long RandomState = 1;
+	public void Seed! (
+		/// Initialize the random numbers with a specific value.
+		long x) {
+		RandomState = x;
+	}
+	/// Initialize the random number generator.
+	/// Will have different output with every run.
+	public void SeedNow! () {
+		RandomState = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+
+	}
+	/// private function - returns bitshift by the given n of 1.
+	static long LowBits(
+		/// integer value bitshift returned.
+		int n
+	) {
+		long one = 1;
+		return (one << n) - 1;
+	}
+	/// Create a random number using the xorshift algorithm.
+	public float NextRandom!()
+	{
+		// https://en.wikipedia.org/wiki/Xorshift#xorshift.2A
+		long state = RandomState;
+		state ^= state >> 12 & LowBits(52);
+		state ^= (state & LowBits(39)) << 25;
+		state ^= state >> 27 & LowBits(37);
+		RandomState = state;
+		float f = (state * 0x2545f4914f6cdd1d >> 40) & LowBits(24);
+		return f / 16777216;
+	}
+
+	/// Create data for a uniform distribution.
+	public List<float>() CreateUniformData!(
+		/// Minimal value.
+		float min,
+		/// Maximal value.
+		float max,
+		/// Number of samples to generate
+		int nsamples
+	) {
+		List<float> () samples;
+		for (int i = 0; i < nsamples; i++) {
+			samples.Add(NextRandom()*(max-min)+min);
+		}
+		return(samples);
+	}
+
+
+	/// Create data of a normal distribution using Box-Muller.
+	/// The resulting samples follow N(mu, sigma^2).
+	public List<float>() CreateNormalData!(
+		/// Mean of the normal distribution
+		float mu,
+		/// Standard deviation of the normal distribution
+		float sigma,
+		/// Number of samples to generate
+		int nsamples
+	) {
+
+		List<float> () samples;
+
+		float pi = Math.PI;
+
+		for (int k=0; k < nsamples / 2; k++) {
+			// Creation of u1 and u2, two uniform random numbers.
+			float u1 = NextRandom();
+			float u2 = NextRandom();
+
+			// Transform to normal distribution.
+			float r = Math.Sqrt(-2.0 * Math.Log(u1));
+			float theta = 2.0 * pi * u2;
+
+			float z0 = r * Math.Cos(theta);
+			float z1 = r * Math.Sin(theta);
+
+			samples.Add(mu + sigma * z0);
+			samples.Add(mu + sigma * z1);
+		}
+
+
+		// if n is an odd number, an extra value is added.
+		if (nsamples % 2 != 0) {
+			float u1 = NextRandom();
+			float u2 = NextRandom();
+
+			float r = Math.Sqrt(-2.0 * Math.Log(u1));
+			float theta = 2.0 * pi * u2;
+
+			samples.Add(mu + sigma * (r * Math.Cos(theta)));
+		}
+		return(samples);
+	}
+	/// Randomize a list of floats;
+	public List<float>() Randomize! (List <float> x) {
+
+		List<float>() y = CreateUniformData(0,1,x.Count);
+		List<float>() z  = null;		
+		List<int>() r = Stats.Rank(y);
+		//r = Stats.Rank(y,mode="first");
+		for (int i = 0; i < x.Count; i++) {
+			z.Add(x[r[i]-1]);
+		}
+		return(z);
+	}
+	/// Randomize a list of floats;
+	public List<int>() RandomizeInt! (List <int> x) {
+
+		List<float>() y = CreateUniformData(0,1,x.Count);
+		List<int>() z ;		
+		List<int>() r  = Stats.Rank(y);
+		//r = Stats.Rank(y,mode="first");
+		for (int i = 0; i < x.Count; i++) {
+			z.Add(x[r[i]-1]);
+		}
+		return(z);
+	}
+	// you can run this Run method by the Test.fu file:
+	// fut  Rand.fu Test.fu -o pym/rand.py
+	// python3 pym/rand.py
+	public static void Run (string[] args) {
+		Rand() rnd;
+		rnd.Seed(123);
+		List<float>() x = rnd.CreateNormalData(0,1,10);
+		//x.Add(Math.NaN);
+		//float m = Stats.Mean(x);
+		//Console.WriteLine($"mean is {m}");
+		for (int i = 0; i < x.Count; i++) {
+			Console.WriteLine($"On position {i} the numeric value of x is {x[i]}!");
+		}
+
+		List<float>() y = rnd.CreateUniformData(1,20,10);
+		for (int i = 0; i < y.Count; i++) {
+			Console.WriteLine($"On position {i} the numeric value of y is {y[i]}!");
+		}
+		List<float>() z = rnd.Randomize(y);
+		for (int i = 0; i < z.Count; i++) {
+			Console.WriteLine($"On position {i} the numeric value of z is {z[i]}!");
+		}
+		List<int>() seq = Stats.Sequence(1,20);
+		for (int i = 0; i < seq.Count; i++) {
+			Console.WriteLine($"On position {i} the value of 1:20 is {seq[i]}!");
+		}
+		List<int>()	rseq = rnd.RandomizeInt(seq);
+		for (int i = 0; i < rseq.Count; i++) {
+			Console.WriteLine($"On position {i} the random int value of 1:20 is {rseq[i]}!");
+		}
+       
+	}
+    
+    #if RANDMAIN
+        public static void Main(string[] args) {
+            Rand.Run(args);
+        }
+    #endif
+}
+
+
+
+
+

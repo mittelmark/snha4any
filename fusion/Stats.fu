@@ -1,0 +1,398 @@
+// ------------------------------------------------------------------------
+// - - -
+// Title: Stats.fu
+// Author: Harshini
+// - - -
+//
+// Stats — static helpers for descriptive statistics on float lists.
+// Missing values are represented as Math.NaN and are ignored where noted.
+// ------------------------------------------------------------------------
+
+/// Static statistics helper class for lists of floats.
+///
+/// Available methods:
+///
+/// * Mean   : arithmetic mean of non-NaN values
+/// * Sum    : sum of non-NaN values
+/// * Median : middle value (or average of two middles) of non-NaN values
+/// * Mode                : most frequently occurring non-NaN value
+/// * Order               : sort indices (non-NaN ascending, NaN last)
+/// * Rank                : average ranks with tie handling (R default style)
+/// * IsNa                : boolean mask marking NaN positions
+/// * Which               : indices where a boolean mask is true
+/// * pearsonCorrelation  : Pearson r between two paired float lists
+/// * spearmanCorrelation : Spearman rho (Pearson r on average ranks)
+///
+/// General usage:
+///
+///     List<float>() x;
+///     x.Add(0.2);
+///     x.Add(0.5);
+///     x.Add(Math.NaN);
+///     float m = Stats.Mean(x);
+///     float med = Stats.Median(x);
+///
+/// Notes:
+/// * NaN entries are skipped by Mean, Sum, Median, Mode, and correlation methods.
+/// * Median and Mode return Math.NaN when no valid values remain.
+/// * Correlation methods use only index pairs where neither x[i] nor y[i] is NaN.
+/// * Spearman assigns average ranks to tied values, then applies Pearson's formula.
+/// * Mode breaks ties by keeping the first value that reaches the highest count.
+
+public static class Stats {
+	/// Arithmetic mean of all non-NaN elements in x.
+	/// Returns sum / count of valid values.
+	public static float Mean (
+		/// vector of floats
+		List<float> x
+	) {
+		float sum = 0.0;
+		int n = 0;
+		for (int i = 0; i < x.Count; i++) {
+			if (!Math.IsNaN(x[i])) {
+				sum = sum + x[i];
+				n = n + 1 ;
+			}
+
+		}
+		return(sum/n);
+	}
+	/// Sum of all non-NaN elements in x.
+	public static float Sum (
+		/// vector of floats
+		List<float> x) {
+		float sum = 0.0;
+		int n = 0;
+		for (int i = 0; i < x.Count; i++) {
+			if (!Math.IsNaN(x[i])) {
+				sum = sum + x[i];
+				n = n + 1 ;
+			}
+
+		}
+		return(sum);
+	}
+	/// Median of all non-NaN elements in x.
+	/// Valid values are sorted; for odd n the middle element is returned,
+	/// for even n the average of the two central elements is returned.
+	/// Returns Math.NaN if x contains no valid values.
+	public static float Median (List<float> x) {
+		List<float>() v;
+		for (int i = 0; i < x.Count; i++) {
+			if (!Math.IsNaN(x[i])) {
+				v.Add(x[i]);
+			}
+		}
+		int n = v.Count;
+		if (n == 0) {
+			return(Math.NaN);
+		}
+		for (int i = 0; i < n; i++) {
+			for (int j = i + 1; j < n; j++) {
+				if (v[j] < v[i]) {
+					float t = v[i];
+					v[i] = v[j];
+					v[j] = t;
+				}
+			}
+		}
+		if (n % 2 == 1) {
+			return(v[n / 2]);
+		}
+		return((v[n / 2 - 1] + v[n / 2]) / 2.0);
+	}
+	/// Mode (most frequent value) among non-NaN elements in x.
+	/// Returns Math.NaN if x contains no valid values.
+	public static float Mode (List<float> x) {
+		List<float>() v;
+		for (int i = 0; i < x.Count; i++) {
+			if (!Math.IsNaN(x[i])) {
+				v.Add(x[i]);
+			}
+		}
+		int n = v.Count;
+		if (n == 0) {
+			return(Math.NaN);
+		}
+		float best = v[0];
+		int bestc = 0;
+		for (int i = 0; i < n; i++) {
+			int c = 0;
+			for (int j = 0; j < n; j++) {
+				if (v[j] == v[i]) {
+					c = c + 1;
+				}
+			}
+			if (c > bestc) {
+				bestc = c;
+				best = v[i];
+			}
+		}
+		return(best);
+	}
+	/// Calculate the standard deviation for a sample.
+	/// The formula is: `s = sqrt(sum(x-mean(x)^2))`
+	public static float StandardDeviation (
+		/// x - Vector of floats, missing values are possible
+		List<float> x) {
+		float m = Mean(x);
+		float s = 0;
+		float n = 0;
+		for (int i = 0; i < x.Count; i++) {
+			if (!Math.IsNaN(x[i])) {
+				s = s + Math.Pow(x[i]-m,2);
+				n = n + 1.0;
+			}
+		}
+		return(Math.Sqrt(s/(n-1)));
+	}
+	/// Create a sequence of numbers.
+	/// Returns a list of a sequence of integers.
+	public static List<int>() Sequence(
+		/// start integer
+		int start,
+		/// end integer
+		int end,
+		/// step variable, default: 1
+		int by=1) {
+		List<int>() x;
+		int current = start;
+		while (current <= end) {
+			x.Add(current);
+			current = current + by;
+		}
+		return(x);
+	}
+	// Randomize the order of a list of floats.
+	// Returns the same values but in a random order
+	public static List<int>() Order (List<float> x) {
+		List<int>() idx;
+		for (int i = 0; i < x.Count; i++) {
+			idx.Add(i);
+		}
+		for (int i = 0; i < idx.Count; i++) {
+			for (int j = i + 1; j < idx.Count; j++) {
+				int ii = idx[i];
+				int jj = idx[j];
+				float vi = x[ii];
+				float vj = x[jj];
+				bool nai = Math.IsNaN(vi);
+				bool naj = Math.IsNaN(vj);
+				bool swap = false;
+				if (nai && !naj) {
+					swap = true;
+				} else if (!nai && !naj && vj < vi) {
+					swap = true;
+				}
+				if (swap) {
+					int t = idx[i];
+					idx[i] = idx[j];
+					idx[j] = t;
+				}
+			}
+		}
+		return(idx);
+	}
+    /// Average ranks (1 .. n) for non-NaN values; NaN positions stay NaN.
+	public static List<float>() RankMean (List<float> x) {
+		List<float>() r;
+		List<bool>() nas = Stats.IsNa(x);
+		int nnas = Stats.Which(nas).Count;
+		float cna = x.Count+1-nnas;
+		for (int i = 0; i < x.Count; i++) {
+			if (Math.IsNaN(x[i])) {
+				r.Add(cna);
+				cna=cna+1;
+				continue;
+			}
+			float rnk = 1.0;
+			float same = 0.0;
+			float f = 0.0; 
+			for (int j = 0; j < x.Count; j++) {
+				if (i == j) continue;
+				if (x[i] > x[j]) {
+					rnk=rnk+1;
+				} else if (x[i] == x[j]) {
+					same = same + 1.0;
+				}
+			}
+			if (same > 0) {
+				f = (1+same)/2.0;
+				r.Add(rnk+f);
+			} else {
+				r.Add(rnk);
+			}
+		}
+		return(r);
+
+	}
+	/// Method Rank with mode=first
+	public static List<int>() Rank (List<float> x) {
+		List<int>() r;
+		List<bool>() nas = Stats.IsNa(x);
+		int nnas = Stats.Which(nas).Count;
+		int cna = x.Count+1-nnas;
+		for (int i = 0; i < x.Count; i++) {
+			if (Math.IsNaN(x[i])) {
+				r.Add(cna);
+				cna=cna+1;
+				continue;
+			}
+			int rnk = 1;
+			for (int j = 0; j < x.Count; j++) {
+				if (Math.IsNaN(x[j])) {
+					continue;
+				}
+				if (i == j) continue;
+				if (x[i] > x[j]) {
+					rnk=rnk+1;
+				} else if (x[i] == x[j] && j < i) {
+					rnk=rnk+1;
+				}
+			}
+			r.Add(rnk);
+		}
+		return(r);
+	}
+
+	public static List<bool>() IsNa (List<float> x) {
+		List<bool>() b;
+		for (int i = 0; i < x.Count; i++) {
+			if (Math.IsNaN(x[i])) {
+				b.Add(true);
+			} else {
+				b.Add(false);
+			}
+		}
+		return(b);
+	}
+	/// Return zero-based indices i where b[i] is true.
+	public static List<int>() Which (List<bool> b) {
+		List<int>() w ;
+		for (int i = 0; i < b.Count; i++) {
+			if (b[i] == true) {
+				w.Add(i);
+			}
+		}
+		return(w);
+	}
+	/// Pearson correlation coefficient between paired lists x and y.
+	/// Only indices 0 .. min(x.Count, y.Count) - 1 are considered; pairs with
+	/// NaN in either list are dropped. Returns Math.NaN if no valid pairs remain,
+	/// and 0.0 if either variable has zero variance among the valid pairs.
+	public static float pearsonCorrelation (List<float> x, List<float> y) {
+		List<float>() validX;
+		List<float>() validY;
+		for (int i = 0; i < Math.Min(x.Count, y.Count); i++) {
+			if (!Math.IsNaN(x[i]) && !Math.IsNaN(y[i])) {
+				validX.Add(x[i]);
+				validY.Add(y[i]);
+			}
+		}
+		if (validX.Count == 0) {
+			return(Math.NaN);
+		}
+		float mx = Mean(validX);
+		float my = Mean(validY);
+		float sum_xy = 0.0;
+		float sum_x2 = 0.0;
+		float sum_y2 = 0.0;
+		int n = validX.Count;
+		for (int i = 0; i < n; i++) {
+			float dx = validX[i] - mx;
+			float dy = validY[i] - my;
+			sum_xy = sum_xy + dx * dy;
+			sum_x2 = sum_x2 + dx * dx;
+			sum_y2 = sum_y2 + dy * dy;
+		}
+		float denominator = Math.Sqrt(sum_x2 * sum_y2);
+		if (denominator == 0.0) {
+			return(0.0);
+		}
+		return(sum_xy / denominator);
+	}
+	/// Spearman rank correlation between paired lists x and y.
+	/// Valid pairs are ranked (ties averaged), then Pearson r is computed on ranks.
+	/// Returns Math.NaN if no valid pairs remain.
+	public static float spearmanCorrelation (List<float> x, List<float> y) {
+		List<float>() validX;
+		List<float>() validY;
+		for (int i = 0; i < Math.Min(x.Count, y.Count); i++) {
+			if (!Math.IsNaN(x[i]) && !Math.IsNaN(y[i])) {
+				validX.Add(x[i]);
+				validY.Add(y[i]);
+			}
+		}
+		if (validX.Count == 0) {
+			return(Math.NaN);
+		}
+		return(pearsonCorrelation(RankMean(validX), RankMean(validY)));
+	}
+	public static List<int>() FloatToInt(List<float> x, string mode="round") {
+		List<int>() y;
+		int NA = int.MinValue;
+		int f = 0;
+		for (int i = 0; i < x.Count; i++) {
+			if (Math.IsNaN(x[i])) {
+				y.Add(NA);
+			} else if (mode == "ceiling") {
+				f = Math.Ceiling(x[i]);
+				y.Add(f);
+			} else {
+				f = Math.Round(x[i]);
+				y.Add(f);
+			}
+
+		}
+		return(y);
+	}
+	public static void Run (string[] argv) {
+		List<float>() x ;
+		x.Add(0.2);
+		x.Add(0.5);
+		x.Add(0.9);
+		x.Add(Math.NaN);
+		x.Add(2.2);
+		x.Add(Math.NaN);
+		x.Add(0.2);
+		x.Add(0.2);
+		float m = Stats.Mean(x);
+		Console.WriteLine($"mean is {m}");
+		List<bool>() inas = Stats.IsNa(x);
+		List<int>() nas = Stats.Which(inas);
+		for (int i = 0; i < nas.Count; i++) {
+			Console.WriteLine($"On position {nas[i]} the numeric value is NA!");
+		}
+		Console.WriteLine($"Standard Deviation is: {Stats.StandardDeviation(x)}");
+		List<int> range = Stats.Sequence(1,20);
+		for (int i = 0; i < range.Count; i++) {
+			Console.WriteLine($"{range[i]} ");
+		}
+		Console.WriteLine("\n");
+		List<int> ord = Stats.Order(x);
+		for (int i = 0; i < ord.Count; i++) {
+			Console.WriteLine($"val={x[i]} order={ord[i]}");
+		}
+		Console.WriteLine("\n");
+
+
+		List<int>() ranks = Stats.Rank(x);
+		for (int i = 0; i < ranks.Count; i++) {
+			Console.WriteLine($"val={x[i]} rankfirst={ranks[i]}");
+		}
+		Console.WriteLine("\n");
+		List<float>() ranksf= Stats.RankMean(x);
+		for (int i = 0; i < ranksf.Count; i++) {
+			Console.WriteLine($"val={x[i]} rankmean={ranksf[i]}");
+		}
+		Console.WriteLine("\n");
+
+	}
+#if STATSMAIN
+	public static void Main (string[] args) {
+		Stats.Run(args);
+	}
+#endif	
+}
+
+
