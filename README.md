@@ -2,6 +2,12 @@
 
 SNHA algorithm implemented in various programming languages.
 
+Already existing are implementations in:
+
+- [R](https://github.com/mittelmark/snha) - by Detlef Groth
+- [Python](https//github.com/thake93/snah4py) - Tim Hake
+- [Julia](https://github.com/nono-zarazua/snha4jl) - Roberto Zarazua
+
 ## References
 
 - Groth, D.; Scheffler, C.; Hermanussen, M. (2019): Body height in stunted Indonesian children depends directly on parental education and not via a nutrition mediated pathway - Evidence from tracing association chains by St. Nicolas House Analysis. In Anthropologischer Anzeiger. [DOI: 10.1127/anthranz/2019/1027](https://doi.org/10.1127/anthranz/2019/1027)
@@ -60,17 +66,17 @@ Here is the process diagram:
 
 ## Progress
 
-| Language   | Rand.fu | Stats.fu |
-|------------|---------|----------|
-| C          | [x]     | [x]      |
-| C++        | [x]     | [x]      |
-| C#         | [x]     | [x]      |
-| D+         | [x]     | [x]      |
-| Java       | [x]     | [x]      |
-| JavaScript | [x]     | [x]      |
-| Python     | [x]     | [x]      |
-| Swift      | nt      |  nt      |
-| TypeScript | [x]     | [x]      |
+| Language   | Rand.fu | Stats.fu | Matrix.fu |
+|------------|---------|----------|-----------|
+| C          | [x]     | [x]      |   [x]     |
+| C++        | [x]     | [x]      |   [x]     |
+| C#         | [x]     | [x]      |   [x]     |
+| D+         | [x]     | [x]      |   [x]     |
+| Java       | [x]     | [x]      |   [x]     |
+| JavaScript | [x]     | [x]      |   [x]     |
+| Python     | [x]     | [x]      |   [x]     |
+| Swift      | [x]     | [x]      |   [x]     |
+| TypeScript | [x]     | [x]      |   [x]     |
 
 ## Authors
 
