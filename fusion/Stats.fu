@@ -196,7 +196,7 @@ public static class Stats {
     /// Average ranks (1 .. n) for non-NaN values; NaN positions stay NaN.
 	public static List<float>() RankMean (List<float> x) {
 		List<float>() r;
-		List<bool> nas = Stats.IsNa(x);
+		List<bool>() nas = Stats.IsNa(x);
 		int nnas = Stats.Which(nas).Count;
 		float cna = x.Count+1-nnas;
 		for (int i = 0; i < x.Count; i++) {
@@ -210,9 +210,9 @@ public static class Stats {
 			float f = 0.0; 
 			for (int j = 0; j < x.Count; j++) {
 				if (i == j) continue;
-				if (x[i] > x[j]) {
+				if ((x[i]-x[j])>0.0001) {
 					rnk=rnk+1;
-				} else if (x[i] == x[j]) {
+				} else if (Math.Abs(x[i]-x[j])<0.0001) {
 					same = same + 1.0;
 				}
 			}
@@ -244,11 +244,16 @@ public static class Stats {
 					continue;
 				}
 				if (i == j) continue;
-				if (x[i] > x[j]) {
+				if (x[i]-x[j]>0.0001) {
 					rnk=rnk+1;
-				} else if (x[i] == x[j] && j < i) {
-					rnk=rnk+1;
+				} else if (Math.Abs(x[i]-x[j])<0.0001 && j < i) {
+					rnk = rnk +1;
 				}
+				//if (x[i] > x[j]) {
+				//	rnk=rnk+1;
+				//} else if (x[i] == x[j] && j < i) {
+				//	rnk=rnk+1;
+				//}
 			}
 			r.Add(rnk);
 		}
@@ -364,12 +369,12 @@ public static class Stats {
 			Console.WriteLine($"On position {nas[i]} the numeric value is NA!");
 		}
 		Console.WriteLine($"Standard Deviation is: {Stats.StandardDeviation(x)}");
-		List<int> range = Stats.Sequence(1,20);
+		List<int>() range = Stats.Sequence(1,20);
 		for (int i = 0; i < range.Count; i++) {
 			Console.WriteLine($"{range[i]} ");
 		}
 		Console.WriteLine("\n");
-		List<int> ord = Stats.Order(x);
+		List<int>() ord = Stats.Order(x);
 		for (int i = 0; i < ord.Count; i++) {
 			Console.WriteLine($"val={x[i]} order={ord[i]}");
 		}

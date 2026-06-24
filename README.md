@@ -75,7 +75,7 @@ Here is the process diagram:
 | Java       | [x]     | [x]      |   [x]     |   [x]     | [x]   |
 | JavaScript | [x]     | [x]      |   [x]     |   [x]     | [x]   |
 | Python     | [x]     | [x]      |   [x]     |   [x]     | [x]   |
-| Swift      | [ ]     | [ ]      |   [ ]     |   [ ]     | [ ]   |
+| Swift      | [x]     | [x]      |   [ ]     |   [ ]     | [ ]   |
 | TypeScript | [x]     | [x]      |   [x]     |   [x]     | [x]   |
 
 Currently there are problems with the Swift code. Error Console does not work which is not a big issue we should not use it for now.

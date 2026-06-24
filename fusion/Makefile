@@ -7,6 +7,7 @@ CURRENT_MAKEFILE := $(lastword $(MAKEFILE_LIST))
 ARGS=
 FUFILES=Stats.fu
 APP=Stats
+LANG=ALL
 app=$(shell echo $(APP) | tr A-Z a-z)
 MAIN=STATSMAIN
 ## D compiler check
@@ -15,6 +16,7 @@ dcom=ldc2
 else
 dcom=dmd
 endif
+CHECK='val=0.2.* rankmean=2.5'
 ## default: list existing tasks 
 .PHONY: tasks
 tasks:  ## list all tasks
@@ -67,10 +69,32 @@ ts:
 	
 swift:
 	[ -d swiftm/Sources/swift ] || mkdir -p swiftm/Sources/swift
-	fut -D $(MAIN) $(FUFILES) -o swiftm/Sources/swift/swift.swift
+	fut -D $(MAIN) -D SWIFT $(FUFILES) -o swiftm/Sources/swift/swift.swift
 	cd swiftm && swift build
 	cd swiftm && swift run
 	./swiftm/.build/x86_64-unknown-linux-gnu/debug/swift
+rand:
+	@make FUFILES="Rand.fu Stats.fu" MAIN="RANDMAIN" APP=Rand c | grep -qE 'position 19.+ is 15' && echo   "C     OK" || echo "C     Fail"
+	@make FUFILES="Rand.fu Stats.fu" MAIN="RANDMAIN" APP=Rand cpp | grep -qE 'position 19.+ is 15' && echo   "C++   OK" || echo "C++   Fail"	
+	@make FUFILES="Rand.fu Stats.fu" MAIN="RANDMAIN" APP=Rand cs | grep -qE 'position 19.+ is 15' && echo   "C#    OK" || echo "C#   Fail"		
+	@make FUFILES="Rand.fu Stats.fu" MAIN="RANDMAIN" APP=Rand d | grep -qE 'position 19.+ is 15' && echo   "D     OK" || echo "D    Fail"			
+	@make FUFILES="Rand.fu Stats.fu" MAIN="RANDMAIN" APP=Rand java | grep -qE 'position 19.+ is 15' && echo   "Java  OK" || echo "Java  Fail"				
+	@make FUFILES="Rand.fu Stats.fu" MAIN="RANDMAIN" APP=Rand js  | grep -qE 'position 19.+ is 15' && echo   "Js    OK" || echo "Js   Fail"					
+	@make FUFILES="Rand.fu Stats.fu" MAIN="RANDMAIN" APP=Rand ts  | grep -qE 'position 19.+ is 15' && echo   "Ts    OK" || echo "Ts   Fail"						
+	@make FUFILES="Rand.fu Stats.fu" MAIN="RANDMAIN" APP=Rand py  | grep -qE 'position 19.+ is 15' && echo   "Py    OK" || echo "Py   Fail"							
+	@make FUFILES="Rand.fu Stats.fu" MAIN="RANDMAIN" LANG=SWIFT APP=Rand swift 2>/dev/null | grep -qE 'position 19.+ is 15' && echo   "Swift OK" || echo "Swift  Fail"
+
+stats:
+	@make FUFILES="Rand.fu Stats.fu" MAIN="STATSMAIN" APP=Stats c | grep -qE $(CHECK) && echo   "C     OK" || echo "C     Fail"
+	@make FUFILES="Rand.fu Stats.fu" MAIN="STATSMAIN" APP=Stats cpp | grep -qE $(CHECK) && echo   "C++   OK" || echo "C++   Fail"	
+	@make FUFILES="Rand.fu Stats.fu" MAIN="STATSMAIN" APP=Stats cs | grep -qE $(CHECK) && echo   "C#    OK" || echo "C#   Fail"		
+	@make FUFILES="Rand.fu Stats.fu" MAIN="STATSMAIN" APP=Stats d | grep -qE $(CHECK) && echo   "D     OK" || echo "D    Fail"			
+	@make FUFILES="Rand.fu Stats.fu" MAIN="STATSMAIN" APP=Stats java | grep -qE $(CHECK) && echo   "Java  OK" || echo "Java  Fail"				
+	@make FUFILES="Rand.fu Stats.fu" MAIN="STATSMAIN" APP=Stats js  | grep -qE $(CHECK) && echo   "Js    OK" || echo "Js   Fail"					
+	@make FUFILES="Rand.fu Stats.fu" MAIN="STATSMAIN" APP=Stats ts  | grep -qE $(CHECK) && echo   "Ts    OK" || echo "Ts   Fail"						
+	@make FUFILES="Rand.fu Stats.fu" MAIN="STATSMAIN" APP=Stats py  | grep -qE $(CHECK) && echo   "Py    OK" || echo "Py   Fail"							
+	@make FUFILES="Rand.fu Stats.fu" MAIN="STATSMAIN" APP=Stats swift 2>/dev/null | grep -qE $(CHECK) && echo   "Swift OK" || echo "Swift  Fail"
+
 mgraph:
 	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu" APP=Mgraph MAIN=MGRAPHMAIN c  | grep -E "A.+B|A.+1" | wc -l | grep -q 5 && echo   "C    OK" || echo "C    Fail"
 	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu" APP=Mgraph MAIN=MGRAPHMAIN cpp | grep -E "A.+B|A.+1" | wc -l | grep -q 5 && echo  "C++  OK" || echo "Cpp  Fail"
