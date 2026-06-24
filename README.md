@@ -66,7 +66,7 @@ Here is the process diagram:
 
 ## Progress
 
-| Language   | Rand.fu | Stats.fu | Matrix.fu | Mgraph.fu |
+| Language   | [Rand.fu](fusion/Rand.fu) | [Stats.fu](fusion/Stats.fu) | [Matrix.fu](fusion/Matrix.fu) | [Mgraph.fu](fusion/Mgraph.fu) |
 |------------|---------|----------|-----------|-----------|
 | C          | [x]     | [x]      |   [x]     |   [x]     |
 | C++        | [x]     | [x]      |   [x]     |   [x]     |
@@ -84,6 +84,9 @@ Currently there are problems with the Swift code. Error Console does not work an
 List<int> x = Method(); // creates problems
 ```
 
+## Class Diagram (WIP)
+
+![](https://kroki.io/plantuml/svg/eNqVUc1OwzAMvvcpciyij4C4bEKaBAVREGfTeFu0xB6JCwXEu9MfGsrUHMgpzveTz3ZtIQR1D6TVZ6a6c64qRJ2fzYqS33LLtFPt9FpiK72GXSSuPILgI5kte7cGgXxrGUQ5Q4X6uUJbKEOiKIA7Wgx_tWUnBDuXNpMymJ2DZe0Yw3xgfm2CXAz8y9-kEd6QjIzOZMC_sqwemq8EJMTuN6GEZaurvn7gaHSK3yBQCtEmibFORL_1Gv0ydIfgA9OKvUcLYvjEvFDz8n02jENyTId0_gpfGqQa834BQcDLuAskHSnHLpKDf0eqGpf4U7rNgddrfDULdhPtaW_q_Qg9M9txs9_PHd_o)
 
 ## Authors
 
