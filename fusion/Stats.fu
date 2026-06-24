@@ -210,9 +210,9 @@ public static class Stats {
 			float f = 0.0; 
 			for (int j = 0; j < x.Count; j++) {
 				if (i == j) continue;
-				if ((x[i]-x[j])>0.0001) {
+				if (x[i]>x[j]) {
 					rnk=rnk+1;
-				} else if (Math.Abs(x[i]-x[j])<0.0001) {
+				} else if (x[i]==x[j]) {
 					same = same + 1.0;
 				}
 			}
@@ -244,9 +244,9 @@ public static class Stats {
 					continue;
 				}
 				if (i == j) continue;
-				if (x[i]-x[j]>0.0001) {
+				if (x[i]>x[j]) {
 					rnk=rnk+1;
-				} else if (Math.Abs(x[i]-x[j])<0.0001 && j < i) {
+				} else if (x[i] == x[j] && j < i) {
 					rnk = rnk +1;
 				}
 				//if (x[i] > x[j]) {

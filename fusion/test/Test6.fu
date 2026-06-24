@@ -1,0 +1,14 @@
+public static class Test6 {
+	public static void Main(string[] args) {
+		List<float>() x;
+		x.Add(2.0);
+		x.Add(2.0);
+		if (x[0] == x[1]) {
+			Console.WriteLine($"x0 and x1 are equal!");
+		} else {
+			Console.WriteLine($"x0 and x1 are not equal!");
+		}
+	}
+}
+
+
