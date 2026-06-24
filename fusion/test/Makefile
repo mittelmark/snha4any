@@ -66,7 +66,7 @@ ts:
 	bun tsm/$(app).ts
 	
 swift:
-	[ -d swiftm/Sources/swift ]] || mkdir -p swiftm/Sources/swift
+	[ -d swiftm/Sources/swift ] || mkdir -p swiftm/Sources/swift
 	fut -D $(MAIN) $(FUFILES) -o swiftm/Sources/swift/swift.swift
 	cd swiftm && swift build
 	cd swiftm && swift run

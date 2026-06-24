@@ -1,0 +1,19 @@
+public static class Test4 {
+	public static void DlangIssue (List<string>() confirmed) {
+		SortedDictionary<string, int>() known;
+		foreach (string chain in confirmed) {
+			if (!(known.ContainsKey(chain))) {
+				string key = chain;
+				known[key] = 1;
+				Console.WriteLine($"added key {key}");
+			}
+		}
+	}
+	public static void Main (string[] args) {
+		List<string>() chains ;
+		chains.Add("A-B-C");
+		chains.Add("C-D-E");
+		chains.Add("B-C-D");		
+		DlangIssue(chains);
+	}
+}
