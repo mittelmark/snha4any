@@ -66,7 +66,7 @@ Here is the process diagram:
 
 ## Progress
 
-| Language   | [Rand.fu](fusion/Rand.fu) | [Stats.fu](fusion/Stats.fu) | [Matrix.fu](fusion/Matrix.fu) | [Mgraph.fu](fusion/Mgraph.fu) | [Mgraph.fu](fusion/Mgraph.fu) |
+| Language   | [Rand.fu](fusion/Rand.fu) | [Stats.fu](fusion/Stats.fu) | [Matrix.fu](fusion/Matrix.fu) | [Mgraph.fu](fusion/Mgraph.fu) | [Mcgraph.fu](fusion/Mcgraph.fu) |
 |------------|---------|----------|-----------|-----------|----------------------|
 | C          | [x]     | [x]      |   [x]     |   [x]     | [x]   | 
 | C++        | [x]     | [x]      |   [x]     |   [x]     | [x]   |
