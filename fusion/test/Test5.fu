@@ -1,0 +1,49 @@
+public class Test5 {
+	/// Initialize the random number generator.
+	/// Will have same output with the same seed all the time.
+	long RandomState = 1;
+	public void Seed! (
+		/// Initialize the random numbers with a specific value.
+		long x) {
+		RandomState = x;
+	}
+	/// Initialize the random number generator.
+	/// Will have different output with every run.
+	public void SeedNow! () {
+		RandomState = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+
+	}
+	/// private function - returns bitshift by the given n of 1.
+	static long LowBits(
+		/// integer value bitshift returned.
+		int n
+	) {
+		long one = 1;
+		return (one << n) - 1;
+	}
+	/// Create a random number using the xorshift algorithm.
+	public float NextRandom!()
+	{
+		// https://en.wikipedia.org/wiki/Xorshift#xorshift.2A
+		long state = RandomState;
+		state ^= state >> 12 & LowBits(52);
+		state ^= (state & LowBits(39)) << 25;
+		state ^= state >> 27 & LowBits(37);
+		RandomState = state;
+		float f = (state * 0x2545f4914f6cdd1d >> 40) & LowBits(24);
+		return f / 16777216;
+	}
+	public static void Run (string[] args) {
+		Test5() rnd;
+		rnd.Seed(123);
+		for (int i = 0; i < 10; i++) {
+			float r = rnd.NextRandom();
+			Console.WriteLine($"On position {i} the random value is {r}!");
+		}
+	}
+    
+	public static void Main(string[] args) {
+		Test5.Run(args);
+	}
+}
+
