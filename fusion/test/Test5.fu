@@ -22,41 +22,30 @@ public class Rand {
 		return (one << n) - 1;
 	}
 	/// Create a random number using the xorshift algorithm.
+	/// Create a random number using the xorshift algorithm.
 	public float NextRandom!()
 	{
-      float f = 0.0;
-
-    #if SWIFT
-	native {
-		var state: Int64 = self.randomState
-		
-		state ^= state >> 12 & Int64(Rand.lowBits(52))
-		state ^= (state & Int64(Rand.lowBits(39))) << 25
-		state ^= state >> 27 & Int64(Rand.lowBits(37))
-		self.randomState = state
-		
-		let a = UInt64(bitPattern: state)
-		let m: UInt64 = 2685821657736338717
-		
-		// full 128-bit product split into high/low 64-bit parts
-		let product = a.multipliedFullWidth(by: m) // (high: UInt64, low: UInt64)
-		
-		// Equivalent to: (state * m) >> 40
-		let shifted = UInt64(truncatingIfNeeded: (product.high << (64 - 40)) | (product.low >> 40))
-		
-		let bits = shifted & UInt64(Rand.lowBits(24))
-		f = Float(bits)
-		//return Float(bits) / 16777216.0
-	}
-	#else
 		// https://en.wikipedia.org/wiki/Xorshift#xorshift.2A
 		long state = RandomState;
 		state ^= state >> 12 & LowBits(52);
 		state ^= (state & LowBits(39)) << 25;
 		state ^= state >> 27 & LowBits(37);
 		RandomState = state;
-		f = (state * 0x2545f4914f6cdd1d >> 40) & LowBits(24);
+	#if SWIFT
+	native {
+		let a = UInt64(bitPattern: state)
+		let m: UInt64 = 2685821657736338717
+
+		// full 128-bit product split into high/low 64-bit parts
+		let product = a.multipliedFullWidth(by: m) // (high: UInt64, low: UInt64)
+
+		// Equivalent to: (state * m) >> 40
+		state = Int64(bitPattern: (product.high << (64 - 40)) | (product.low >> 40))
+	}
+	#else
+		state = state * 0x2545f4914f6cdd1d >> 40;
 	#endif
+		float f = state & LowBits(24);
 		return f / 16777216.0;
     }
 	public static void Run (string[] args) {
