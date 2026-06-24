@@ -71,19 +71,13 @@ Here is the process diagram:
 | C          | [x]     | [x]      |   [x]     |   [x]     | [x]   | 
 | C++        | [x]     | [x]      |   [x]     |   [x]     | [x]   |
 | C#         | [x]     | [x]      |   [x]     |   [x]     | [x]   |
-| D+         | [x]     | [x]      |   [x]     |   [x]     | [x]   |
+| D          | [x]     | [x]      |   [x]     |   [x]     | [x]   |
 | Java       | [x]     | [x]      |   [x]     |   [x]     | [x]   |
 | JavaScript | [x]     | [x]      |   [x]     |   [x]     | [x]   |
 | Python     | [x]     | [x]      |   [x]     |   [x]     | [x]   |
 | Swift      | [x]     | [x]      |   [ ]     |   [ ]     | [ ]   |
 | TypeScript | [x]     | [x]      |   [x]     |   [x]     | [x]   |
 
-Currently there are problems with the Swift code. Error Console does not work which is not a big issue we should not use it for now.
-
-```
-List<int>   x = Method(); // creates problems should give fut error
-List<int>() x = Method(); // does not work with Swift
-```
 
 ## Class Diagram (WIP)
 
