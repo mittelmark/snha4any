@@ -66,19 +66,21 @@ Here is the process diagram:
 
 ## Progress
 
-| Language   | [Rand.fu](fusion/Rand.fu) | [Stats.fu](fusion/Stats.fu) | [Matrix.fu](fusion/Matrix.fu) | [Mgraph.fu](fusion/Mgraph.fu) |
-|------------|---------|----------|-----------|-----------|
-| C          | [x]     | [x]      |   [x]     |   [x]     |
-| C++        | [x]     | [x]      |   [x]     |   [x]     |
-| C#         | [x]     | [x]      |   [x]     |   [x]     |
-| D+         | [x]     | [x]      |   [x]     |   [x]     |
-| Java       | [x]     | [x]      |   [x]     |   [x]     |
-| JavaScript | [x]     | [x]      |   [x]     |   [x]     |
-| Python     | [x]     | [x]      |   [x]     |   [x]     |
-| Swift      | [ ]     | [ ]      |   [ ]     |   [ ]     |
-| TypeScript | [x]     | [x]      |   [x]     |   [x]     |
+| Language   | [Rand.fu](fusion/Rand.fu) | [Stats.fu](fusion/Stats.fu) | [Matrix.fu](fusion/Matrix.fu) | [Mgraph.fu](fusion/Mgraph.fu) | [Mgraph.fu](fusion/Mgraph.fu) |
+|------------|---------|----------|-----------|-----------|----------------------|
+| C          | [x]     | [x]      |   [x]     |   [x]     | [x]   | 
+| C++        | [x]     | [x]      |   [x]     |   [x]     | [x]   |
+| C#         | [x]     | [x]      |   [x]     |   [x]     | [x]   |
+| D+         | [x]     | [x]      |   [x]     |   [x]     | [x]   |
+| Java       | [x]     | [x]      |   [x]     |   [x]     | [ ]   |
+| JavaScript | [x]     | [x]      |   [x]     |   [x]     | [x]   |
+| Python     | [x]     | [x]      |   [x]     |   [x]     | [x]   |
+| Swift      | [ ]     | [ ]      |   [ ]     |   [ ]     | [ ]   |
+| TypeScript | [x]     | [x]      |   [x]     |   [x]     | [x]   |
 
 Currently there are problems with the Swift code. Error Console does not work and as well.
+There is as well a problem with Java delegating floats which does not allow Mcgraph to work with Java.
+
 
 ```
 List<int> x = Method(); // creates problems

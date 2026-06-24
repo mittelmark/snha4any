@@ -1,0 +1,11 @@
+public static class Test3 {
+	public static void FloatIssue (int x, float f = 0.05) {
+		Console.WriteLine($"x is {x} float f is {f}");
+	}
+	public static void Main (string[] args) {
+		Test3.FloatIssue(1);
+		Test3.FloatIssue(2,0.04);
+	}
+}
+
+

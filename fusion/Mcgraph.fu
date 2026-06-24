@@ -1,0 +1,512 @@
+/// Monte Carlo data generation utilities for graph-based simulations.
+///
+/// The class 'Mcgraph' generates synthetic data from graphs created with 'Mgraph'.
+///
+/// The idea is:
+/// * 1. Create a graph structure.
+/// * 2. Assign random initial values to all nodes.
+/// * 3. Propagate information through graph edges.
+/// * 4. Add random noise through each iteration.
+/// * 5. Store the resulting simulated samples.
+///
+/// This produces data matrices whose correlation structure reflects the topology of the graph.
+///
+/// Example:
+///     Mgraph() G;
+///     G.gnew("werner", 6);
+///
+///     Mcgraph() MC;
+///     Matrix data;
+///     data = Graph2Data(G, 10, 30, 1, 0.05, 100, 2);
+///
+/// Arguments for Graph2Data(G, nsamples, iter, noise, prop, mu, sigma):
+///     * G         : input graph.
+///     * nsamples  : the number of generated data from each variable, default: 200.
+///     * iter      : the number of iterations (counteracts noise), default: 30.
+///     * noise     : the level of random noise added to the data values in each iteration, default: 1.
+///     * prop      : the proportion in which the source and target nodes are weighted when calculating the updated target value, default: 0.05.
+///     * mu        : the mean value of the normal distribution the random values are drawn for, default: 100.
+///     * sigma     : the value of the standard deviation the random values are drawn for, default: 2.
+///
+
+public class Mcgraph {
+
+	/// Random generator used by the whole class.
+	Rand() rnd;
+
+	/// Initialize random generator once.
+	public void Seed! () {
+		rnd.SeedNow();
+	}
+
+	/// Return absolute value of x.
+	public float Abs(float x) {
+		if (x < 0) {
+			return -x;
+		}
+		return x;
+	}
+
+	/// Generate one random value from N(mu, sigma^2) using Box-Muller.
+	public float NormalValue! (float mu = 100, float sigma = 2) {
+		// Generate two uniform random numbers between 0 and 1
+		float u1 = rnd.NextRandom();
+		float u2 = rnd.NextRandom();
+
+		// Box-Muller to transform two uniform numbers into normally distributed ones
+		float r = Math.Sqrt(-2.0 * Math.Log(u1));
+		float theta = 2.0 * Math.PI * u2;
+
+		// Final normal value
+		return mu + sigma * r * Math.Cos(theta);
+	}
+
+
+	/// Create data of a normal distribution using Box-Muller.
+	/// The resulting samples follow N(mu, sigma^2).
+	public List<float>() CreateNormalData!(
+		// Mean of the normal distribution
+		float mu,
+		// Standard deviation of the normal distribution
+		float sigma,
+		// Number of samples to generate
+		int nsamples
+	) {
+
+		rnd.SeedNow();
+
+		// List containing the samples.
+		List<float> () samples;
+
+		float pi = Math.PI;
+
+		for (int k=0; k < nsamples / 2; k++) {
+			// Creation of u1 and u2, two uniform random numbers.
+			float u1 = rnd.NextRandom();
+			float u2 = rnd.NextRandom();
+
+			// Transform to normal distribution.
+			float r = Math.Sqrt(-2.0 * Math.Log(u1));
+			float theta = 2.0 * pi * u2;
+
+			float z0 = r * Math.Cos(theta);
+			float z1 = r * Math.Sin(theta);
+
+			samples.Add(mu + sigma * z0);
+			samples.Add(mu + sigma * z1);
+		}
+
+
+		// if n is an odd number, an extra value is added.
+		if (nsamples % 2 != 0) {
+			float u1 = rnd.NextRandom();
+			float u2 = rnd.NextRandom();
+
+			float r = Math.Sqrt(-2.0 * Math.Log(u1));
+			float theta = 2.0 * pi * u2;
+
+			samples.Add(mu + sigma * (r * Math.Cos(theta)));
+		}
+		return(samples);
+	}
+
+	/// Generate synthetic data from a graph using a Monte Carlo approach.
+	/// Results are stochastic: repeated calls may generate different graph structures.
+	///
+	/// Output matrix:
+	///     rows    = graph nodes / variables
+	///     columns = simulated samples
+	public Matrix() Graph2Data! (
+		Mgraph G,
+		// More sample, pronounced correlations
+		int nsamples = 200,
+		// Higher iter values strengthen correlations.
+		int iter = 30,
+		// Higher noise weakens the correlation structure.
+		float noise = 1,
+		// Larger prop values make connected nodes more similar faster.
+		float prop = 0.05,
+		float mu = 100,
+		float sigma = 2
+	) {
+		Matrix() dataMatrix;
+
+		Seed();
+
+		int p = G.Size();
+		dataMatrix.Create(p, nsamples, 0);
+
+		for (int sample = 0; sample < nsamples; sample++) {
+
+			List<float>() X;
+
+			// Initial values for all nodes.
+			for (int node = 0; node < p; node++) {
+				X.Add(NormalValue(mu, sigma));
+			}
+			// Console.WriteLine($"\nSample {sample}");
+
+			// Monte Carlo refinement.
+			List<int>() seq = Stats.Sequence(0, p - 1);
+
+			for (int it = 0; it < iter; it++) {
+
+				List<int>() sources = rnd.RandomizeInt(seq);
+				List<int>() targets = rnd.RandomizeInt(seq);
+
+				for (int source = 0; source < p; source++) {
+					int csrc = sources[source];
+
+					for (int target = 0; target < p; target++) {
+						int ctrg = targets[target];
+
+						if (csrc == ctrg) {
+							continue;
+						}
+
+						float weight = G.GetEdge(csrc, ctrg);
+
+						if (weight != 0) {
+							float src = X[csrc];
+							float trg = X[ctrg];
+							float abs_weight = Abs(weight);
+
+							float xnew_trg = src * prop * abs_weight
+										 + trg * (1 - prop) * abs_weight;
+							float xnew_src = trg * prop * abs_weight
+										 + src * (1 - prop) * abs_weight;                                         
+
+							if (weight > 0) {
+								X[csrc] = xnew_src;
+                                X[ctrg] = xnew_trg;
+								// Console.WriteLine($"hello, {src} {trg} {xnew} {X[target]} {source} -> {target}");
+
+							} else {
+								X[csrc] = 2 * src - xnew_src;
+                                X[ctrg] = 2 * trg - xnew_trg;
+							}
+						}
+					}
+				}
+				// Console.Write($"Iteration {it}: ");
+				// for (int node = 0; node < p; node++) {
+				// Console.Write($"{X[node]} ");
+				// }
+				// Console.WriteLine("");
+
+				// Add noise after each iteration.
+				for (int node = 0; node < p; node++) {
+					X[node] = X[node] + NormalValue(0, noise);
+				}
+			}
+
+			// Store this sample as one column.
+			for (int node = 0; node < p; node++) {
+				dataMatrix.Set(node, sample, X[node]);
+			}
+		}
+
+		return dataMatrix;
+	}
+
+
+
+	/// Print generated data with node names.
+	public void PrintData(Mgraph G, Matrix data, int nsamples) {
+		int p = G.Size();
+
+		Console.Write("\t");
+		for (int j = 0; j < nsamples; j++) {
+			Console.Write($"S{j}\t");
+		}
+		Console.WriteLine("");
+
+		for (int i = 0; i < p; i++) {
+			Console.Write(G.GetName(i) + "\t");
+
+			for (int j = 0; j < nsamples; j++) {
+				Console.Write($"{data.Get(i, j)}\t");
+			}
+
+			Console.WriteLine("");
+		}
+	}
+
+	/// Print matrix in CSV format.
+	/// Rows correspond to graph nodes and columns to samples.
+	///
+	/// Example:
+	///
+	///     MC.SaveCSV(G, data, 200, "output.csv");
+	///
+	public void PrintCSV(
+		Mgraph G,
+		Matrix data,
+		int nsamples
+	) {
+		// Header.
+		Console.Write("Node");
+
+		for (int j = 0; j < nsamples; j++) {
+			Console.Write($",S{j}");
+		}
+		Console.WriteLine("");
+
+		// Data rows.
+		for (int i = 0; i < G.Size(); i++) {
+			Console.Write(G.GetName(i));
+
+			for (int j = 0; j < nsamples; j++) {
+				Console.Write($",{data.Get(i, j)}");
+			}
+			Console.WriteLine("");
+		}
+	}
+
+	/// Print correlation matrix in CSV format.
+	public void PrintCorrCSV(Mgraph G, Matrix data) {
+		Matrix() T = data.Transpose();
+		Matrix() C = Matrix.AsCorrelationMatrix(T, "pearson");
+
+		// Header.
+		Console.Write("Node");
+
+		for (int j = 0; j < G.Size(); j++) {
+			Console.Write($",{G.GetName(j)}");
+		}
+		Console.WriteLine("");
+
+		// Rows.
+		for (int i = 0; i < G.Size(); i++) {
+			Console.Write(G.GetName(i));
+
+			for (int j = 0; j < G.Size(); j++) {
+				Console.Write($",{C.Get(i,j)}");
+			}
+
+			Console.WriteLine("");
+		}
+	}
+
+	/// Return a color associated with a correlation value.
+	///
+	/// The function maps a correlation coefficient r in the interval [-1, 1] to one of the 20 predefinied colors.
+	/// * Negative correlations are represented in red.
+	/// * Positive correlations are represented in blue.
+	///
+	/// The input value is clamped to the inteval [-1, 1] to avoid invalid indexes.
+	/// Then it is transformed into an integer index that selects the corresponding color from the color palette obtained in R.
+	///
+	/// Arguments:
+	/// * r : correlation coefficient.
+	///
+	/// Returns:
+	/// * A hexadecimal color string.
+	///
+	public string() CorrColor(float r) {
+		List<string>() colors;
+		// Negative correlations  red
+		colors.Add("#5F1415");
+		colors.Add("#7F2A2B");
+		colors.Add("#A13F3F");
+		colors.Add("#BD5758");
+		colors.Add("#CE7575");
+		colors.Add("#DD9191");
+		colors.Add("#EAACAC");
+		colors.Add("#F3C5C5");
+		colors.Add("#F9DCDC");
+		colors.Add("#F9EFEF");
+
+		// Near zero  almost white
+		colors.Add("#EFF1F8");
+
+		// Positive correlations  blue
+		colors.Add("#DCE2F6");
+		colors.Add("#C5CFF0");
+		colors.Add("#ABBBE8");
+		colors.Add("#8EA4DE");
+		colors.Add("#6F8DD2");
+		colors.Add("#4A76C7");
+		colors.Add("#295EAE");
+		colors.Add("#0A468D");
+		colors.Add("#002F70");
+
+		// Limit correlation values to the valid interval.
+		r = Math.Clamp(r, -1, 1);
+
+		// Transform correlation range [-1, 1] into palette indexes [0, 19].
+		int index = Math.Ceiling((r + 1) * 10);
+
+		// Safety check to avoid invalid indexes caused by floating-point rounding.
+		if (index < 0) {
+			index = 0;
+		}
+		if (index > 19) {
+			index = 19;
+		}
+		return colors[index];
+	}
+
+	/// Create a SVG representation of the correlation matrix.
+	///
+	/// This function calculates the Pearson correlation matrix from the simulated data
+	/// and prints ans SVG image to the console.
+	/// The SVG contains a square grid where rows and columns represent graph nodes.
+	///
+	/// Each off-diagonal contains a circle:
+	/// * The circle color represents the sign and magnitude of the correlation.
+	///     - Blue tones indicates positive correlations.
+	///     - Red tones indicaates negative correaltions.
+	///     - Almoss white tones indicates correlations close to 0.
+	/// * The circle radious is proportional to the aboslute value of the correlation coefficient.
+	///     - Larger circles indicate stronger correlations.
+	///     - Smaller circles indicate weaker correlations.
+	///
+	/// The main diagonal is left empty because it represents the correlation of each variable with itself.
+	///
+	/// Arguments:
+	/// * G         : input graph, usedd to obtain node names and number of nodes.
+	/// * data      : matrix containing the generated data.
+	/// * nsamples  : number of samples in the data matrix.
+	/// * margin    : left/top margin of the SVG plot.
+	/// * cell      : size of each square cell in the matrix.
+	/// * show_values : if true, print the rounded correlation value inside each circle.
+	///
+	/// Output:
+	/// * The SVG code is printed directly to the console.
+	///
+	// Create SVG with correlation matrix.
+	public void Corr2SVG(Mgraph G, Matrix data, int nsamples, int margin = 120, int cell = 60, bool show_values = false) {
+		int nvars = G.Size();
+
+
+		// Transpose matrix so variables become columns.
+		Matrix() T = data.Transpose();
+		Matrix() C = Matrix.AsCorrelationMatrix(T, "pearson");
+
+		// Total SVG canvas size.
+		int width = margin + nvars * cell + 40;
+		int height = margin + nvars * cell + 40;
+
+		// Maximun circle radius inside each cell.
+		// 0.42 keeps circles inside the square boundaries.
+		int max_radius = Math.Floor(cell * 0.42);
+
+		// Adapt font size for large correlation matrices.
+		int font_size = 14;
+		if (nvars > 10) {
+			font_size = 11;
+		}
+		if (nvars > 20) {
+			font_size = 8;
+		}
+
+		string() svg;
+		svg = "";
+
+		// SVG root element.
+		svg = svg + $"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"{width}\" height=\"{height}\" viewBox=\"0 0 {width} {height}\">\n";
+
+		// White background.
+		svg = svg + "<rect width=\"100%\" height=\"100%\" fill=\"white\"/>\n";
+
+		// Title
+		svg = svg + $"<text x=\"{width / 2}\" y=\"30\" text-anchor=\"middle\" font-family=\"sans-serif\" font-size=\"{font_size + 4}\" font-weight=\"bold\">Correlation matrix</text>\n";
+		// DEBUGING: show the dimensions of the matrix.
+		//svg = svg + $"<text x=\"{width / 2}\" y=\"60\" text-anchor=\"middle\" font-family=\"sans-serif\" font-size=\"{font_size + 4}\" font-weight=\"bold\">{C.Nrow()} {C.Ncol()}</text>\n";
+
+		// Column labels. Rotating them improves readability for long node names.
+		for (int j = 0; j < nvars; j++) {
+			int x = margin + j * cell + cell / 2;
+			int y = margin - 15;
+
+			svg = svg + $"<text x=\"{x}\" y=\"{y}\" text-anchor=\"start\" font-family=\"sans-serif\" font-size=\"{font_size}\" transform=\"rotate(-45 {x},{y})\">";
+			svg = svg + G.GetName(j);
+			svg = svg + "</text>\n";
+		}
+
+		// Row labels.
+		for (int i = 0; i < nvars; i++) {
+			int x = margin - 15;
+			int y = margin + i * cell + cell / 2 + font_size / 2;
+
+
+			svg = svg + $"<text x=\"{x}\" y=\"{y}\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"{font_size}\">";
+			svg = svg + G.GetName(i);
+			svg = svg + "</text>\n";
+		}
+
+		// Grid and circles.
+		for (int i = 0; i < nvars; i++) {
+			for (int j = 0; j < nvars; j++) {
+				// Cell top-left corner coordinates.
+				int x0 = margin + j * cell;
+				int y0 = margin + i * cell;
+
+				// Circle center coordinates.
+				int cx = x0 + cell / 2;
+				int cy = y0 + cell / 2;
+
+				float r = C.Get(i, j);
+
+				// Absolute correlation controls circle size.
+				float ar = Abs(r);
+
+				// Draw square cell background and border.
+				svg = svg + $"<rect x=\"{x0}\" y=\"{y0}\" width=\"{cell}\" height=\"{cell}\" fill=\"white\" stroke=\"#dddddd\" stroke-width=\"1\"/>\n";
+
+				// Skip diagonal because self-correlation is always 1.
+				if (i != j) {
+					// Circle size proportional to correaltion magnitude.
+					int radius = Math.Ceiling(ar * max_radius);
+					string() color;
+					color = CorrColor(r);
+
+					svg = svg + $"<circle cx=\"{cx}\" cy=\"{cy}\" r=\"{radius}\" fill=\"{color}\" fill-opacity=\"0.85\"/>\n";
+
+					// Optionally display rounded correlation value inside the circle.
+					if (show_values) {
+                        int rr_int;
+						rr_int = Math.Round(r * 100);
+                        
+                        float rr;
+                        rr = rr_int / 100.0;
+                        
+						svg = svg + $"<text x=\"{cx}\" y=\"{cy + font_size / 3}\" text-anchor=\"middle\" font-family=\"sans-serif\" font-size=\"{font_size}\" fill=\"black\">";
+						svg = svg + $"{rr}";
+						svg = svg + "</text>\n";
+					}
+				}
+			}
+		}
+		svg = svg + "</svg>\n";
+		Console.Write(svg);
+	}
+
+	public static void Run(string[] args) {
+		Console.WriteLine("\nTesting Mcgraph");
+
+		Mgraph() G;
+		G.gnew("band", 5);
+
+		Mcgraph() MC;
+		Matrix() data = MC.Graph2Data(G, 10, 5, 1, 0.05, 100, 2);
+
+		Console.WriteLine("Monte Carlo data:");
+		MC.PrintData(G, data, 10);
+
+		Console.WriteLine("Correlation matrix:");
+		Matrix() corr = Matrix.AsCorrelationMatrix(data.Transpose(), "pearson");
+		Matrix.PrintMatrix(corr);
+	}
+    
+   
+    #if MCGRAPHMAIN
+        public static void Main(string[] args) {
+            Mcgraph.Run(args);
+        }
+    #endif
+}
+
+
+
