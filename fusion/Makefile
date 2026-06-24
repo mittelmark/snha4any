@@ -82,11 +82,11 @@ mgraph:
 	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu" APP=Mgraph MAIN=MGRAPHMAIN py | grep -E "A.+B|A.+1" | wc -l | grep -q 5 && echo   "Py   OK" || echo "Py   Fail"
 
 mcgraph:
-	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu Mcgraph.fu" APP=Mcgraph MAIN=MCGRAPHMAIN c
-	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu Mcgraph.fu" APP=Mcgraph MAIN=MCGRAPHMAIN cpp
-	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu Mcgraph.fu" APP=Mcgraph MAIN=MCGRAPHMAIN cs
-	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu Mcgraph.fu" APP=Mcgraph MAIN=MCGRAPHMAIN d
-	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu Mcgraph.fu" APP=Mcgraph MAIN=MCGRAPHMAIN java	
-	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu Mcgraph.fu" APP=Mcgraph MAIN=MCGRAPHMAIN js
-	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu Mcgraph.fu" APP=Mcgraph MAIN=MCGRAPHMAIN ts	
-	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu Mcgraph.fu" APP=Mcgraph MAIN=MCGRAPHMAIN py
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu Mcgraph.fu" APP=Mcgraph MAIN=MCGRAPHMAIN c 2>/dev/null | grep -E '^(A|.+S0.+S1|1)' | wc -l | grep -q 3 && echo "C    OK" || echo "C     Fail"
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu Mcgraph.fu" APP=Mcgraph MAIN=MCGRAPHMAIN cpp | grep -E '^(A|.+S0.+S1|1)' | wc -l | grep -q 3 && echo "Cpp  OK" || echo "Cpp   Fail"
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu Mcgraph.fu" APP=Mcgraph MAIN=MCGRAPHMAIN cs | grep -E '^(A|.+S0.+S1|1)' | wc -l | grep -q 3 && echo "C#   OK" || echo "C#    Fail"
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu Mcgraph.fu" APP=Mcgraph MAIN=MCGRAPHMAIN d | grep -E '^(A|.+S0.+S1|1)' | wc -l | grep -q 3 && echo "D    OK" || echo "D     Fail"
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu Mcgraph.fu" APP=Mcgraph MAIN=MCGRAPHMAIN java | grep -E '^(A|.+S0.+S1|1)' | wc -l | grep -q 3 && echo "Java OK" || echo "Java Fail"	
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu Mcgraph.fu" APP=Mcgraph MAIN=MCGRAPHMAIN js | grep -E '^(A|.+S0.+S1|1)' | wc -l | grep -q 3 && echo "Js   OK" || echo "Js   Fail"
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu Mcgraph.fu" APP=Mcgraph MAIN=MCGRAPHMAIN ts	| grep -E '^(A|.+S0.+S1|1)' | wc -l | grep -q 3 && echo "Ts   OK" || echo "Ts    Fail"
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu Mcgraph.fu" APP=Mcgraph MAIN=MCGRAPHMAIN py | grep -E '^(A|.+S0.+S1|1)' | wc -l | grep -q 3 && echo "Py   OK" || echo "Py    Fail"
