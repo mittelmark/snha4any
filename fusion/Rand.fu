@@ -99,7 +99,7 @@ public class Rand {
 	public List<float>() Randomize! (List <float> x) {
 
 		List<float>() y = CreateUniformData(0,1,x.Count);
-		List<float>() z  = null;		
+		List<float>() z;		
 		List<int>() r = Stats.Rank(y);
 		//r = Stats.Rank(y,mode="first");
 		for (int i = 0; i < x.Count; i++) {
@@ -145,7 +145,7 @@ public class Rand {
 		for (int i = 0; i < seq.Count; i++) {
 			Console.WriteLine($"On position {i} the value of 1:20 is {seq[i]}!");
 		}
-		List<int>()	rseq = rnd.RandomizeInt(seq);
+		List<int>() rseq = rnd.RandomizeInt(seq);
 		for (int i = 0; i < rseq.Count; i++) {
 			Console.WriteLine($"On position {i} the random int value of 1:20 is {rseq[i]}!");
 		}

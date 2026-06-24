@@ -102,8 +102,7 @@ public class Mgraph {
 		// Reset names list.
 		names.Clear();
 
-		string() letters;
-		letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 		// Generate nodes names automatically.
 		for (int i = 0; i < nnodes; i++) {

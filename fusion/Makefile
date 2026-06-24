@@ -30,7 +30,7 @@ cpp:	## compile Cpp
 	[ -d cppm ] || mkdir cppm
 	fut -D $(MAIN) $(FUFILES) -o cppm/$(app).cpp
 	g++ -std=c++20 cppm/$(app).cpp -o cppm/$(app)-cpp
-	./cppm/$(app)-cpp | tail -n 20
+	./cppm/$(app)-cpp 
 cs:
 	[ -d MainApp ] && rm -rf MainApp
 	dotnet new console -n MainApp --no-restore --force
@@ -71,4 +71,12 @@ swift:
 	cd swiftm && swift build
 	cd swiftm && swift run
 	./swiftm/.build/x86_64-unknown-linux-gnu/debug/swift
-
+mgraph:
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu" APP=Mgraph MAIN=MGRAPHMAIN c  | grep -E "A.+B|A.+1" | wc -l | grep -q 5 && echo   "C    OK" || echo "C    Fail"
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu" APP=Mgraph MAIN=MGRAPHMAIN cpp | grep -E "A.+B|A.+1" | wc -l | grep -q 5 && echo  "C++  OK" || echo "Cpp  Fail"
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu" APP=Mgraph MAIN=MGRAPHMAIN cs | grep -v MainApp | grep -E "A.+B|A.+1" | wc -l | grep -q 5 && echo   "C#   OK" || echo "C#   Fail"
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu" APP=Mgraph MAIN=MGRAPHMAIN d  | grep -E "A.+B|A.+1" | wc -l | grep -q 5 && echo   "D    OK" || echo "D    Fail"
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu" APP=Mgraph MAIN=MGRAPHMAIN java | grep -E "A.+B|A.+1" | wc -l | grep -q 5 && echo "Java OK" || echo "Java Fail"
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu" APP=Mgraph MAIN=MGRAPHMAIN js | grep -E "A.+B|A.+1" | wc -l | grep -q 5 && echo   "Js   OK" || echo "Js   Fail"
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu" APP=Mgraph MAIN=MGRAPHMAIN ts | grep -E "A.+B|A.+1" | wc -l | grep -q 5 && echo   "Ts   OK" || echo "Ts   Fail"
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu" APP=Mgraph MAIN=MGRAPHMAIN py | grep -E "A.+B|A.+1" | wc -l | grep -q 5 && echo   "Py   OK" || echo "Py   Fail"
