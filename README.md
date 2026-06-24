@@ -72,18 +72,17 @@ Here is the process diagram:
 | C++        | [x]     | [x]      |   [x]     |   [x]     | [x]   |
 | C#         | [x]     | [x]      |   [x]     |   [x]     | [x]   |
 | D+         | [x]     | [x]      |   [x]     |   [x]     | [x]   |
-| Java       | [x]     | [x]      |   [x]     |   [x]     | [ ]   |
+| Java       | [x]     | [x]      |   [x]     |   [x]     | [x]   |
 | JavaScript | [x]     | [x]      |   [x]     |   [x]     | [x]   |
 | Python     | [x]     | [x]      |   [x]     |   [x]     | [x]   |
 | Swift      | [ ]     | [ ]      |   [ ]     |   [ ]     | [ ]   |
 | TypeScript | [x]     | [x]      |   [x]     |   [x]     | [x]   |
 
-Currently there are problems with the Swift code. Error Console does not work and as well.
-There is as well a problem with Java delegating floats which does not allow Mcgraph to work with Java.
-
+Currently there are problems with the Swift code. Error Console does not work which is not a big issue we should not use it for now.
 
 ```
-List<int> x = Method(); // creates problems
+List<int>   x = Method(); // creates problems should give fut error
+List<int>() x = Method(); // does not work with Swift
 ```
 
 ## Class Diagram (WIP)

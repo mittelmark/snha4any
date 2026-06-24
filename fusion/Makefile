@@ -86,7 +86,7 @@ mcgraph:
 	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu Mcgraph.fu" APP=Mcgraph MAIN=MCGRAPHMAIN cpp
 	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu Mcgraph.fu" APP=Mcgraph MAIN=MCGRAPHMAIN cs
 	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu Mcgraph.fu" APP=Mcgraph MAIN=MCGRAPHMAIN d
-	#@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu Mcgraph.fu" APP=Mcgraph MAIN=MCGRAPHMAIN java	
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu Mcgraph.fu" APP=Mcgraph MAIN=MCGRAPHMAIN java	
 	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu Mcgraph.fu" APP=Mcgraph MAIN=MCGRAPHMAIN js
 	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu Mcgraph.fu" APP=Mcgraph MAIN=MCGRAPHMAIN ts	
 	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu Mcgraph.fu" APP=Mcgraph MAIN=MCGRAPHMAIN py
