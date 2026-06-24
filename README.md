@@ -66,17 +66,17 @@ Here is the process diagram:
 
 ## Progress
 
-| Language   | [Rand.fu](fusion/Rand.fu) | [Stats.fu](fusion/Stats.fu) | [Matrix.fu](fusion/Matrix.fu) | [Mgraph.fu](fusion/Mgraph.fu) | [Mcgraph.fu](fusion/Mcgraph.fu) |
-|------------|---------|----------|-----------|-----------|----------------------|
-| C          | [x]     | [x]      |   [x]     |   [x]     | [x]   | 
-| C++        | [x]     | [x]      |   [x]     |   [x]     | [x]   |
-| C#         | [x]     | [x]      |   [x]     |   [x]     | [x]   |
-| D          | [x]     | [x]      |   [x]     |   [x]     | [x]   |
-| Java       | [x]     | [x]      |   [x]     |   [x]     | [x]   |
-| JavaScript | [x]     | [x]      |   [x]     |   [x]     | [x]   |
-| Python     | [x]     | [x]      |   [x]     |   [x]     | [x]   |
-| Swift      | [x]     | [x]      |   [ ]     |   [ ]     | [ ]   |
-| TypeScript | [x]     | [x]      |   [x]     |   [x]     | [x]   |
+| Language   | Compiler / Interpreter | [Rand.fu](fusion/Rand.fu) | [Stats.fu](fusion/Stats.fu) | [Matrix.fu](fusion/Matrix.fu) | [Mgraph.fu](fusion/Mgraph.fu) | [Mcgraph.fu](fusion/Mcgraph.fu) |
+|------------|-------------|----------|----------|-----------|-----------|----------------------|
+| C          | gcc 15      | [x]     | [x]      |   [x]     |   [x]     | [x]   | 
+| C++        | g++ 15      | [x]     | [x]      |   [x]     |   [x]     | [x]   |
+| C#         | dotnet 10   | [x]     | [x]      |   [x]     |   [x]     | [x]   |
+| D          | ldc2 1.40   | [x]     | [x]      |   [x]     |   [x]     | [x]   |
+| Java       | javac 21    | [x]     | [x]      |   [x]     |   [x]     | [x]   |
+| JavaScript | node 22     | [x]     | [x]      |   [x]     |   [x]     | [x]   |
+| Python     | python 3.13 | [x]     | [x]      |   [x]     |   [x]     | [x]   |
+| Swift      | swift 6.0   | [x]     | [x]      |   [ ]     |   [ ]     | [ ]   |
+| TypeScript | bun 1.3     | [x]     | [x]      |   [x]     |   [x]     | [x]   |
 
 
 ## Class Diagram (WIP)
