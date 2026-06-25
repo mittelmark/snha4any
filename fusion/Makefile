@@ -17,6 +17,7 @@ else
 dcom=dmd
 endif
 CHECK='val=0.2.* rankmean=2.5'
+CHECKM='(^2.+5.+8|0.95)'
 ## default: list existing tasks 
 .PHONY: tasks
 tasks:  ## list all tasks
@@ -71,7 +72,7 @@ swift:
 	[ -d swiftm/Sources/swift ] || mkdir -p swiftm/Sources/swift
 	fut -D $(MAIN) -D SWIFT $(FUFILES) -o swiftm/Sources/swift/swift.swift
 	cd swiftm && swift build
-	cd swiftm && swift run
+	#cd swiftm && swift run
 	./swiftm/.build/x86_64-unknown-linux-gnu/debug/swift
 rand:
 	@make FUFILES="Rand.fu Stats.fu" MAIN="RANDMAIN" APP=Rand c | grep -qE 'position 19.+ is 15' && echo   "C     OK" || echo "C     Fail"
@@ -94,6 +95,17 @@ stats:
 	@make FUFILES="Rand.fu Stats.fu" MAIN="STATSMAIN" APP=Stats ts  | grep -qE $(CHECK) && echo   "Ts    OK" || echo "Ts   Fail"						
 	@make FUFILES="Rand.fu Stats.fu" MAIN="STATSMAIN" APP=Stats py  | grep -qE $(CHECK) && echo   "Py    OK" || echo "Py   Fail"							
 	@make FUFILES="Rand.fu Stats.fu" MAIN="STATSMAIN" APP=Stats swift 2>/dev/null | grep -qE $(CHECK) && echo   "Swift OK" || echo "Swift  Fail"
+
+matrix:
+	@make FUFILES="Stats.fu Matrix.fu" MAIN="MATRIXMAIN" APP=Matrix c 2>/dev/null | grep -E $(CHECKM) | wc -l | grep -q 2 && echo   "C     OK" || echo "C     Fail"
+	@make FUFILES="Stats.fu Matrix.fu" MAIN="MATRIXMAIN" APP=Matrix cpp | grep -E $(CHECKM) | wc -l | grep -q 2 && echo   "C++   OK" || echo "C++   Fail"
+	@make FUFILES="Stats.fu Matrix.fu" MAIN="MATRIXMAIN" APP=Matrix cs | grep -E $(CHECKM) | wc -l | grep -q 2 && echo   "C#    OK" || echo "C#     Fail"
+	@make FUFILES="Stats.fu Matrix.fu" MAIN="MATRIXMAIN" APP=Matrix d | grep -E $(CHECKM) | wc -l | grep -q 2 && echo   "D     OK" || echo "D    Fail"
+	@make FUFILES="Stats.fu Matrix.fu" MAIN="MATRIXMAIN" APP=Matrix java	 | grep -E $(CHECKM) | wc -l | grep -q 2  && echo   "Java  OK" || echo "Java  Fail"
+	@make FUFILES="Stats.fu Matrix.fu" MAIN="MATRIXMAIN" APP=Matrix js | grep -E $(CHECKM) | wc -l | grep -q 2  && echo   "Js    OK" || echo "Js    Fail"
+	@make FUFILES="Stats.fu Matrix.fu" MAIN="MATRIXMAIN" APP=Matrix py | grep -E $(CHECKM) | wc -l | grep -q 2  && echo   "Py    OK" || echo "Py    Fail"
+	@make FUFILES="Stats.fu Matrix.fu" MAIN="MATRIXMAIN" APP=Matrix ts | grep -E $(CHECKM) | wc -l | grep -q 2 && echo   "Ts    OK" || echo "Ts    Fail"
+	@make FUFILES="Stats.fu Matrix.fu" MAIN="MATRIXMAIN" APP=Matrix swift 2>/dev/null | grep -E $(CHECKM) | wc -l | grep -q 2 && echo   "Swift OK" || echo "Swift   Fail"
 
 mgraph:
 	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu" APP=Mgraph MAIN=MGRAPHMAIN c  | grep -E "A.+B|A.+1" | wc -l | grep -q 5 && echo   "C    OK" || echo "C    Fail"
