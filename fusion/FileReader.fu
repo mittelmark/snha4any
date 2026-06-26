@@ -1,0 +1,86 @@
+
+public static class FileReader
+{
+	public static string() ReadFile(string() path)
+	{
+		string() content = "";
+		
+#if C
+native {
+	
+		 FILE* f = fopen(path, "rb");
+		 if (!f) return "";
+		 fseek(f, 0, SEEK_END);
+		 long size = ftell(f);
+		 fseek(f, 0, SEEK_SET);
+		 content = (char*)malloc(size + 1);
+		 fread(content, 1, size, f);
+		 fclose(f);
+		 //return buf;   // returns char*, Fusion converts to string()
+	 }
+#elif CPP
+     native {
+		 std::ifstream in(path, std::ios::binary);
+		 auto txt = std::string(std::istreambuf_iterator<char>(in), std::istreambuf_iterator<char>());
+		 content = txt;
+	 }
+#elif CSHARP
+		native {
+			content = System.IO.File.ReadAllText(path);
+		}
+#elif JAVA
+		native {
+			try{
+			java.nio.file.Path p = java.nio.file.Paths.get(path);
+			byte[] bytes = java.nio.file.Files.readAllBytes(p);
+			content = new String(bytes, java.nio.charset.StandardCharsets.UTF_8);
+			} catch (java.io.IOException e){
+				content = "";
+			}
+		}
+#elif JS
+		native {
+			const fs = require("fs");
+			return fs.readFileSync(path, "utf8");
+		}
+#elif TS
+		native {
+			const fs = require("fs");
+			return fs.readFileSync(path, "utf8");
+		}
+#elif SWIFT
+native {
+	let url = URL(fileURLWithPath: path)
+    do { 
+		content = try String(contentsOf: url, encoding: .utf8) 
+	}   
+    catch { content = "" }
+}
+#elif D
+		native {
+			import std.file : readText;
+			return readText(path);
+		}
+#elif PYTHON
+		native {
+		with open(path, "r", encoding="utf-8") as f:
+			 content = f.read()
+		}
+#else
+		content = "";
+#endif
+		return content;
+	}
+#if FILEREADERMAIN
+	public static void Main(string[] args) {
+		if (args.Length > 0) {
+			Console.WriteLine($"{args[0]}");
+			string() content = FileReader.ReadFile(args[0]);
+			Console.WriteLine($"{content}");
+			
+		}
+	}
+#endif
+
+}
+
