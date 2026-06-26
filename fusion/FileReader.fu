@@ -12,7 +12,8 @@ public static class FileReader
 {
 	public static string() ReadFile(string() path)
 	{
-		string() content = "";
+		string() content;
+		content = "";
 		
 #if C
 native {
