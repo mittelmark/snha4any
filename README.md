@@ -79,6 +79,18 @@ Here is the process diagram:
 | TypeScript | bun 1.3                | [x]     | [x]      |   [x]     |   [x]     | [x]   |
 
 
+| Language   | [FileReader.fu](fusion/FileReader.fu) |
+|------------|------------------------|
+| C          | [x]                    |
+| C++        | [x]                    |
+| Cs         | [x]                    |
+| D          | [x]                    |
+| Java       | [x]                    |
+| JavaScript | [x]                    |
+| Python     | [x]                    |
+| Swift      | [x]                    |
+| TypeScript | [x]                    |
+
 ## Class Diagram (WIP)
 
 ![](https://kroki.io/plantuml/svg/eNqVUc1OwzAMvvcpciyij4C4bEKaBAVREGfTeFu0xB6JCwXEu9MfGsrUHMgpzveTz3ZtIQR1D6TVZ6a6c64qRJ2fzYqS33LLtFPt9FpiK72GXSSuPILgI5kte7cGgXxrGUQ5Q4X6uUJbKEOiKIA7Wgx_tWUnBDuXNpMymJ2DZe0Yw3xgfm2CXAz8y9-kEd6QjIzOZMC_sqwemq8EJMTuN6GEZaurvn7gaHSK3yBQCtEmibFORL_1Gv0ydIfgA9OKvUcLYvjEvFDz8n02jENyTId0_gpfGqQa834BQcDLuAskHSnHLpKDf0eqGpf4U7rNgddrfDULdhPtaW_q_Qg9M9txs9_PHd_o)
