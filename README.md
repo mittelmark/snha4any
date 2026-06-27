@@ -75,7 +75,7 @@ Here is the process diagram:
 | Java       | javac 21-25            | [x]     | [x]      |   [x]     |   [x]     | [x]   |
 | JavaScript | node 20-22             | [x]     | [x]      |   [x]     |   [x]     | [x]   |
 | Python     | python 3.13            | [x]     | [x]      |   [x]     |   [x]     | [x]   |
-| Swift      | swift 6.0-6.3          | [x]     | [x]      |   [x]     |   [ ]     | [ ]   |
+| Swift      | swift 6.0-6.3          | [x]     | [x]      |   [x]     |   [x]     | [x]   |
 | TypeScript | bun 1.3                | [x]     | [x]      |   [x]     |   [x]     | [x]   |
 
 

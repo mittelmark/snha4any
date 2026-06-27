@@ -31,7 +31,8 @@ cpp:	## compile Cpp
 	fut -D $(MAIN) $(FUFILES) -o cppm/$(app).cpp
 	g++ -std=c++20 cppm/$(app).cpp -o cppm/$(app)-cpp
 	./cppm/$(app)-cpp | tail -n 20
-cs:
+
+cs:     ## compile C#
 	-[ -d MainApp ] && rm -rf MainApp
 	dotnet new console -n MainApp --no-restore --force
 	rm MainApp/Program.cs
