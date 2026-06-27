@@ -20,6 +20,7 @@ endif
 CHECK='val=0.2.* rankmean=2.5'
 CHECKM='(^2.+5.+8|0.95)'
 FREADERCHECK=grep -E 'test.txt|Hello|World' | wc -l | grep -q 4
+CSVREADERCHECK=grep -E '3 0.1|4 0.5' | wc -l | grep -q 2
 ## default: list existing tasks 
 .PHONY: tasks
 tasks:  ## list all tasks
@@ -141,3 +142,14 @@ freader:
 	@make FUFILES="FileReader.fu" APP=FileReader MAIN=FILEREADERMAIN ARGS=test/test.txt py    2> /dev/null| $(FREADERCHECK) && echo "Py    OK" || echo "Py    Fail"						
 	@make FUFILES="FileReader.fu" APP=FileReader MAIN=FILEREADERMAIN ARGS=test/test.txt swift 2> /dev/null| $(FREADERCHECK) && echo "Swift OK" || echo "Swift Fail"							
 	@make FUFILES="FileReader.fu" APP=FileReader MAIN=FILEREADERMAIN ARGS=test/test.txt ts    2> /dev/null| $(FREADERCHECK) && echo "Ts    OK" || echo "Ts    Fail"								
+
+csvparser:
+	@make FUFILES="FileReader.fu Matrix.fu Stats.fu CSVParser.fu" ARGS=test/testm.csv APP=CSVParser MAIN=CSVPARSERMAIN c     2> /dev/null| $(CSVREADERCHECK) && echo "C     OK" || echo "C     Fail"
+	@make FUFILES="FileReader.fu Matrix.fu Stats.fu CSVParser.fu" ARGS=test/testm.csv APP=CSVParser MAIN=CSVPARSERMAIN cpp   2> /dev/null| $(CSVREADERCHECK) && echo "C++   OK" || echo "C++   Fail"	
+	@make FUFILES="FileReader.fu Matrix.fu Stats.fu CSVParser.fu" ARGS=test/testm.csv APP=CSVParser MAIN=CSVPARSERMAIN cs    2> /dev/null| $(CSVREADERCHECK) && echo "C#    OK" || echo "C#    Fail"
+	@make FUFILES="FileReader.fu Matrix.fu Stats.fu CSVParser.fu" ARGS=test/testm.csv APP=CSVParser MAIN=CSVPARSERMAIN d     2> /dev/null| $(CSVREADERCHECK) && echo "D     OK" || echo "D     Fail"	
+	@make FUFILES="FileReader.fu Matrix.fu Stats.fu CSVParser.fu" ARGS=test/testm.csv APP=CSVParser MAIN=CSVPARSERMAIN java  2> /dev/null| $(CSVREADERCHECK) && echo "Java  OK" || echo "Java  Fail"
+	@make FUFILES="FileReader.fu Matrix.fu Stats.fu CSVParser.fu" ARGS=test/testm.csv APP=CSVParser MAIN=CSVPARSERMAIN js    2> /dev/null| $(CSVREADERCHECK) && echo "Js    OK" || echo "Js  Fail"	
+	@make FUFILES="FileReader.fu Matrix.fu Stats.fu CSVParser.fu" ARGS=test/testm.csv APP=CSVParser MAIN=CSVPARSERMAIN py    2> /dev/null| $(CSVREADERCHECK) && echo "Py    OK" || echo "Py  Fail"		
+	@make FUFILES="FileReader.fu Matrix.fu Stats.fu CSVParser.fu" ARGS=test/testm.csv APP=CSVParser MAIN=CSVPARSERMAIN ts    2> /dev/null| $(CSVREADERCHECK) && echo "Ts    OK" || echo "Ts  Fail"			
+	@make FUFILES="FileReader.fu Matrix.fu Stats.fu CSVParser.fu" ARGS=test/testm.csv APP=CSVParser MAIN=CSVPARSERMAIN ts    2> /dev/null| $(CSVREADERCHECK) && echo "Swift OK" || echo "Swift Fail"			

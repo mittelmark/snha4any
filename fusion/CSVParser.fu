@@ -1,0 +1,145 @@
+public static class CSVParser {
+    ///Parses only a single line at a time
+
+    public static void ParseLine(string line, List<float>! values){
+        int start = 0;
+        for (int i = 0; i < line.Length; i++){
+            if (line[i] == ','){
+                string() field = line.Substring(start, i - start);
+                if(IsFloat(field)){
+                    values.Add(ParseFloat(field));
+				}
+                start = i + 1;
+            }
+        }
+        string() last = line.Substring(start);
+        if (IsFloat(last)){
+			values.Add(ParseFloat(last));
+        }
+    }
+	
+    //Check if substring is float before entering to parse float
+    static bool IsFloat(string s){
+        if(s.Length == 0){
+            return false;
+        }
+        int start = 0;
+        if (s[0] == '-') {
+            start = 1;
+            if(start >= s.Length){
+                return false;
+			}
+        }
+        bool isDecimal = false;
+        for (int i = start; i < s.Length; i++){
+            if(s[i] == '.' && !isDecimal){
+                isDecimal = true;
+            } else if (s[i] == '.' && isDecimal){
+                return false;
+            } else if (s[i] < '0' || s[i] > '9'){
+                return false;
+            }
+        }
+        return true;
+    }
+    static float ParseFloat(string s){
+        float result = 0.0;
+        int i =0;
+        bool negative = false;
+        if(s[0] == '-'){
+            negative = true;
+            i =1;
+        }
+        while (i < s.Length && s[i] != '.'){
+            result = result * 10.0 + (s[i] - '0');
+            i++;
+        }
+        if (i < s.Length && s[i] == '.'){
+            i++;
+            double factor = 0.1;
+            while(i < s.Length){
+				result += (s[i] - '0') * factor;
+				factor *= 0.1;
+				i++;
+            }
+        }
+        if(negative){
+            result = -result;
+        }
+        return result;
+    }
+	public static Matrix() ReadCSV(string csv, bool skipHeader){
+        //variables local to Mat
+        int RowCount = 0;
+        int ColCount = 0;
+        Matrix() Mat;
+        // First pass — collect all values into a flat list
+        List<float>() values;
+        int start    = 0;
+        int rowIndex = 0;
+        for (int i = 0; i < csv.Length; i++){
+            if (csv[i] == '\n'){
+                string() line = csv.Substring(start, i - start);
+                if (line.Length > 0 && line[line.Length - 1] == ','){
+                    line = line.Substring(0, line.Length - 1);
+				}
+                if (line.Length > 0){
+                    if (skipHeader && rowIndex == 0) {
+                    } else {
+                        int before = values.Count;
+                        CSVParser.ParseLine(line, values);
+                        if (ColCount == 0){
+                            ColCount = values.Count - before;
+						}
+                        RowCount++;
+                    }
+                }
+                rowIndex++;
+                start = i + 1;
+            }
+        }
+        //Count Rows and Columns from values
+        if (start < csv.Length){
+            string() line = csv.Substring(start);
+            if (line.Length > 0 && line[line.Length - 1] == ','){
+                line = line.Substring(0, line.Length - 1);
+			}
+            if (line.Length > 0){
+                if (skipHeader && rowIndex == 0) {
+                } else {
+                    int before = values.Count;
+                    CSVParser.ParseLine(line, values);
+                    if (ColCount == 0){
+                        ColCount = values.Count - before;
+					}
+                    RowCount++;
+                }
+            }
+        }
+        //Matrix Creation from Matrix File
+        Mat.Create(RowCount, ColCount, 0.0);
+        for (int i = 0; i < RowCount; i++){
+            for (int j = 0; j < ColCount; j++){
+                Mat.Set(i, j, values[i * ColCount + j]);
+            }
+        }
+		return Mat;
+    }
+#if CSVPARSERMAIN
+    public static void Main(string[] args) {
+		string() content = "Hello CSVParser";
+		//string() content = FileReader.ReadFile(args[0]);
+		Console.WriteLine($"{content}");
+		Matrix() M = CSVParser.ReadCSV("hello,world\n0.0,0.1\n0.2,0.3\n0.4,0.5\n",true) ;
+		int n = M.Nrow();
+		Console.WriteLine($"{n} {M.Get(0,1)}");
+		if (args.Length > 0) {
+			string() content2 = FileReader.ReadFile(args[0]);
+			Matrix() M2 = CSVParser.ReadCSV(content2,true);
+			int o = M2.Nrow();
+			float f = M2.Get(3,1);
+			Console.WriteLine($"{o} {f}");
+		}
+	}
+#endif
+}

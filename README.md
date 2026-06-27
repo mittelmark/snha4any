@@ -79,17 +79,17 @@ Here is the process diagram:
 | TypeScript | bun 1.3                | [x]     | [x]      |   [x]     |   [x]     | [x]   |
 
 
-| Language   | [FileReader.fu](fusion/FileReader.fu) |
-|------------|------------------------|
-| C          | [x]                    |
-| C++        | [x]                    |
-| Cs         | [x]                    |
-| D          | [x]                    |
-| Java       | [x]                    |
-| JavaScript | [x]                    |
-| Python     | [x]                    |
-| Swift      | [x]                    |
-| TypeScript | [x]                    |
+| Language   | [FileReader.fu](fusion/FileReader.fu) | [CSVParser.fu](fusion/CSVParser.fu) |
+|------------|------------------------|----------------------------------------------------|
+| C          | [x]                    | [x] |
+| C++        | [x]                    | [x] |
+| Cs         | [x]                    | [x] |
+| D          | [x]                    | [x] |
+| Java       | [x]                    | [x] |
+| JavaScript | [x]                    | [x] |
+| Python     | [x]                    | [x] |
+| Swift      | [x]                    | [x] |
+| TypeScript | [x]                    | [x] |
 
 ## Class Diagram (WIP)
 
