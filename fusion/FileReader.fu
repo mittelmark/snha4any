@@ -6,6 +6,10 @@ import Foundation
 native {
 #include <fstream>
 }
+#elif JS
+native {
+import fs from "node:fs";
+}
 #endif
 
 public static class FileReader
@@ -50,7 +54,6 @@ native {
 		}
 #elif JS
 		native {
-			const fs = require("fs");
 			return fs.readFileSync(path, "utf8");
 		}
 #elif TS
