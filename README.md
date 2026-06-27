@@ -68,7 +68,7 @@ Here is the process diagram:
 
 | Language   | Compiler / Interpreter | [Rand.fu](fusion/Rand.fu) | [Stats.fu](fusion/Stats.fu) | [Matrix.fu](fusion/Matrix.fu) | [Mgraph.fu](fusion/Mgraph.fu) | [Mcgraph.fu](fusion/Mcgraph.fu) |
 |------------|------------------------|----------|----------|-----------|-----------|----------------------|
-| C          | gcc 14-15              | [x]     | [x]      |   [ ]     |   [x]     | [x]   | 
+| C          | gcc 14-15              | [x]     | [x]      |   [?] transpose?  |   [x]     | [x]   | 
 | C++        | g++ 14-15              | [x]     | [x]      |   [x]     |   [x]     | [x]   |
 | C#         | dotnet 10              | [x]     | [x]      |   [x]     |   [x]     | [x]   |
 | D          | ldc2 1.40 / dmd 2.112  | [x]     | [x]      |   [x]     |   [x]     | [x]   |
@@ -83,7 +83,7 @@ Here is the process diagram:
 |------------|------------------------|----------------------------------------------------|
 | C          | [x]                    | [x] |
 | C++        | [x]                    | [x] |
-| Cs         | [x]                    | [x] |
+| C#         | [x]                    | [x] |
 | D          | [x]                    | [x] |
 | Java       | [x]                    | [x] |
 | JavaScript | [x]                    | [x] |
