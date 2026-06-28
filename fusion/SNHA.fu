@@ -1,0 +1,355 @@
+    // Saint Nicolas House Algorithm Main Entry point
+    //
+    // Basic Usage:
+    //  * 1. Create a Matrix object from the Matrix class to hold variables and observations.
+    //  * 2. The associated correlation matrix will be called and created within the st_nico_algo function itself. To view the correlation matrix, you can simply call Matrix.AsCorrelationMatrix(data) with, data, corresponding to a matrix object.
+    //  * 3. Create a new SNHA object and call st_nico_alg
+    //
+    //
+    //  Example for a single SNHA run:
+    //  Matrix() M = CSVParser.ReadCSV(file, false);
+    //  SNHA# data ;
+    //  data.new(M, "pearson", 0.10);
+    //  data.getChains();
+    //  Matrix() data_adj = data.getAdj();
+    //
+    //  Example for a bootstrap SNHA run:
+    //  SNHA# foo ;
+    //  foo.new(M, "spearman", 0.10, true, 100, 0.50);
+    //
+    //
+    //  Arguments for st_nico_alg(data, method, threshold, bootstrap, iterations, tolerance)
+    //      * data           : Input data. Must be of matrix() object
+    //      * method         : Pearson("pearson") correlation, Spearman ("spearman") correlation, Kendall-Tau ("kendal") Correlation
+    //      * threshold      : Absolute correlation values under a certain threshold will not be used for association chain construction
+    //      * boot           : Run bootstrap
+    //      * iterations     : Total iterations for bootstrap run, default = 10
+    //      * tolerance      : Total number of edges predicted by bootstrap must be over this percentage
+    //
+public class SNHA {
+    //List of List of int which correspond to chains --> final chains
+    List<List<int>()>() chains;
+    //Final Adjacency matrix storage for retrieval outside of class after either a normal SNHA run or bootstrap
+    Matrix() adj;
+
+    public void Create!(Matrix() data, string method = "pearson", double threshold = 0.10, bool boot = false, int iterations = 10, double tolerance = 0.60){
+        if(boot){
+            Matrix() temp = Bootstrap.Run(data, method, threshold, iterations, tolerance);
+            
+            int n = temp.Nrow();
+            int m = temp.Ncol();
+            this.adj.Create(n,m,0.0);
+            for(int i =0; i<n; i++){
+                for(int j=0; j<m;j++){
+                    this.adj.Set(i,j, temp.Get(i,j));
+                }
+            }
+        }else{
+            Run(data, method, threshold);
+        }
+    }
+    //Get chains from SNHA run
+    public void getChains() {
+        int i = 0;
+        foreach (List<int> chain in this.chains) {
+            i++;
+            Console.Write($" Chain {i}: ");
+            PrintChain(chain);
+        }
+    }
+    //Problem with C memory - return a copy of the adj matrix
+    public Matrix() getAdj(){
+        Matrix() copy;
+        int n = this.adj.Nrow();
+        copy.Create(n,n,0.0);
+        for(int i=0; i < n; i++){
+            for(int j = 0; j < n; j++){
+                copy.Set(i,j, this.adj.Get(i,j));
+            }
+        }
+        return copy;
+    }
+
+    //New Sorted Orders with insertion sort w/o values under a certain threshold
+    public Matrix() PrecomputeSortedOrders(Matrix corrMat, float threshold) {
+        int n = corrMat.Nrow();
+        Matrix() orders;
+        orders.Create(n, n, -1.0);
+
+        for (int i = 0; i < n; i++) {
+            List<float>() vals;
+            List<int>() indices;
+
+            for (int j = 0; j < n; j++) {
+                if (j == i) continue;
+                float absCorr = Math.Abs(corrMat.Get(i, j));
+                if (absCorr > threshold) {
+                    vals.Add(absCorr);
+                    indices.Add(j);
+                }
+            }
+            // Insertion sort descending
+            for (int a = 1; a < vals.Count; a++) {
+                float keyVal = vals[a];
+                int   keyIdx = indices[a];
+                int b = a - 1;
+                while (b >= 0 && vals[b] < keyVal) {
+                    vals[b + 1]    = vals[b];
+                    indices[b + 1] = indices[b];
+                    b--;
+                }
+                vals[b + 1]    = keyVal;
+                indices[b + 1] = keyIdx;
+            }
+            for (int k = 0; k < indices.Count; k++){
+                orders.Set(i, k, indices[k]);
+                }
+        }
+        return orders;
+    }
+
+    //Makes a chain every subset -  Main Chain + Middle Chain helper
+    //Takes into consideration every column, the current active set of nodes and uses the matrix of sorted orders
+    public List<int>() BuildChainFromActiveColumn(int col, List<int> activeNodes,
+                                                   Matrix orders) {
+        List<int>() chain;
+        chain.Add(col);
+        for (int i = 0; i < orders.Ncol(); i++) {
+            int candidate = Math.Floor(orders.Get(col, i));
+            if (candidate == -1) break;
+            if (activeNodes.Contains(candidate)){
+                chain.Add(candidate);
+                }
+        }
+        return chain;
+    }
+    //If a chain is constructed, check the reverse chain
+    public bool CheckReverseChain(int col, List<int> forwardChain, List<int> activeNodes, Matrix orders) {
+        int lastNode = forwardChain[forwardChain.Count - 1];
+        List<int>() reverseChain = BuildChainFromActiveColumn(lastNode, activeNodes, orders);
+        if (reverseChain.Count != forwardChain.Count){
+            return false;
+            }
+        for (int i = 0; i < forwardChain.Count; i++) {
+            int expected = forwardChain[forwardChain.Count - 1 - i];
+            if (reverseChain[i] != expected){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // LIST HELPERS - No built in fusion code for checking reverse nor comparison
+    public List<int>() ReverseList(List<int> list) {
+        List<int>() rev;
+        for (int i = list.Count - 1; i >= 0; i--)
+            rev.Add(list[i]);
+        return rev;
+    }
+
+    public bool ListsEqual(List<int> a, List<int> b) {
+        if (a.Count != b.Count) return false;
+        for (int i = 0; i < a.Count; i++)
+            if (a[i] != b[i]) return false;
+        return true;
+    }
+
+    public bool IsSubchain(List<int> shorter, List<int> longer) {
+        if (shorter.Count >= longer.Count) return false;
+        for (int start = 0; start <= longer.Count - shorter.Count; start++) {
+            bool match = true;
+            for (int k = 0; k < shorter.Count; k++) {
+                if (longer[start + k] != shorter[k]) { match = false; break; }
+            }
+            if (match) return true;
+        }
+        return false;
+    }
+
+    public bool IsSubchainOrReverse(List<int> shorter, List<int> longer) {
+        if (IsSubchain(shorter, longer)) return true;
+        List<int>() rev = ReverseList(shorter);
+        return IsSubchain(rev, longer);
+    }
+
+    public List<int>() FindMiddleChain(List<int> nodes, Matrix orders) {
+        List<List<int>()>() preFiltered;
+
+        for (int i = 0; i < nodes.Count; i++) {
+            int targetCol = nodes[i];
+            preFiltered.Add();
+            List<int>! subset = preFiltered.Last();
+            if (nodes.Contains(targetCol)){
+                subset.Add(targetCol);
+                }
+            for (int k = 0; k < orders.Ncol(); k++) {
+                int node = Math.Floor(orders.Get(targetCol, k));
+                if (node == -1) break;
+                if (nodes.Contains(node) && node != targetCol)
+                    subset.Add(node);
+            }
+        }
+
+        int fi = 0;
+        foreach (List<int> fchain in preFiltered) {
+            int si = 0;
+            foreach (List<int> schainRaw in preFiltered) {
+                if (si > fi) {
+                    List<int>() schain = ReverseList(schainRaw);
+                    if (ListsEqual(fchain, schain)) {
+                        List<int>() result;
+                        result.AddRange(fchain);
+                        return result;
+                    }
+                }
+                si++;
+            }
+            fi++;
+        }
+        //Return empty if no chain found
+        List<int>() empty;
+        return empty;
+    }
+    // Remove duplicate chains, builds this.chains(adj) directly.
+    void RemoveDuplicateChains!(List<List<int>()>() confirmed) {
+        SortedDictionary<string(), int>() known;
+        List<List<int>()>() unique;
+
+        foreach (List<int> chain in confirmed) {
+            string() fwd = ChainToString(chain);
+            List<int>() rev = ReverseList(chain);
+            string() bwd = ChainToString(rev);
+            string() key = fwd;
+            if (bwd.Length < fwd.Length) key = bwd;
+            if (!known.ContainsKey(key)) {
+                known[key] = 1;
+                unique.Add();
+                List<int>! dest = unique.Last();
+                dest.AddRange(chain);
+            }
+        }
+
+        int i = 0;
+        foreach (List<int> chainI in unique) {
+            bool isRedundant = false;
+            int j = 0;
+            foreach (List<int> chainJ in unique) {
+                if (i != j && IsSubchainOrReverse(chainI, chainJ)) {
+                    isRedundant = true;
+                    break;
+                }
+                j++;
+            }
+            if (!isRedundant) {
+                this.chains.Add();
+                List<int>! dest = this.chains.Last();
+                dest.AddRange(chainI);
+            }
+            i++;
+        }
+    }
+
+    //Main entry point into the SNHA algorithm
+    public void Run!(Matrix data, string method, double threshold) {
+        //Creation of three matrices - Adjacency for final output, Correlation matrix, Orders for sorting of correlation values
+        Matrix() corrMat = Matrix.AsCorrelationMatrix(data, method);
+        int n = corrMat.Nrow();
+
+        this.adj.Create(n, n, 0.0);
+        this.chains.Clear();
+
+        Matrix() orders = PrecomputeSortedOrders(corrMat, threshold);
+        //Creation of a List of Lists for chains that are found to be equal forward and reverse
+        List<List<int>()>() confirmedChains;
+
+        for (int col = 0; col < n; col++) {
+            //Consideration of active nodes at a given point, decreases by one with removal of weakest abs correlation value every iteration
+            List<int>() activeNodes;
+            if (n > 10){
+                //Cap candidates to top 11 for the current column
+                int limit = 0;
+                for(int k = 0; k < orders.Ncol();k++){
+                    int candidate = Math.Floor(orders.Get(col,k));
+                    if(candidate == -1)break;
+                    activeNodes.Add(candidate);
+                    limit++;
+                    if(limit == 11)break;
+                }
+                }else{
+                    for(int i = 0; i < n; i++){
+                        activeNodes.Add(i);
+                    }
+            }
+            while (activeNodes.Count >= 3) {
+                //Chain forward
+                List<int>() chain = BuildChainFromActiveColumn(col, activeNodes, orders);
+                //Chain backward
+                bool confirmed = CheckReverseChain(col, chain, activeNodes, orders);
+                //Addition of chains to List of Lists
+                if (confirmed) {
+                    confirmedChains.Add();
+                    List<int>! dest = confirmedChains.Last();
+                    dest.AddRange(chain);
+                    break;
+                }
+                List<int>() midChain = FindMiddleChain(chain, orders);
+                if (midChain.Count > 0) {
+                    confirmedChains.Add();
+                    List<int>! dest = confirmedChains.Last();
+                    dest.AddRange(midChain);
+                    break;
+                }
+                //Weakest variable removal
+                int weakestIdx = -1;
+                float weakestAbs = Math.NaN;
+                for (int i = 0; i < activeNodes.Count; i++) {
+                    int node = activeNodes[i];
+                    if (node == col) continue;
+                    float a = Math.Abs(corrMat.Get(col, node));
+                    if (Math.IsNaN(weakestAbs) || a < weakestAbs) {
+                        weakestAbs = a;
+                        weakestIdx = i;
+                    }
+                }
+                if (weakestIdx != -1) activeNodes.RemoveAt(weakestIdx);
+                else break;
+            }
+        }
+        //Removal of chains that are the same backwards and forwards
+        //Ex: A-B-C, C-B-A
+        RemoveDuplicateChains(confirmedChains);
+        foreach (List<int> chainRef in this.chains) {
+            List<int>() chain;
+            chain.AddRange(chainRef);
+            for (int i = 0; i < chain.Count - 1; i++) {
+                int from = chain[i];
+                int to   = chain[i + 1];
+                this.adj.Set(from, to, 1);
+                this.adj.Set(to, from, 1);
+            }
+        }
+    }
+
+    // LABELS AND PRINT
+    public string() GetLabel(int i) {
+        string labels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$";
+        return labels.Substring(i, 1);
+    }
+
+    public void PrintChain(List<int> chain) {
+        for (int i = 0; i < chain.Count; i++) {
+            Console.Write(GetLabel(chain[i]));
+            if (i + 1 < chain.Count) Console.Write("-");
+        }
+        Console.WriteLine("");
+    }
+
+    public string() ChainToString(List<int> chain) {
+        string() s = "";
+        for (int i = 0; i < chain.Count; i++) {
+            s = s + GetLabel(chain[i]);
+            if (i + 1 < chain.Count) s = s + "-";
+        }
+        return s;
+    }
+}

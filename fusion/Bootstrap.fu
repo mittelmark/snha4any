@@ -1,0 +1,105 @@
+// Saint Nicolas House Algorithm Bootstrapping
+//
+// The class helps with shuffling the original dataset and running the SNHA algorithm over n iterations
+// When an edge is predicted from the SNHA algorithm run, a count will be added to a helper adjaceny matrix
+// A tolerance of a certain percentage will dictate whether these edges will be added to the final adjacency matrix
+//
+//
+//
+
+
+public static class Bootstrap{
+	//Helper to reshuffle the rows in the original data
+	public static Matrix() ResampleRows(Matrix data, Rand! rng){
+		int m = data.Nrow();
+		int n = data.Ncol();
+		Matrix() boot;
+		boot.Create(m,n, 0.0);
+		for(int row = 0; row < m; row++){
+			int random_row = Math.Floor(rng.NextRandom() * m);
+			for(int col = 0; col < n; col++){
+				boot.Set(row, col, data.Get(random_row, col));
+			}
+		}
+		return boot;
+	}
+
+	//Commented out for p-value distribution 
+	public static Matrix() ShuffleColumns(Matrix data, Rand! rng){
+		int m = data.Nrow();
+		int n = data.Ncol();
+		Matrix() shuffled;
+		shuffled.Create(m,n,0.0);
+		//Original Data
+		for(int i =0; i< m; i++){
+			for(int j= 0; j < n; j++){
+				shuffled.Set(i,j, data.Get(i,j));
+			}
+		}
+
+		//for(int j = 0; j < n; j++){
+			//for(int i = m-1; i>0; i--){
+				//int swap_col = Math.Floor(rng.NextRandom() * (i+1));
+				//if(swap_col > i) swap_col = i;
+				//float tmp = shuffled.Get(i,j);
+				//shuffled.Set(i, j, shuffled.Get(swap_col,j));
+				//shuffled.Set(swap_col, j, tmp);
+			//}
+		//}
+		for(int col = 0; col < n; col++){
+			int random_col = Math.Floor(rng.NextRandom() * n);
+			for(int row = 0; row < m; row++){
+				shuffled.Set(row,col, shuffled.Get(row, random_col));
+			}
+		}
+		Console.Write("");
+		Matrix.PrintMatrix(shuffled);
+		return shuffled;
+	}
+	public static Matrix() Run(Matrix() data, string method, float threshold, int iterations, float tolerance){
+		int vars = data.Ncol();
+		//Random number generator
+		Rand() rng;
+		rng.SeedNow();
+		//Run SNHA on the original data first 
+		SNHA# baseSnha = new SNHA();
+		baseSnha.Run(data, method, threshold);
+		Matrix() baseAdj = baseSnha.getAdj();
+		//Keeps track of edge counts
+		Matrix() edgeCounts;
+		edgeCounts.Create(vars, vars,0.0);
+		//bootstrapping entry
+		//matrix() shuff_orig = ShuffleColumns(data, rng);
+		SNHA# bootsnha = new SNHA();
+		for(int iter = 0; iter < iterations; iter++){
+			Matrix() boot_data = ResampleRows(data, rng);
+			bootsnha.Run(boot_data, method, threshold);
+			Matrix() boot_adj = bootsnha.getAdj();
+			for (int i =0; i < vars; i++){
+				for(int j = i +1 ; j < vars; j++){
+					if(boot_adj.Get(i,j) == 1.0){
+						edgeCounts.Set(i,j,edgeCounts.Get(i,j)+1.0);
+						edgeCounts.Set(j,i,edgeCounts.Get(j,i)+1.0);
+					}
+				}
+			}
+			
+		}
+		//Print Total Counts of edges before tolerance check
+		//matrix.PrintMatrix(edgeCounts);
+		float tol = iterations * tolerance;
+		for(int i =0; i < vars; i++){
+			for(int j = i +1; j < vars; j++){
+				if(baseAdj.Get(i,j) == 1.0 && edgeCounts.Get(i,j) >= tol){
+					baseAdj.Set(i,j,1.0);
+					baseAdj.Set(j,i,1.0);
+				}else{
+					baseAdj.Set(i,j,0.0);
+					baseAdj.Set(j,i,0.0);
+				}
+			}
+		}
+		
+		return baseAdj;
+	}
+}
