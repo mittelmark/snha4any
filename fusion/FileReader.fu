@@ -1,19 +1,97 @@
-#if SWIFT
+#if C
 native {
-import Foundation	
+#include <sys/stat.h>
 }
 #elif CPP
 native {
 #include <fstream>
+#include <filesystem>
+namespace fs = std::filesystem;
 }
-#elif JS
+#elif CSHARP
+native {
+using System.IO;
+}
+#elif D
+native {
+import std.file;	
+}
+#elif JAVA
+native {
+import java.nio.file.*;
+}
+#elif JS || TS
 native {
 import fs from "node:fs";
+}
+#elif PYTHON
+native {
+import os
+}
+#elif SWIFT
+native {
+import Foundation	
 }
 #endif
 
 public static class FileReader
 {
+	public static bool FileExists(string() path) 
+	{
+		int x;
+		x = 0;
+		#if C
+		native {
+		struct stat st;
+		x = stat(path, &st);
+		}
+		#elif CPP
+		native {
+		fs::path p = path;
+		if (!fs::is_regular_file(p)) {
+			x = 1;
+		}
+		}
+		#elif CSHARP
+		native {
+		if (!File.Exists(path)) {
+			x = 1;
+		}
+		}
+		#elif D
+		native {
+		if (!(exists(path) && isFile(path))) {
+			x = 1;
+		}
+		}
+		#elif JAVA
+		native {
+		Path p = Paths.get(path);
+		if (!Files.exists(p)) { x = 1; }
+		}
+		#elif JS || TS
+		native {
+		if (!fs.existsSync(path)) {
+			x = 1;
+		}
+		}
+		#elif PYTHON
+		native {
+		if (not os.path.exists(path)):
+			x = 1
+		}
+		#elif SWIFT
+		native {
+			let url = URL(fileURLWithPath: path)
+			var isRegularFile = false
+			if let values = try? url.resourceValues(forKeys: [.isRegularFileKey]) {
+				isRegularFile = values.isRegularFile ?? false
+			}			
+			if (!isRegularFile) { x = 1 }
+		}
+		#endif
+		return (x == 0) ;
+	}
 	public static string() ReadFile(string() path)
 	{
 		string() content;
@@ -87,9 +165,13 @@ native {
 #if FILEREADERMAIN
 	public static void Main(string[] args) {
 		if (args.Length > 0) {
-			Console.WriteLine($"{args[0]}");
-			string() content = FileReader.ReadFile(args[0]);
-			Console.WriteLine($"{content}");
+			if (!FileReader.FileExists(args[0])) {
+				Console.WriteLine($"Error: File {args[0]} does not exists!");
+			} else {
+				Console.WriteLine($"{args[0]}");
+				string() content = FileReader.ReadFile(args[0]);
+				Console.WriteLine($"{content}");
+			}
 			
 		}
 	}
