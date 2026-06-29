@@ -15,6 +15,8 @@ using System.IO;
 #elif D
 native {
 import std.file;	
+import std.file : readText;
+import std.stdio : File;
 }
 #elif JAVA
 native {
@@ -34,7 +36,7 @@ import Foundation
 }
 #endif
 
-public static class FileReader
+public static class FileSystem
 {
 	public static bool FileExists(string() path) 
 	{
@@ -92,7 +94,7 @@ public static class FileReader
 		#endif
 		return (x == 0) ;
 	}
-	public static string() ReadFile(string() path)
+	public static string() FileRead(string() path)
 	{
 		string() content;
 		content = "";
@@ -149,7 +151,6 @@ native {
 }
 #elif D
 		native {
-			import std.file : readText;
 			return readText(path);
 		}
 #elif PYTHON
@@ -162,16 +163,103 @@ native {
 #endif
 		return content;
 	}
-#if FILEREADERMAIN
+	public static bool FileSave(string() path, string() content) {
+		bool success;
+		success = true;
+		#if C
+		native {
+			FILE *f = fopen(path, "wt");
+			if (!f) {
+				success = false;
+			} else {
+				fputs(content, f);
+				fclose(f);
+			}
+		}
+		#elif CPP
+		native {
+			try {
+				std::ofstream ofs(path);
+				ofs << content;
+				if (!ofs) success = false;
+			} catch (const std::exception& e) {
+				success = false;
+			}
+		}
+		#elif CSHARP
+		native {
+			try {
+				File.WriteAllText(path, content);
+			} catch (Exception) {
+				success = false;
+			}
+		}
+		#elif D
+		native {
+			try {
+				auto f = File(path, "w");
+				scope(exit) f.close();
+				f.writeln(content); 
+			} catch (Exception e) {
+				success = false;
+			}
+		}
+		#elif JAVA
+		native {
+			try{
+				java.nio.file.Path p = java.nio.file.Paths.get(path);
+				java.nio.file.Files.writeString(p, content);
+			} catch (java.io.IOException e){
+				success = false;
+			}
+		}
+		#elif JS || TS
+		native {
+			try {
+				fs.writeFileSync(path, content, "utf8");
+			} catch (e) {
+				success = false;
+			}
+		}
+		#elif PYTHON
+		native {
+		success = False
+		f = open(path, "w", encoding="utf-8")
+		try:
+			f.write(content)
+			success = True
+		finally:
+		    f.close()
+		}
+		#elif SWIFT
+		native {
+			let url = URL(fileURLWithPath: path)
+			do {
+				try content.write(to: url, atomically: true, encoding: .utf8)
+			} catch {
+				success = false
+			}
+		}
+		#endif
+		return success;
+	}
+#if FILESYSTEMMAIN
 	public static void Main(string[] args) {
 		if (args.Length > 0) {
-			if (!FileReader.FileExists(args[0])) {
+			if (!FileSystem.FileExists(args[0])) {
 				Console.WriteLine($"Error: File {args[0]} does not exists!");
 			} else {
 				Console.WriteLine($"{args[0]}");
-				string() content = FileReader.ReadFile(args[0]);
+				string() content = FileSystem.FileRead(args[0]);
 				Console.WriteLine($"{content}");
+				content = $"Out:\n{content}";
+				if (args.Length > 1) {
+					FileSystem.FileSave(args[1],content);
+					string() out = FileSystem.FileRead(args[0]);
+					Console.WriteLine($"{content}");
+				}
 			}
+			
 			
 		}
 	}

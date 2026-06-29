@@ -79,7 +79,7 @@ Here is the process diagram:
 | TypeScript | bun 1.3                | [x]     | [x]      |   [x]     |   [x]     | [x]   |
 
 
-| Language   | [FileReader.fu](fusion/FileReader.fu) | [CSVParser.fu](fusion/CSVParser.fu) |
+| Language   | [FileSystem.fu](fusion/FileSystem.fu) | [CSVParser.fu](fusion/CSVParser.fu) |
 |------------|------------------------|----------------------------------------------------|
 | C          | [x]                    | [x] |
 | C++        | [x]                    | [x] |
