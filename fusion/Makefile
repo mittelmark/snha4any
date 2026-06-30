@@ -21,6 +21,7 @@ CHECK='val=0.2.* rankmean=2.5'
 CHECKM='(^2.+5.+8|0.95)'
 FSYSCHECK=grep -E 'test.txt|Hello|World|Out:' | wc -l | grep -q 7
 CSVREADERCHECK=grep -E '3 0.1|4 0.5' | wc -l | grep -q 2
+CHECKMGRAPH=grep -v var | grep -v Write | grep -v MainApp | grep -E "A.+B|A.+1|D.+1.+1" | wc -l | grep -q 6
 ## default: list existing tasks 
 .PHONY: tasks
 tasks:  ## list all tasks
@@ -108,21 +109,21 @@ matrix:
 	@make FUFILES="Stats.fu Matrix.fu" MAIN="MATRIXMAIN" APP=Matrix js | grep -E $(CHECKM) | wc -l | grep -q 2  && echo   "Js    OK" || echo "Js    Fail"
 	@make FUFILES="Stats.fu Matrix.fu" MAIN="MATRIXMAIN" APP=Matrix py | grep -E $(CHECKM) | wc -l | grep -q 2  && echo   "Py    OK" || echo "Py    Fail"
 	@make FUFILES="Stats.fu Matrix.fu" MAIN="MATRIXMAIN" APP=Matrix ts | grep -E $(CHECKM) | wc -l | grep -q 2 && echo   "Ts    OK" || echo "Ts    Fail"
-	@make FUFILES="Stats.fu Matrix.fu" MAIN="MATRIXMAIN" APP=Matrix swift 2>/dev/null | grep -E $(CHECKM) | wc -l | grep -q 2 && echo   "Swift OK" || echo "Swift   Fail"
+	m@ake FUFILES="Stats.fu Matrix.fu" MAIN="MATRIXMAIN" APP=Matrix swift 2>/dev/null | grep -E $(CHECKM) | wc -l | grep -q 2 && echo   "Swift OK" || echo "Swift   Fail"
 
 mgraph:
-	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu" APP=Mgraph MAIN=MGRAPHMAIN c    | grep -E "A.+B|A.+1" | wc -l | grep -q 5 && echo   "C     OK" || echo "C    Fail"
-	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu" APP=Mgraph MAIN=MGRAPHMAIN cpp  | grep -E "A.+B|A.+1" | wc -l | grep -q 5 && echo   "C++   OK" || echo "Cpp  Fail"
-	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu" APP=Mgraph MAIN=MGRAPHMAIN cs   | grep -v MainApp | grep -E "A.+B|A.+1" | wc -l | grep -q 5 && echo   "C#    OK" || echo "C#   Fail"
-	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu" APP=Mgraph MAIN=MGRAPHMAIN d    | grep -E "A.+B|A.+1" | wc -l | grep -q 5 && echo   "D     OK" || echo "D    Fail"
-	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu" APP=Mgraph MAIN=MGRAPHMAIN java | grep -E "A.+B|A.+1" | wc -l | grep -q 5 && echo   "Java  OK" || echo "Java Fail"
-	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu" APP=Mgraph MAIN=MGRAPHMAIN js   | grep -E "A.+B|A.+1" | wc -l | grep -q 5 && echo   "Js    OK" || echo "Js   Fail"
-	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu" APP=Mgraph MAIN=MGRAPHMAIN ts   | grep -E "A.+B|A.+1" | wc -l | grep -q 5 && echo   "Ts    OK" || echo "Ts   Fail"
-	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu" APP=Mgraph MAIN=MGRAPHMAIN py   | grep -E "A.+B|A.+1" | wc -l | grep -q 5 && echo   "Py    OK" || echo "Py   Fail"
-	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu" APP=Mgraph MAIN=MGRAPHMAIN swift 2>/dev/null| grep -v Write | grep -E "A.+B|A.+1" | wc -l | grep -q 5 && echo   "Swift OK" || echo "Swift  Fail"	
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu" APP=Mgraph MAIN=MGRAPHMAIN c    | $(CHECKMGRAPH) && echo   "C     OK" || echo "C    Fail"
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu" APP=Mgraph MAIN=MGRAPHMAIN cpp  | $(CHECKMGRAPH) && echo   "C++   OK" || echo "Cpp  Fail"
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu" APP=Mgraph MAIN=MGRAPHMAIN cs   | $(CHECKMGRAPH)  && echo   "C#    OK" || echo "C#   Fail"
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu" APP=Mgraph MAIN=MGRAPHMAIN d    | $(CHECKMGRAPH) && echo   "D     OK" || echo "D    Fail"
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu" APP=Mgraph MAIN=MGRAPHMAIN java | $(CHECKMGRAPH) && echo   "Java  OK" || echo "Java Fail"
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu" APP=Mgraph MAIN=MGRAPHMAIN js   | $(CHECKMGRAPH) && echo   "Js    OK" || echo "Js   Fail"
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu" APP=Mgraph MAIN=MGRAPHMAIN ts   | $(CHECKMGRAPH) && echo   "Ts    OK" || echo "Ts   Fail"
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu" APP=Mgraph MAIN=MGRAPHMAIN py   | $(CHECKMGRAPH) && echo   "Py    OK" || echo "Py   Fail"
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu" APP=Mgraph MAIN=MGRAPHMAIN swift 2>/dev/null| $(CHECKMGRAPH) && echo   "Swift OK" || echo "Swift  Fail"	
 
 mcgraph:
-	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu Mcgraph.fu" APP=Mcgraph MAIN=MCGRAPHMAIN c 2>/dev/null | grep -E '^(A|.+S0.+S1|1)' | wc -l | grep -q 3 && echo "C    OK" || echo "C     Fail"
+	make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu Mcgraph.fu" APP=Mcgraph MAIN=MCGRAPHMAIN c 2>/dev/null | grep -E '^(A|.+S0.+S1|1)' | wc -l | grep -q 3 && echo "C    OK" || echo "C     Fail"
 	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu Mcgraph.fu" APP=Mcgraph MAIN=MCGRAPHMAIN cpp | grep -E '^(A|.+S0.+S1|1)' | wc -l | grep -q 3 && echo "Cpp  OK" || echo "Cpp   Fail"
 	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu Mcgraph.fu" APP=Mcgraph MAIN=MCGRAPHMAIN cs | grep -E '^(A|.+S0.+S1|1)' | wc -l | grep -q 3 && echo "C#   OK" || echo "C#    Fail"
 	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu Mcgraph.fu" APP=Mcgraph MAIN=MCGRAPHMAIN d | grep -E '^(A|.+S0.+S1|1)' | wc -l | grep -q 3 && echo "D    OK" || echo "D     Fail"

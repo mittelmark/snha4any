@@ -23,7 +23,7 @@ tasks:  ## list all tasks
 c:	## compile C
 	[ -d cm ] || mkdir cm
 	fut -D $(MAIN) $(FUFILES) -o cm/$(app).c
-	gcc cm/$(app).c `pkg-config --cflags --libs glib-2.0` -o cm/$(app)-c -lm
+	gcc cm/$(app).c `pkg-config --cflags --libs glib-2.0` -o cm/$(app)-c
 	./cm/$(app)-c
 
 cpp:	## compile Cpp

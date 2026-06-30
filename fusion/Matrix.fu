@@ -71,7 +71,7 @@ public class Matrix {
 		return corrMat;
 	}
 
-	public static void PrintMatrix(Matrix() M) {
+	public static void PrintMatrix(Matrix M) {
 		for (int i = 0; i < M.Nrow(); i++) {
 			for (int j = 0; j < M.Ncol(); j++) {
 				Console.Write($"{M.Get(i, j)}\t");
@@ -80,20 +80,23 @@ public class Matrix {
 		}
 	}
 
-	public Matrix() Transpose() {
-		Matrix() T;
-		T.Create(nc, nr, 0);
-
+	public static Matrix() Transpose(Matrix M) {
+		Matrix() N;
+		int nr = M.Nrow();
+		int nc = M.Ncol();
+		
+		N.Create(nc, nr, 0);
 		for (int i = 0; i < nr; i++) {
 			for (int j = 0; j < nc; j++) {
-				T.Set(j, i, M[i][j]);
+				N.Set(j, i, M.Get(i,j));
 			}
 		}
 
-		return T;
+		return N;
 	}
 
-	public static void Run(string[] args) {
+    #if MATRIXMAIN
+	public static void Main(string[] args) {
 		Console.WriteLine("\nTesting matrix");
 
 		Matrix() M;
@@ -113,10 +116,8 @@ public class Matrix {
 
 		Console.WriteLine("Original matrix:");
 		Matrix.PrintMatrix(M);
-
 		Console.WriteLine("Transposed matrix:");
-		Matrix() T = null;
-		T = M.Transpose();
+		Matrix() T = Matrix.Transpose(M);
 		Matrix.PrintMatrix(T);
 
 		Console.WriteLine("Pearson test:");
@@ -131,14 +132,8 @@ public class Matrix {
 		y.Add(3.1);
 		y.Add(6.2);
 		y.Add(9.3);
-
 		Console.WriteLine(Stats.PearsonCorrelation(x, y));
 	}
-    
-    #if MATRIXMAIN
-        public static void Main(string[] args) {
-            Matrix.Run(args);
-        }
     #endif
 }
 
