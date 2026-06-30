@@ -1,7 +1,7 @@
 public class Matrix {
 	List<List<float>()>() M;
-	int nc = 0;
-	int nr = 0;
+	//int nc = 0;
+	//int nr = 0;
 
 	// constructors can't take arguments so we do a create function
 	public void Create! (int nrow, int ncol, float value=0) {
@@ -11,8 +11,8 @@ public class Matrix {
 				M[i].Add(value);
 			}
 		}
-		nc = ncol;
-		nr = nrow;
+		//nc = ncol;
+		//nr = nrow;
 	}
 
 	// exclamation mark as object is modified
@@ -30,14 +30,14 @@ public class Matrix {
 
 	public List<float>() GetColumn(int col) {
 		List<float>() values;
-		for (int i = 0; i < nr; i++) {
+		for (int i = 0; i < this.Nrow(); i++) {
 			values.Add(M[i][col]);
 		}
 		return(values);
 	}
 
-	public int Nrow() => nr;
-	public int Ncol() => nc;
+	public int Nrow() => M.Count;
+	public int Ncol() => M[0].Count;
 
 	public static Matrix() AsCorrelationMatrix(Matrix data, string method = "pearson") {
 		Matrix() corrMat;
