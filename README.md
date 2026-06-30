@@ -80,7 +80,7 @@ Here is the process diagram:
 
 
 | Language   | [FileSystem.fu](fusion/FileSystem.fu) | [CSVParser.fu](fusion/CSVParser.fu) | | [SNHA.fu](fusion/SNHA.fu) |
-|------------|------------------------|----------------------------------------------------|
+|------------|------------------------|-------------|---------------------------------------|
 | C          | [x]                    | [x] | [x] | 
 | C++        | [x]                    | [x] | [x] | 
 | C#         | [x]                    | [x] | [x] | 
