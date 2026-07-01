@@ -365,7 +365,7 @@ public class SNHA {
 		string() csv = FileSystem.FileRead("test/werner-synthetic.csv");
 		Matrix() M = CSVParser.ReadCSV(csv,true);
 		SNHA() sn;
-		sn.Run(M,"pearson",0.1);
+		sn.Create(M);
 		sn.GetChains();
 		Matrix() A = sn.GetAdjacency();
 		Console.WriteLine($"M: {M.Nrow()},{M.Ncol()}");

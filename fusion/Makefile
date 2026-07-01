@@ -31,13 +31,13 @@ tasks:  ## list all tasks
 c:	## compile C
 	[ -d cm ] || mkdir cm
 	fut -D $(MAIN) -D C $(FUFILES) -o cm/$(app).c
-	gcc cm/$(app).c `pkg-config --cflags --libs glib-2.0` -o cm/$(app)-c -lm
+	gcc -O3 cm/$(app).c `pkg-config --cflags --libs glib-2.0` -o cm/$(app)-c -lm
 	./cm/$(app)-c $(ARGS)
 
 cpp:	## compile Cpp
 	[ -d cppm ] || mkdir cppm
 	fut -D $(MAIN) -D CPP  $(FUFILES) -o cppm/$(app).cpp
-	g++ -std=c++20 cppm/$(app).cpp -o cppm/$(app)-cpp
+	g++ -O3 -std=c++20 cppm/$(app).cpp -o cppm/$(app)-cpp
 	./cppm/$(app)-cpp $(ARGS)
 cs:
 	[ -d MainApp ] && rm -rf MainApp

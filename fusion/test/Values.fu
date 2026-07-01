@@ -1,13 +1,13 @@
 
- public static class Values {
-	 public static void AddValues (int n, List<float>! values) {
+public static class Values {
+	 public static List<float>! void AddValues (int n, List<float>! values) {
 		 for (int i = 0; i < n; i++) {
 			 float f = i*1.0;
 			 values.Add(f);
 		 }
 	 }
 	 public static void Main () {
-		 List<float>() values;
+		 List<float># values;
 		 AddValues(5,values);
 		 AddValues(6,values);
 		 Console.WriteLine($"Count: {values.Count}");
