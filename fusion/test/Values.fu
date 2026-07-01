@@ -1,17 +1,16 @@
 
 public static class Values {
-	 public static List<float>! void AddValues (int n, List<float>! values) {
+	 public static void AddValues (int n, FloatVector! vals) {
 		 for (int i = 0; i < n; i++) {
 			 float f = i*1.0;
-			 values.Add(f);
+			 vals.Add(f);
 		 }
 	 }
 	 public static void Main () {
-		 List<float># values;
-		 AddValues(5,values);
-		 AddValues(6,values);
-		 Console.WriteLine($"Count: {values.Count}");
-		 
+		 FloatVector() vals;
+		 AddValues(5,vals);
+		 AddValues(6,vals);
+		 Console.WriteLine($"Count: {vals.Count}");
 	 }
 	 
  }

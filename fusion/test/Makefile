@@ -7,7 +7,7 @@ CURRENT_MAKEFILE := $(lastword $(MAKEFILE_LIST))
 ARGS=
 FUFILES=Test.fu
 APP=Test
-app=$(shell echo $(APP) | tr A-Z a-z)
+app=$(shell echo $(APP) | tr A-Z a-z | perl -pe 's/ .+//')
 MAIN=TESTMAIN
 ## D compiler check
 ifeq (, $(shell which dmd 2>/dev/null))
@@ -22,8 +22,8 @@ tasks:  ## list all tasks
 
 c:	## compile C
 	[ -d cm ] || mkdir cm
-	fut -D $(MAIN) $(FUFILES) -o cm/$(app).c
-	gcc cm/$(app).c `pkg-config --cflags --libs glib-2.0` -o cm/$(app)-c
+	fut -D $(MAIN) -D C $(FUFILES) -o cm/$(app).c 
+	gcc cm/$(app).c `pkg-config --cflags --libs glib-2.0` -o cm/$(app)-c -lm
 	./cm/$(app)-c
 
 cpp:	## compile Cpp

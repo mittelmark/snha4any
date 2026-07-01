@@ -1,7 +1,7 @@
 public static class CSVParser {
     ///Parses only a single line at a time
 
-    public static void ParseLine(string line, List<float>! values){
+    public static void ParseLine(string line, FloatVector! values){
         int start = 0;
         for (int i = 0; i < line.Length; i++){
             if (line[i] == ','){
@@ -74,7 +74,7 @@ public static class CSVParser {
         int ColCount = 0;
         Matrix() Mat;
         // First pass — collect all values into a flat list
-        List<float>() values;
+        FloatVector() values;
         int start    = 0;
         int rowIndex = 0;
         for (int i = 0; i < csv.Length; i++){
@@ -120,7 +120,7 @@ public static class CSVParser {
         Mat.Create(RowCount, ColCount, 0.0);
         for (int i = 0; i < RowCount; i++){
             for (int j = 0; j < ColCount; j++){
-                Mat.Set(i, j, values[i * ColCount + j]);
+                Mat.Set(i, j, values.Get(i * ColCount + j));
             }
         }
 		return Mat;

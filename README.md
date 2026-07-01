@@ -88,7 +88,7 @@ Here is the process diagram:
 | Java       | [x]                    | [x] | [x] | [x] |
 | JavaScript | [x]                    | [x] | [x] | [x] |
 | Python     | [x]                    | [x] | [x] | [x] |
-| Swift      | [x]                    | [?](https://github.com/fusionlanguage/fut/issues/247) | [?](https://github.com/fusionlanguage/fut/issues/247) | [x] |
+| Swift      | [x]                    | [x] | [?](https://github.com/fusionlanguage/fut/issues/247) | [x] |
 | TypeScript | [x]                    | [x] | [x] | [x] |
 
 ## Class Diagram (WIP)

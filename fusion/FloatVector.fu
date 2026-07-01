@@ -1,0 +1,13 @@
+public class FloatVector {
+	internal List<float>() L;
+	public int Count = 0;
+	public void Add!(float f) {
+		L.Add(f);
+		Count = Count + 1;
+	}
+	public float Get(int index) {
+		return(L[index]);
+	}
+}
+
+
