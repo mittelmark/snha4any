@@ -1,0 +1,29 @@
+ 
+/// Description of class.
+public class Timeit {
+	internal long starttime;
+	public void Start! () {
+		starttime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+	}
+	public long Duration () {
+		long endtime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+		return(endtime-starttime);
+	}
+	#if TIMEITMAIN
+	public static void Main () {
+		Timeit() time;
+		time.Start();
+		long x = 0;
+		for (int i = 0; i < 100*100; i++) {
+			for (int j = 0; j < 10000; j++) {
+				x = x+1;
+			}
+		}
+		long t = time.Duration();
+		float s = t/1000.0;
+		Console.WriteLine($"Required Time for {x} iterations: {t}ms - {s:F3}s!");
+	}
+	#endif
+}
+ 
+

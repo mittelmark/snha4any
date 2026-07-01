@@ -79,17 +79,17 @@ Here is the process diagram:
 | TypeScript | bun 1.3                | [x]     | [x]      |   [x]     |   [x]     | [x]   |
 
 
-| Language   | [FileSystem.fu](fusion/FileSystem.fu) | [CSVParser.fu](fusion/CSVParser.fu) | [SNHA.fu](fusion/SNHA.fu) |
+| Language   | [FileSystem.fu](fusion/FileSystem.fu) | [CSVParser.fu](fusion/CSVParser.fu) | [SNHA.fu](fusion/SNHA.fu) | [Timeit.fu](fusion/Timeit.fu) |
 |------------|------------------------|-------------|---------------------------------------|
-| C          | [x]                    | [x] | [x] |
-| C++        | [x]                    | [x] | [x] |
-| C#         | [x]                    | [x] | [x] |
-| D          | [x]                    | [x] | [x] |
-| Java       | [x]                    | [x] | [x] |
-| JavaScript | [x]                    | [x] | [x] |
-| Python     | [x]                    | [x] | [x] |
-| Swift      | [x]                    | [?](https://github.com/fusionlanguage/fut/issues/247) | [?](https://github.com/fusionlanguage/fut/issues/247) |
-| TypeScript | [x]                    | [x] | [x] |
+| C          | [x]                    | [x] | [x] | [x] |
+| C++        | [x]                    | [x] | [x] | [x] |
+| C#         | [x]                    | [x] | [x] | [x] |
+| D          | [x]                    | [x] | [x] | [x] |
+| Java       | [x]                    | [x] | [x] | [x] |
+| JavaScript | [x]                    | [x] | [x] | [x] |
+| Python     | [x]                    | [x] | [x] | [x] |
+| Swift      | [x]                    | [?](https://github.com/fusionlanguage/fut/issues/247) | [?](https://github.com/fusionlanguage/fut/issues/247) | [x] |
+| TypeScript | [x]                    | [x] | [x] | [x] |
 
 ## Class Diagram (WIP)
 
