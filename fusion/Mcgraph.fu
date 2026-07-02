@@ -499,7 +499,12 @@ public class Mcgraph {
 
 		Mcgraph() MC;
 		MC.Seed(123);
-		Matrix() data = MC.Graph2Data(G, 10, 5, 1, 0.05, 100, 2);
+		Timeit() time;
+		time.Start();
+		Matrix() data = MC.Graph2Data(G, 200, 100, 1, 0.05, 100, 2);
+		long t = time.Duration();
+		float s = t/1000.0;
+		Console.WriteLine($"Required Time for data generation: {t}ms - {s:F3}s!");
 
 		Console.WriteLine("Monte Carlo data:");
 		MC.PrintData(G, data, 10);
