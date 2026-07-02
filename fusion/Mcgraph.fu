@@ -33,10 +33,18 @@ public class Mcgraph {
 
 	/// Random generator used by the whole class.
 	Rand() rnd;
-
+	bool seeded = false;
 	/// Initialize random generator once.
-	public void Seed! () {
-		rnd.SeedNow();
+	public void Seed! (long value=0) {
+		if (!seeded) {
+			if (value == 0) {
+				rnd.SeedNow();
+			} else {
+				rnd.Seed(value);
+			}
+			seeded = true;
+		}
+
 	}
 
 	/// Return absolute value of x.
@@ -72,8 +80,8 @@ public class Mcgraph {
 		// Number of samples to generate
 		int nsamples
 	) {
-
-		rnd.SeedNow();
+		this.Seed();
+		//rnd.SeedNow();
 
 		// List containing the samples.
 		List<float> () samples;
@@ -131,7 +139,7 @@ public class Mcgraph {
 	) {
 		Matrix() dataMatrix;
 
-		Seed();
+		this.Seed();
 
 		int p = G.Size();
 		dataMatrix.Create(p, nsamples, 0);
@@ -490,6 +498,7 @@ public class Mcgraph {
 		G.gnew("band", 5);
 
 		Mcgraph() MC;
+		MC.Seed(123);
 		Matrix() data = MC.Graph2Data(G, 10, 5, 1, 0.05, 100, 2);
 
 		Console.WriteLine("Monte Carlo data:");
