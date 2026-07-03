@@ -374,10 +374,7 @@ public class SNHA {
         }
     }
 	public void SetLabels!(List<string()> headers) {
-		Console.WriteLine($"Here 3");
-		
 		this.nodenames = headers;
-		Console.WriteLine($"Here 4");
 	}
 
     /// return the label for the given node id
