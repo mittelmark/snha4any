@@ -68,6 +68,7 @@ public static class CSVParser {
         }
         return result;
     }
+	/// Return the headers of a CSV string
 	public static List<string()>() ReadHeader(string csv) {
 		int start = 0;
 		List<string()>() headers;
@@ -89,7 +90,7 @@ public static class CSVParser {
         }
 		return headers;
 	}
-	public static Matrix() ReadCSV(string csv, bool skipHeader){
+	public static Matrix() ReadData(string csv, bool skipHeader = true){
         //variables local to Mat
         int RowCount = 0;
         int ColCount = 0;
@@ -151,7 +152,7 @@ public static class CSVParser {
 		string() content = "Hello CSVParser";
 		//string() content = FileSystem.ReadFile(args[0]);
 		Console.WriteLine($"{content}");
-		Matrix() M = CSVParser.ReadCSV("hello,world\n0.0,0.1\n0.2,0.3\n0.4,0.5\n",true) ;
+		Matrix() M = CSVParser.ReadData("hello,world\n0.0,0.1\n0.2,0.3\n0.4,0.5\n",true) ;
 		int n = M.Nrow();
 		Console.WriteLine($"{n} {M.Get(0,1)}");
 		List<string()>() headers = CSVParser.ReadHeader("hello,world\n0.0,0.1\n0.2,0.3\n0.4,0.5\n");
