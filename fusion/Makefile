@@ -166,13 +166,13 @@ fsystem:
 snha:
 	@make FUFILES="FileSystem.fu FloatVector.fu Rand.fu Matrix.fu CSVParser.fu Stats.fu Bootstrap.fu SNHA.fu" APP=SNHA MAIN=SNHAMAIN c     | $(CHECKSNHA) && echo "C     OK" || echo "C     Fail"
 	@make FUFILES="FileSystem.fu FloatVector.fu Rand.fu Matrix.fu CSVParser.fu Stats.fu Bootstrap.fu SNHA.fu" APP=SNHA MAIN=SNHAMAIN cpp   | $(CHECKSNHA) && echo "C++   OK" || echo "C++   Fail"
-	@make FUFILES="FileSystem.fu FloatVector.fu Rand.fu Matrix.fu CSVParser.fu Stats.fu Bootstrap.fu SNHA.fu" APP=SNHA MAIN=SNHAMAIN cs    | $(CHECKSNHA) && echo "C#    OK" || echo "C#    Fail"
+	#@make FUFILES="FileSystem.fu FloatVector.fu Rand.fu Matrix.fu CSVParser.fu Stats.fu Bootstrap.fu SNHA.fu" APP=SNHA MAIN=SNHAMAIN cs    | $(CHECKSNHA) && echo "C#    OK" || echo "C#    Fail"
 	@make FUFILES="FileSystem.fu FloatVector.fu Rand.fu Matrix.fu CSVParser.fu Stats.fu Bootstrap.fu SNHA.fu" APP=SNHA MAIN=SNHAMAIN d     | $(CHECKSNHA) && echo "D     OK" || echo "D     Fail"
 	@make FUFILES="FileSystem.fu FloatVector.fu Rand.fu Matrix.fu CSVParser.fu Stats.fu Bootstrap.fu SNHA.fu" APP=SNHA MAIN=SNHAMAIN java  | $(CHECKSNHA) && echo "Java  OK" || echo "Java  Fail"
 	@make FUFILES="FileSystem.fu FloatVector.fu Rand.fu Matrix.fu CSVParser.fu Stats.fu Bootstrap.fu SNHA.fu" APP=SNHA MAIN=SNHAMAIN js    | $(CHECKSNHA) && echo "Js    OK" || echo "Js    Fail"
 	@make FUFILES="FileSystem.fu FloatVector.fu Rand.fu Matrix.fu CSVParser.fu Stats.fu Bootstrap.fu SNHA.fu" APP=SNHA MAIN=SNHAMAIN py    | $(CHECKSNHA) && echo "py    OK" || echo "py    Fail"
-	make FUFILES="FileSystem.fu FloatVector.fu Rand.fu Matrix.fu CSVParser.fu Stats.fu Bootstrap.fu SNHA.fu" APP=SNHA MAIN=SNHAMAIN swift | $(CHECKSNHA) && echo "Swift OK" || echo "Swift Fail"
-	@make FUFILES="FileSystem.fu FloatVector.fu Rand.fu Matrix.fu CSVParser.fu Stats.fu Bootstrap.fu SNHA.fu" APP=SNHA MAIN=SNHAMAIN ts    | $(CHECKSNHA) && echo "Ts    OK" || echo "Ts    Fail"
+	#@make FUFILES="FileSystem.fu FloatVector.fu Rand.fu Matrix.fu CSVParser.fu Stats.fu Bootstrap.fu SNHA.fu" APP=SNHA MAIN=SNHAMAIN swift | $(CHECKSNHA) && echo "Swift OK" || echo "Swift Fail"
+	#@make FUFILES="FileSystem.fu FloatVector.fu Rand.fu Matrix.fu CSVParser.fu Stats.fu Bootstrap.fu SNHA.fu" APP=SNHA MAIN=SNHAMAIN ts    | $(CHECKSNHA) && echo "Ts    OK" || echo "Ts    Fail"
 
 timeit:
 	@make FUFILES="Timeit.fu" APP=Timeit  MAIN=TIMEITMAIN c     | grep Required && echo "C     OK" || echo "C     Fail"

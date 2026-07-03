@@ -56,7 +56,7 @@ public static class Bootstrap{
 		Matrix.PrintMatrix(shuffled);
 		return shuffled;
 	}
-	public static Matrix() Run(Matrix() data, string method, float threshold, int iterations, float tolerance){
+	public static Matrix() Run(Matrix data, string method, float threshold, int iterations, float tolerance){
 		int vars = data.Ncol();
 		//Random number generator
 		Rand() rng;

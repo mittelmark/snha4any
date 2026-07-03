@@ -32,7 +32,7 @@ public class SNHA {
     //Final Adjacency matrix storage for retrieval outside of class after either a normal SNHA run or bootstrap
     Matrix() adj;
 
-    public void Create!(Matrix() data, string method = "pearson", double threshold = 0.10, bool boot = false, int iterations = 10, double tolerance = 0.60){
+    public void Create!(Matrix data, string method = "pearson", double threshold = 0.10, bool boot = false, int iterations = 10, double tolerance = 0.60){
         if(boot){
             Matrix() temp = Bootstrap.Run(data, method, threshold, iterations, tolerance);
             
@@ -364,8 +364,10 @@ public class SNHA {
 	public static void Main (string[] args) {
 		string() csv = FileSystem.FileRead("test/werner-synthetic.csv");
 		Matrix() M = CSVParser.ReadCSV(csv,true);
+		Console.WriteLine($"M: {M.Nrow()},{M.Ncol()}");
 		SNHA() sn;
 		sn.Create(M);
+		
 		sn.GetChains();
 		Matrix() A = sn.GetAdjacency();
 		Console.WriteLine($"M: {M.Nrow()},{M.Ncol()}");
