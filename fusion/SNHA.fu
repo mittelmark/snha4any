@@ -1,38 +1,50 @@
-    // Saint Nicolas House Algorithm Main Entry point
-    //
-    // Basic Usage:
-    //  * 1. Create a Matrix object from the Matrix class to hold variables and observations.
-    //  * 2. The associated correlation matrix will be called and created within the st_nico_algo function itself. To view the correlation matrix, you can simply call Matrix.AsCorrelationMatrix(data) with, data, corresponding to a matrix object.
-    //  * 3. Create a new SNHA object and call st_nico_alg
-    //
-    //
-    //  Example for a single SNHA run:
-    //  Matrix() M = CSVParser.ReadCSV(file, false);
-    //  SNHA# data ;
-    //  data.new(M, "pearson", 0.10);
-    //  data.getChains();
-    //  Matrix() data_adj = data.getAdj();
-    //
-    //  Example for a bootstrap SNHA run:
-    //  SNHA# foo ;
-    //  foo.new(M, "spearman", 0.10, true, 100, 0.50);
-    //
-    //
-    //  Arguments for st_nico_alg(data, method, threshold, bootstrap, iterations, tolerance)
-    //      * data           : Input data. Must be of matrix() object
-    //      * method         : Pearson("pearson") correlation, Spearman ("spearman") correlation, Kendall-Tau ("kendal") Correlation
-    //      * threshold      : Absolute correlation values under a certain threshold will not be used for association chain construction
-    //      * boot           : Run bootstrap
-    //      * iterations     : Total iterations for bootstrap run, default = 10
-    //      * tolerance      : Total number of edges predicted by bootstrap must be over this percentage
-    //
+   
+    /// Saint Nicolas House Algorithm Main Entry point
+    ///
+	/// Authors: Christopher Olvera and Detlef Groth, University of Potsdam
+	///
+    /// Basic Usage:
+	///
+    ///  * 1. Create a Matrix object from the Matrix class to hold variables 
+	///       and observations.
+    ///  * 2. The associated correlation matrix will be called and created within
+	///       the Create function itself. To view the correlation matrix, 
+	///        you can simply call Matrix.AsCorrelationMatrix(data) with, data, 
+	///        corresponding to a matrix object.
+    ///  * 3. Create a new SNHA object and call Create
+    ///
+    ///
+    ///  Example for a single SNHA run (Language Fusion):
+	///
+    ///  SNHA() sn;
+	///  Matrix() M = CSVParser.ReadCSV(file, false);
+    ///  sn.Create(M);
+    ///  sn.PrintChains();
+    ///  Matrix() A = sn.GetTheta(); // adjacency matrix
+    ///  Matrix.PrintMatrix(A);
+    ///
 public class SNHA {
-    //List of List of int which correspond to chains --> final chains
+    /// List of List of int which correspond to chains --> final chains
     List<List<int>()>() chains;
-    //Final Adjacency matrix storage for retrieval outside of class after either a normal SNHA run or bootstrap
+    /// Final Adjacency matrix storage for retrieval outside of class after either a normal SNHA run or bootstrap
     Matrix() adj;
-
-    public void Create!(Matrix data, string method = "pearson", double threshold = 0.10, bool boot = false, int iterations = 10, double tolerance = 0.60){
+	/// The correlation matrix
+	Matrix() sigma ;
+	/// Starts the SNHA algorithm.
+    public void Create!(
+		/// data matrix with variables in columns and samples in rows
+		Matrix data, 
+		/// correlation method, either "pearson" or "spearman", default: "pearson"
+		string method = "pearson", 
+		/// threshold for correlation value to be considered, default: 0.1
+		double threshold = 0.10, 
+		/// should boostrapping of samples performed to test stability of edges, default: false
+		bool boot = false, 
+		/// if boot=true how many resamplings should be done, default: 50
+		int iterations = 50, 
+		/// threshold to check for the presence of an edge ptroportion for an edge
+		/// must be above this threshold, default: 0.60
+		double tolerance = 0.60){
         if(boot){
             Matrix() temp = Bootstrap.Run(data, method, threshold, iterations, tolerance);
             
@@ -48,8 +60,12 @@ public class SNHA {
             Run(data, method, threshold);
         }
     }
-    //Get chains from SNHA run
-    public void GetChains() {
+	/// Get the Chains of the current run.
+	public List<List<int>()>() GetChains() {
+		return(this.chains);
+	}
+    /// Print out Get chains from SNHA run.
+    public void PrintChains() {
         int i = 0;
         foreach (List<int> chain in this.chains) {
             i++;
@@ -57,8 +73,9 @@ public class SNHA {
             PrintChain(chain);
         }
     }
-    //Problem with C memory - return a copy of the adj matrix
-    public Matrix() GetAdjacency () {
+	// Problem with C memory - return a copy of the adj matrix
+    /// Get the Adjacency Matrix of the current run.
+    public Matrix() GetTheta () {
         Matrix() copy;
         int n = this.adj.Nrow();
         copy.Create(n,n,0.0);
@@ -69,9 +86,12 @@ public class SNHA {
         }
         return copy;
     }
-
+	/// Return the Correlation Matrix
+	public Matrix() GetSigma() {
+		return(this.sigma);
+	}
     //New Sorted Orders with insertion sort w/o values under a certain threshold
-    public Matrix() PrecomputeSortedOrders(Matrix corrMat, float threshold) {
+    protected Matrix() PrecomputeSortedOrders(Matrix corrMat, float threshold) {
         int n = corrMat.Nrow();
         Matrix() orders;
         orders.Create(n, n, -1.0);
@@ -110,7 +130,7 @@ public class SNHA {
 
     //Makes a chain every subset -  Main Chain + Middle Chain helper
     //Takes into consideration every column, the current active set of nodes and uses the matrix of sorted orders
-    public List<int>() BuildChainFromActiveColumn(int col, List<int> activeNodes,
+    protected List<int>() BuildChainFromActiveColumn(int col, List<int> activeNodes,
                                                    Matrix orders) {
         List<int>() chain;
         chain.Add(col);
@@ -124,7 +144,7 @@ public class SNHA {
         return chain;
     }
     //If a chain is constructed, check the reverse chain
-    public bool CheckReverseChain(int col, List<int> forwardChain, List<int> activeNodes, Matrix orders) {
+    protected bool CheckReverseChain(int col, List<int> forwardChain, List<int> activeNodes, Matrix orders) {
         int lastNode = forwardChain[forwardChain.Count - 1];
         List<int>() reverseChain = BuildChainFromActiveColumn(lastNode, activeNodes, orders);
         if (reverseChain.Count != forwardChain.Count){
@@ -139,22 +159,29 @@ public class SNHA {
         return true;
     }
 
-    // LIST HELPERS - No built in fusion code for checking reverse nor comparison
-    public List<int>() ReverseList(List<int> list) {
+    /// LIST HELPERS - Reverse a list of integers.
+    public List<int>() ReverseList(
+		/// list of integers
+		List<int> list) {
         List<int>() rev;
         for (int i = list.Count - 1; i >= 0; i--)
             rev.Add(list[i]);
         return rev;
     }
-
+	/// LIST HELPERS: Check if two lists of integers are equal.
     public bool ListsEqual(List<int> a, List<int> b) {
         if (a.Count != b.Count) return false;
         for (int i = 0; i < a.Count; i++)
             if (a[i] != b[i]) return false;
         return true;
     }
-
-    public bool IsSubchain(List<int> shorter, List<int> longer) {
+	/// Check if the first list is a sublist of the second longer list
+	/// Returns true or false
+    public bool IsSubchain(
+		/// the shorter list
+		List<int> shorter, 
+		/// the longer list
+		List<int> longer) {
         if (shorter.Count >= longer.Count) return false;
         for (int start = 0; start <= longer.Count - shorter.Count; start++) {
             bool match = true;
@@ -166,13 +193,13 @@ public class SNHA {
         return false;
     }
 
-    public bool IsSubchainOrReverse(List<int> shorter, List<int> longer) {
+    protected bool IsSubchainOrReverse(List<int> shorter, List<int> longer) {
         if (IsSubchain(shorter, longer)) return true;
         List<int>() rev = ReverseList(shorter);
         return IsSubchain(rev, longer);
     }
 
-    public List<int>() FindMiddleChain(List<int> nodes, Matrix orders) {
+    protected List<int>() FindMiddleChain(List<int> nodes, Matrix orders) {
         List<List<int>()>() preFiltered;
 
         for (int i = 0; i < nodes.Count; i++) {
@@ -211,7 +238,7 @@ public class SNHA {
         return empty;
     }
     // Remove duplicate chains, builds this.chains(adj) directly.
-    void RemoveDuplicateChains!(List<List<int>()>() confirmed) {
+    protected void RemoveDuplicateChains!(List<List<int>()>() confirmed) {
         SortedDictionary<string(), int>() known;
         List<List<int>()>() unique;
 
@@ -260,7 +287,13 @@ public class SNHA {
 		double threshold) {
         //Creation of three matrices - Adjacency for final output, Correlation matrix, Orders for sorting of correlation values
         Matrix() corrMat = Matrix.AsCorrelationMatrix(data, method);
-        int n = corrMat.Nrow();
+		int n = corrMat.Nrow();
+		this.sigma.Create(n,n,0.0);
+		for(int i =0; i<n; i++){
+			for(int j=0; j<n;j++){
+				this.sigma.Set(i,j, corrMat.Get(i,j));
+			}
+		}
 
         this.adj.Create(n, n, 0.0);
         this.chains.Clear();
@@ -343,7 +376,7 @@ public class SNHA {
         return labels.Substring(i, 1);
     }
 
-    public void PrintChain(List<int> chain) {
+    protected void PrintChain(List<int> chain) {
         for (int i = 0; i < chain.Count; i++) {
             Console.Write(GetLabel(chain[i]));
             if (i + 1 < chain.Count) Console.Write("-");
@@ -367,11 +400,13 @@ public class SNHA {
 		Console.WriteLine($"M: {M.Nrow()},{M.Ncol()}");
 		SNHA() sn;
 		sn.Create(M);
-		
-		sn.GetChains();
-		Matrix() A = sn.GetAdjacency();
+		sn.PrintChains();		
+		Matrix() A = sn.GetTheta();
+		Matrix() B = sn.GetSigma();		
 		Console.WriteLine($"M: {M.Nrow()},{M.Ncol()}");
 		Matrix.PrintMatrix(A);
+		Matrix.PrintMatrix(A);
+		Matrix.PrintMatrix(B);
 	}
 	#endif
 }

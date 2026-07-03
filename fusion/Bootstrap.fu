@@ -64,7 +64,7 @@ public static class Bootstrap{
 		//Run SNHA on the original data first 
 		SNHA# baseSnha = new SNHA();
 		baseSnha.Run(data, method, threshold);
-		Matrix() baseAdj = baseSnha.GetAdjacency();
+		Matrix() baseAdj = baseSnha.GetTheta();
 		//Keeps track of edge counts
 		Matrix() edgeCounts;
 		edgeCounts.Create(vars, vars,0.0);
@@ -74,7 +74,7 @@ public static class Bootstrap{
 		for(int iter = 0; iter < iterations; iter++){
 			Matrix() boot_data = ResampleRows(data, rng);
 			bootsnha.Run(boot_data, method, threshold);
-			Matrix() boot_adj = bootsnha.GetAdjacency();
+			Matrix() boot_adj = bootsnha.GetTheta();
 			for (int i =0; i < vars; i++){
 				for(int j = i +1 ; j < vars; j++){
 					if(boot_adj.Get(i,j) == 1.0){
