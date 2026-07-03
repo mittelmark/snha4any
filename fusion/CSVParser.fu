@@ -161,7 +161,7 @@ public static class CSVParser {
 		}
 		if (args.Length > 0) {
 			string() content2 = FileSystem.FileRead(args[0]);
-			Matrix() M2 = CSVParser.ReadCSV(content2,true);
+			Matrix() M2 = CSVParser.ReadData(content2,true);
 			int o = M2.Nrow();
 			float f = M2.Get(3,1);
 			Console.WriteLine($"{o} {f}");

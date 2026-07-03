@@ -17,7 +17,7 @@
     ///  Example for a single SNHA run (Language Fusion):
 	///
     ///  SNHA() sn;
-	///  Matrix() M = CSVParser.ReadCSV(file, false);
+	///  Matrix() M = CSVParser.ReadData(file, true);
     ///  sn.Create(M);
     ///  sn.PrintChains();
     ///  Matrix() A = sn.GetTheta(); // adjacency matrix
@@ -86,7 +86,7 @@ public class SNHA {
         }
         return copy;
     }
-	/// Return the Correlation Matrix
+	/// Return the Correlation Matrix.
 	public Matrix() GetSigma() {
 		return(this.sigma);
 	}
@@ -370,7 +370,7 @@ public class SNHA {
         }
     }
 
-    // LABELS AND PRINT
+    /// return the label for the given node id
     public string() GetLabel(int i) {
         string labels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$";
         return labels.Substring(i, 1);
@@ -383,7 +383,8 @@ public class SNHA {
         }
         Console.WriteLine("");
     }
-
+	/// Return a string representation for a give list
+	/// of node ids.
     public string() ChainToString(List<int> chain) {
         string() s = "";
         for (int i = 0; i < chain.Count; i++) {
@@ -394,19 +395,22 @@ public class SNHA {
     }
 	#if SNHAMAIN
 	/// Documentation text.
-	public static void Main (string[] args) {
-		string() csv = FileSystem.FileRead("test/werner-synthetic.csv");
-		Matrix() M = CSVParser.ReadCSV(csv,true);
+	public static void Main (string[] args) { // werner-synthetic
+		string() filename = "test/werner-synthetic.csv";
+		if (args.Length > 0) {
+			if (FileSystem.FileExists(args[0])) {
+				filename = args[0];
+			}
+		}
+		string() csv = FileSystem.FileRead(filename);
+		Matrix() M = CSVParser.ReadData(csv,true);
 		Console.WriteLine($"M: {M.Nrow()},{M.Ncol()}");
 		SNHA() sn;
 		sn.Create(M);
 		sn.PrintChains();		
 		Matrix() A = sn.GetTheta();
 		Matrix() B = sn.GetSigma();		
-		Console.WriteLine($"M: {M.Nrow()},{M.Ncol()}");
 		Matrix.PrintMatrix(A);
-		Matrix.PrintMatrix(A);
-		Matrix.PrintMatrix(B);
 	}
 	#endif
 }
