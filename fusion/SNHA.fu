@@ -31,6 +31,7 @@ public class SNHA {
 	/// The correlation matrix
 	Matrix() sigma ;
 	/// Starts the SNHA algorithm.
+	List<string()> nodenames;
     public void Create!(
 		/// data matrix with variables in columns and samples in rows
 		Matrix data, 
@@ -45,6 +46,9 @@ public class SNHA {
 		/// threshold to check for the presence of an edge ptroportion for an edge
 		/// must be above this threshold, default: 0.60
 		double tolerance = 0.60){
+		List<string()>() empty;
+		empty.Add("");
+		this.nodenames = empty;
         if(boot){
             Matrix() temp = Bootstrap.Run(data, method, threshold, iterations, tolerance);
             
@@ -369,9 +373,18 @@ public class SNHA {
             }
         }
     }
+	public void SetLabels!(List<string()> headers) {
+		Console.WriteLine($"Here 3");
+		
+		this.nodenames = headers;
+		Console.WriteLine($"Here 4");
+	}
 
     /// return the label for the given node id
     public string() GetLabel(int i) {
+		if (i < this.nodenames.Count) {
+			return(this.nodenames[i]);
+		} 
         string labels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$";
         return labels.Substring(i, 1);
     }
@@ -404,9 +417,11 @@ public class SNHA {
 		}
 		string() csv = FileSystem.FileRead(filename);
 		Matrix() M = CSVParser.ReadData(csv,true);
+		List<string()>() headers = CSVParser.ReadHeader(csv);
 		Console.WriteLine($"M: {M.Nrow()},{M.Ncol()}");
 		SNHA() sn;
 		sn.Create(M);
+		sn.SetLabels(headers);
 		sn.PrintChains();		
 		Matrix() A = sn.GetTheta();
 		Matrix() B = sn.GetSigma();		
