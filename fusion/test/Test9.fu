@@ -1,0 +1,14 @@
+		
+public static class Test9 {
+	public static void Main () {
+		string() hw = "Hello World";
+		Console.WriteLine($"hw={hw}"); // OK
+		int x = 0;
+		Console.WriteLine($"hw={hw} x={x}"); // OK
+		string() combined1 = $"hw={hw} x={x}";
+		Console.WriteLine($"combined1={combined1}"); // OK
+		string() combined2 = $"hw={hw,12} x={x}"; // NOT OK in Swift
+		Console.WriteLine($"combined2={combined2}"); // NOT OK in Swift
+	}
+}
+
