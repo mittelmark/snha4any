@@ -23,11 +23,34 @@ public class Matrix {
 	public float Get(int row, int col) {
 		return(M[row][col]);
 	}
-
+	public void SetRow!(int row, List<float> values) {
+		for (int i = 0; i < values.Count; i++) {
+			this.Set(row,i,values[i]);
+		}
+	}
+	public Matrix() GetRows (List<int> x) {
+		Matrix() mat;
+		mat.Create(0,x.Count,this.Ncol());
+		for (int i = 0; i < x.Count; i++) {
+			mat.SetRow(i,this.GetRow(x[i]));
+		}
+		return(mat);
+	}
 	public List<float>() GetRow(int row) {
 		return(M[row]);
 	}
-
+	public Matrix() AddMatrix (Matrix data) {
+		int nrow = this.Nrow();
+		int ncol = this.Ncol();
+		Matrix() M;
+		M.Create(0,nrow,ncol);
+		for (int i = 0; i < nrow; i++) {
+			for (int j = 0; j < ncol; j++) {
+				M.Set(i,j,this.Get(i,j)+data.Get(i,j));
+			}
+		}
+		return(M);
+	}
 	public List<float>() GetColumn(int col) {
 		List<float>() values;
 		for (int i = 0; i < this.Nrow(); i++) {
@@ -133,6 +156,12 @@ public class Matrix {
 		y.Add(6.2);
 		y.Add(9.3);
 		Console.WriteLine(Stats.PearsonCorrelation(x, y));
+		List<float>() a;
+		a.Add(10.0);
+		a.Add(11.0);
+		a.Add(12.0);
+		T.SetRow(2,a);
+		Matrix.PrintMatrix(T);
 	}
     #endif
 }
