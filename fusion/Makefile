@@ -191,9 +191,12 @@ bootstrap:
 	make FUFILES="FileSystem.fu FloatVector.fu Rand.fu Matrix.fu CSVParser.fu Stats.fu Bootstrap.fu SNHA.fu" APP=bootstrap MAIN=BOOTSTRAPMAIN c     | $(CHECKSNHA) && echo "C     OK" || echo "C     Fail"
 
 listutils:
-	make FUFILES="ListUtils.fu" APP=ListUtils MAIN=LISTUTILSMAIN c     | grep -q OK && echo "C     OK" || echo "C     Fail"
+	make FUFILES="ListUtils.fu" APP=ListUtils MAIN=LISTUTILSMAIN c      | grep -q OK && echo "C     OK" || echo "C     Fail"
 	@make FUFILES="ListUtils.fu" APP=ListUtils MAIN=LISTUTILSMAIN cpp   | grep -q OK && echo "C++   OK" || echo "C++   Fail"
+	@make FUFILES="ListUtils.fu" APP=ListUtils MAIN=LISTUTILSMAIN cs    | grep -q OK && echo "C#    OK" || echo "Cs    Fail"	
 	@make FUFILES="ListUtils.fu" APP=ListUtils MAIN=LISTUTILSMAIN d     | grep -q OK && echo "D     OK" || echo "D     Fail"
 	@make FUFILES="ListUtils.fu" APP=ListUtils MAIN=LISTUTILSMAIN java  | grep -q OK && echo "Java  OK" || echo "Java  Fail"
 	@make FUFILES="ListUtils.fu" APP=ListUtils MAIN=LISTUTILSMAIN js    | grep -q OK && echo "Js    OK" || echo "Js    Fail"
 	@make FUFILES="ListUtils.fu" APP=ListUtils MAIN=LISTUTILSMAIN py    | grep -q OK && echo "Py    OK" || echo "py    Fail"
+	@make FUFILES="ListUtils.fu" APP=ListUtils MAIN=LISTUTILSMAIN ts    | grep -q OK && echo "Ts    OK" || echo "Ts    Fail"
+	@make FUFILES="ListUtils.fu" APP=ListUtils MAIN=LISTUTILSMAIN swift | grep -q OK && echo "Swift OK" || echo "Swift Fail"
