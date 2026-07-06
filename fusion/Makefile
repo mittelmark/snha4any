@@ -22,7 +22,7 @@ CHECKM=grep -E '^(2.+5.+8|0.95|10.+11.+12)' | wc -l | grep -q 4
 FSYSCHECK=grep -E 'test.txt|Hello|World|Out:' | wc -l | grep -q 7
 CSVREADERCHECK=grep -E '3 0.1|4 0.5' | wc -l | grep -q 2
 CHECKMGRAPH=grep -v var | grep -v Write | grep -v MainApp | grep -E "A.+B|A.+1|D.+1.+1" | wc -l | grep -q 6
-CHECKSNHA=grep -E 'M: 100,6|Chain 4: E1-F1-D1-B1' | wc -l | grep -q 5
+CHECKSNHA=grep -E 'M: 100,6|Chain 4: E1-F1-D1-B1|Chain 4: F1-E1-D1-B1-C1|Chain 3: E1-F1-D1-B1-C1|3.+3.+1.+0.+0' | wc -l | grep -q 6
 RANDC=grep -E '(position 19.+ is 15|position 12.+13|true=1)' | wc -l | grep -q 4
 ## default: list existing tasks 
 .PHONY: tasks

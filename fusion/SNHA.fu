@@ -385,17 +385,28 @@ public class SNHA {
 	public static void Bootstrap(Matrix data, List<string()> headers) {
 		Rand() rnd;
 		rnd.Seed(123);
+		Matrix() Add;
+		Add.Create(data.Ncol(),data.Ncol(),0);
 		List<int>() seq = Stats.Sequence(0,data.Nrow()-1);
 		for (int i = 0; i < 3; i++) {
-			List<int>() nsmaple = rnd.SampleInt(seq,data.Nrow(),true);
+			List<int>() nsample = rnd.SampleInt(seq,data.Nrow(),true);
 			SNHA() sn;
-			sn.Create(data);
+			Matrix() ndata = data.GetRows(nsample);
+			sn.Create(ndata);
 			sn.SetLabels(headers);
 			sn.PrintChains();		
 			Matrix() A = sn.GetTheta();
 			Matrix.PrintMatrix(A);
+			for (int j = 0; j < A.Nrow(); j++) {
+				for (int k = 0; k < A.Ncol(); k++) {
+					Add.Set(j,k,Add.Get(j,k)+A.Get(j,k));
+				}
+			}
+
 		}
+		Console.WriteLine("");
 		
+		Matrix.PrintMatrix(Add);
 	}
 	public static void Main (string[] args) { // werner-synthetic
 		string() filename = "test/werner-synthetic.csv";

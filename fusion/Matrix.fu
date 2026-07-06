@@ -29,12 +29,14 @@ public class Matrix {
 		}
 	}
 	public Matrix() GetRows (List<int> x) {
-		Matrix() mat;
-		mat.Create(0,x.Count,this.Ncol());
+		Matrix() N;
+		N.Create(x.Count,this.Ncol(),0);
 		for (int i = 0; i < x.Count; i++) {
-			mat.SetRow(i,this.GetRow(x[i]));
+			for (int j = 0; j < this.Ncol(); j++) {
+				N.Set(i,j,this.Get(x[i],j));
+			}
 		}
-		return(mat);
+		return(N);
 	}
 	public List<float>() GetRow(int row) {
 		return(M[row]);
@@ -82,6 +84,8 @@ public class Matrix {
 
 				if (method == "pearson") {
 					corr = Stats.PearsonCorrelation(colI, colJ);
+				} else if (method == "spearman") {
+					corr = Stats.SpearmanCorrelation(colI,colJ);
 				} else {
 					corr = Math.NaN;
 				}
@@ -162,6 +166,11 @@ public class Matrix {
 		a.Add(12.0);
 		T.SetRow(2,a);
 		Matrix.PrintMatrix(T);
+		List<int>() z;
+		z.Add(0);
+		z.Add(1);
+		
+		Matrix() U = T.GetRows(z);
 	}
     #endif
 }
