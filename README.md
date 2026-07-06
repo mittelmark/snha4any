@@ -79,17 +79,17 @@ Here is the process diagram:
 | TypeScript | bun 1.3                | [x]     | [x]      |   [x]     |   [x]     | [x]   |
 
 
-| Language   | [FileSystem.fu](fusion/FileSystem.fu) | [CSVParser.fu](fusion/CSVParser.fu) | [SNHA.fu](fusion/SNHA.fu) | [Timeit.fu](fusion/Timeit.fu) |
-|------------|------------------------|-------------|---------------------------------------|----|
-| C          | [x]                    | [x] | [x] | [x] |
-| C++        | [x]                    | [x] | [x] | [x] |
-| C#         | [x]                    | [x] | [x] | [x] |
-| D          | [x]                    | [x] | [x] | [x] |
-| Java       | [x]                    | [x] | [x] | [x] |
-| JavaScript | [x]                    | [x] | [x] | [x] |
-| Python     | [x]                    | [x] | [x] | [x] |
-| Swift      | [x]                    | [x] | [?](https://github.com/fusionlanguage/fut/issues/247) | [x] |
-| TypeScript | [x]                    | [x] | [x] | [x] |
+| Language   | [FileSystem.fu](fusion/FileSystem.fu) | [CSVParser.fu](fusion/CSVParser.fu) | [SNHA.fu](fusion/SNHA.fu) | [Timeit.fu](fusion/Timeit.fu) | | [ListUtils.fu](fusion/ListUtils.fu) |
+|------------|------------------------|-------------|---------------------------------------|----|---|
+| C          | [x]                    | [x] | [x] | [x] | [x] |
+| C++        | [x]                    | [x] | [x] | [x] | [x] |
+| C#         | [x]                    | [x] | [x] | [x] | [x] |
+| D          | [x]                    | [x] | [x] | [x] | [x] |
+| Java       | [x]                    | [x] | [x] | [x] | [x] |
+| JavaScript | [x]                    | [x] | [x] | [x] | [x] |
+| Python     | [x]                    | [x] | [x] | [x] | [x] |
+| Swift      | [x]                    | [x] | [?](https://github.com/fusionlanguage/fut/issues/247) | [x] | [x] |
+| TypeScript | [x]                    | [x] | [x] | [x] | [x] |
 
 ## Class Diagram (WIP)
 
@@ -102,5 +102,5 @@ The following persons contribute to the project:
 - Alba de Prada Hernandez (AP), University of Potsdam (graph and data generation modules)
 - Christopher Olvera (CO), University of Potsdam (implementation of SNHA algorithm and accuracy metrics)
 - Detlef Groth (DG), University of Potsdam (supervisor and random data generation)
-- Harsini Praveen Kumar (HP), University of Potsdam (statistics module)
+- Harshini Praveen Kumar (HP), University of Potsdam (statistics module)
 - Roberto Zarazua (RZ), University of Potsdam (Julia code, used for implementation)
