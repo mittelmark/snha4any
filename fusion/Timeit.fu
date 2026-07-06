@@ -1,13 +1,40 @@
  
 /// Description of class.
 public class Timeit {
-	internal long starttime;
+	internal long starttime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 	public void Start! () {
 		starttime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 	}
 	public long Duration () {
 		long endtime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 		return(endtime-starttime);
+	}
+	public string() Report () {
+		string lang = "Fusion" ;
+		#if C
+		lang = "C";
+		#elif CPP
+		lang = "C++";
+		#elif CSHARP
+		lang = "C#";
+		#elif D
+		lang = "D";
+		#elif JAVA
+		lang = "Java";
+		#elif JS
+		lang = "Js";
+		#elif PYTHON
+		lang = "Py";
+		#elif SWIFT
+		lang = "Swift";
+		#elif TS
+		lang = "Ts";
+		#endif
+		long t = this.Duration();
+		float s = t/1000.0;
+		return($"Required Time for data generation for Lang {lang,7}: {t}ms - {s:F3}s!");
+		
+		
 	}
 	#if TIMEITMAIN
 	public static void Main () {
@@ -21,7 +48,7 @@ public class Timeit {
 		}
 		long t = time.Duration();
 		float s = t/1000.0;
-		Console.WriteLine($"Required Time for {x} iterations: {t}ms - {s:F3}s!");
+		Console.WriteLine(time.Report());
 	}
 	#endif
 }

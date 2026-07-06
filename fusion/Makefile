@@ -109,18 +109,18 @@ stats:
 	@make FUFILES="Rand.fu Stats.fu" MAIN="STATSMAIN" APP=Stats swift 2>/dev/null | grep -qE $(CHECK) && echo   "Swift OK" || echo "Swift  Fail"
 
 matrix:
-	@make FUFILES="Stats.fu Matrix.fu" MAIN="MATRIXMAIN" APP=Matrix c 2>/dev/null | $(CHECKM) && echo   "C     OK" || echo "C     Fail"
+	make FUFILES="Stats.fu Matrix.fu" MAIN="MATRIXMAIN" APP=Matrix c 2>/dev/null | $(CHECKM) && echo   "C     OK" || echo "C     Fail"
 	@make FUFILES="Stats.fu Matrix.fu" MAIN="MATRIXMAIN" APP=Matrix cpp | $(CHECKM) && echo   "C++   OK" || echo "C++   Fail"
 	@make FUFILES="Stats.fu Matrix.fu" MAIN="MATRIXMAIN" APP=Matrix cs | $(CHECKM) && echo   "C#    OK" || echo "C#     Fail"
 	@make FUFILES="Stats.fu Matrix.fu" MAIN="MATRIXMAIN" APP=Matrix d | $(CHECKM) && echo   "D     OK" || echo "D    Fail"
 	@make FUFILES="Stats.fu Matrix.fu" MAIN="MATRIXMAIN" APP=Matrix java |  $(CHECKM)  && echo   "Java  OK" || echo "Java  Fail"
 	@make FUFILES="Stats.fu Matrix.fu" MAIN="MATRIXMAIN" APP=Matrix js |  $(CHECKM)  && echo   "Js    OK" || echo "Js    Fail"
 	@make FUFILES="Stats.fu Matrix.fu" MAIN="MATRIXMAIN" APP=Matrix py | $(CHECKM)  && echo   "Py    OK" || echo "Py    Fail"
-	@make FUFILES="Stats.fu Matrix.fu" MAIN="MATRIXMAIN" APP=Matrix ts | $(CHECKM)  && echo   "Ts    OK" || echo "Ts    Fail"
+	@make FUFILES="Stats.fu Matrix.fu" MAIN="MATRIXMAIN" APP=Matrix ts 2>/dev/null | $(CHECKM)  && echo   "Ts    OK" || echo "Ts    Fail"
 	@make FUFILES="Stats.fu Matrix.fu" MAIN="MATRIXMAIN" APP=Matrix swift 2>/dev/null |  $(CHECKM) && echo   "Swift OK" || echo "Swift   Fail"
 
 mgraph:
-	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu" APP=Mgraph MAIN=MGRAPHMAIN c    | $(CHECKMGRAPH) && echo   "C     OK" || echo "C    Fail"
+	make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu" APP=Mgraph MAIN=MGRAPHMAIN c    | $(CHECKMGRAPH) && echo   "C     OK" || echo "C    Fail"
 	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu" APP=Mgraph MAIN=MGRAPHMAIN cpp  | $(CHECKMGRAPH) && echo   "C++   OK" || echo "Cpp  Fail"
 	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu" APP=Mgraph MAIN=MGRAPHMAIN cs   | $(CHECKMGRAPH)  && echo   "C#    OK" || echo "C#   Fail"
 	@make FUFILES="Rand.fu Stats.fu Matrix.fu Mgraph.fu" APP=Mgraph MAIN=MGRAPHMAIN d    | $(CHECKMGRAPH) && echo   "D     OK" || echo "D    Fail"
@@ -167,13 +167,13 @@ fsystem:
 snha:
 	@make FUFILES="FileSystem.fu FloatVector.fu Rand.fu Matrix.fu CSVParser.fu Stats.fu SNHA.fu" APP=SNHA MAIN=SNHAMAIN c     | $(CHECKSNHA) && echo "C     OK" || echo "C     Fail"
 	@make FUFILES="FileSystem.fu FloatVector.fu Rand.fu Matrix.fu CSVParser.fu Stats.fu SNHA.fu" APP=SNHA MAIN=SNHAMAIN cpp   | $(CHECKSNHA) && echo "C++   OK" || echo "C++   Fail"
-	#@make FUFILES="FileSystem.fu FloatVector.fu Rand.fu Matrix.fu CSVParser.fu Stats.fu Bootstrap.fu SNHA.fu" APP=SNHA MAIN=SNHAMAIN cs    | $(CHECKSNHA) && echo "C#    OK" || echo "C#    Fail"
+	@make FUFILES="FileSystem.fu FloatVector.fu Rand.fu Matrix.fu CSVParser.fu Stats.fu Bootstrap.fu SNHA.fu" APP=SNHA MAIN=SNHAMAIN cs    | $(CHECKSNHA) && echo "C#    OK" || echo "C#    Fail"
 	@make FUFILES="FileSystem.fu FloatVector.fu Rand.fu Matrix.fu CSVParser.fu Stats.fu SNHA.fu" APP=SNHA MAIN=SNHAMAIN d     | $(CHECKSNHA) && echo "D     OK" || echo "D     Fail"
 	@make FUFILES="FileSystem.fu FloatVector.fu Rand.fu Matrix.fu CSVParser.fu Stats.fu SNHA.fu" APP=SNHA MAIN=SNHAMAIN java  | $(CHECKSNHA) && echo "Java  OK" || echo "Java  Fail"
 	@make FUFILES="FileSystem.fu FloatVector.fu Rand.fu Matrix.fu CSVParser.fu Stats.fu SNHA.fu" APP=SNHA MAIN=SNHAMAIN js    | $(CHECKSNHA) && echo "Js    OK" || echo "Js    Fail"
-	#@make FUFILES="FileSystem.fu FloatVector.fu Rand.fu Matrix.fu CSVParser.fu Stats.fu Bootstrap.fu SNHA.fu" APP=SNHA MAIN=SNHAMAIN py    | $(CHECKSNHA) && echo "py    OK" || echo "py    Fail"
-	#@make FUFILES="FileSystem.fu FloatVector.fu Rand.fu Matrix.fu CSVParser.fu Stats.fu Bootstrap.fu SNHA.fu" APP=SNHA MAIN=SNHAMAIN swift | $(CHECKSNHA) && echo "Swift OK" || echo "Swift Fail"
-	#@make FUFILES="FileSystem.fu FloatVector.fu Rand.fu Matrix.fu CSVParser.fu Stats.fu Bootstrap.fu SNHA.fu" APP=SNHA MAIN=SNHAMAIN ts    | $(CHECKSNHA) && echo "Ts    OK" || echo "Ts    Fail"
+	@make FUFILES="FileSystem.fu FloatVector.fu Rand.fu Matrix.fu CSVParser.fu Stats.fu Bootstrap.fu SNHA.fu" APP=SNHA MAIN=SNHAMAIN py    | $(CHECKSNHA) && echo "py    OK" || echo "py    Fail"
+	@make FUFILES="FileSystem.fu FloatVector.fu Rand.fu Matrix.fu CSVParser.fu Stats.fu Bootstrap.fu SNHA.fu" APP=SNHA MAIN=SNHAMAIN swift | $(CHECKSNHA) && echo "Swift OK" || echo "Swift Fail"
+	@make FUFILES="FileSystem.fu FloatVector.fu Rand.fu Matrix.fu CSVParser.fu Stats.fu Bootstrap.fu SNHA.fu" APP=SNHA MAIN=SNHAMAIN ts    | $(CHECKSNHA) && echo "Ts    OK" || echo "Ts    Fail"
 
 timeit:
 	@make FUFILES="Timeit.fu" APP=Timeit  MAIN=TIMEITMAIN c     | grep Required && echo "C     OK" || echo "C     Fail"
