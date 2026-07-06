@@ -11,6 +11,33 @@
  
  /// Documentation text.
  public static class ListUtils {
+	 public static List<string()>() AutoNames (int n) {
+		 string() letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		 float f = n / 26;
+		 int x = Math.Ceiling(f);
+		 List<string()>() labels;
+		 if (n < 27) {
+			 for (int i = 0; i < n; i++) {
+				 labels.Add($"{letters.Substring(i,1)}");
+			 }
+		 } else {
+			 if (n < 9*26) {
+				 for (int j = 0; j < 26; j++) {
+					 for (int i = 1; i < x+1; i++) {
+						 labels.Add($"{letters.Substring(j,1)}{i}");
+					 }
+				 }
+			 } else {
+				 for (int i = 0; i < n; i++) {
+					 labels.Add($"N{i:d4}");
+					 
+				 }
+			 }
+				 
+		 }
+		 return(labels);
+	 }
+
 	 /// LIST HELPERS - Reverse a list of integers.
     public static List<int>() ReverseInt(
 		/// list of integers
@@ -73,7 +100,9 @@
 		y.Add(3); y[0] = 1; y[1] = 2;
 		if (ListUtils.AreEqualInt(x,y)) b = 1;
 		Console.WriteLine($"a={a} b={b}");
-		if (a != b && t != s) {
+		List<string()>() labels = ListUtils.AutoNames(27);
+		
+		if (a != b && t != s && labels[0] == "A1") {
 			Console.WriteLine($"OK");
 		} else {
 			Console.WriteLine($"Fail");
