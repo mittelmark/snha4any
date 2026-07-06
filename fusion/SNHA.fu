@@ -45,13 +45,19 @@ public class SNHA {
 		int iterations = 50, 
 		/// threshold to check for the presence of an edge ptroportion for an edge
 		/// must be above this threshold, default: 0.60
-		double tolerance = 0.60){
+		double tolerance = 0.60,
+		/// the random seed number if bootstapping is performed. If not given
+		/// defaults to zero which means the current time in milliseconds is used.
+		long seedval = 0
+	){
 		List<string()>() empty;
 		empty.Add("");
 		this.nodenames = empty;
         if(boot){
-            Matrix() temp = Bootstrap.Run(data, method, threshold, iterations, tolerance);
-            
+			Console.WriteLine($"boot 1");
+			
+            /*Matrix() temp = Bootstrap.Run(data, method, threshold, iterations, tolerance,seedval);
+			Console.WriteLine($"boot 2");
             int n = temp.Nrow();
             int m = temp.Ncol();
             this.adj.Create(n,m,0.0);
@@ -59,8 +65,9 @@ public class SNHA {
                 for(int j=0; j<m;j++){
                     this.adj.Set(i,j, temp.Get(i,j));
                 }
-            }
+            }*/
         }else{
+			Console.WriteLine($"noboot ");
             Run(data, method, threshold);
         }
     }
@@ -68,15 +75,6 @@ public class SNHA {
 	public List<List<int>()>() GetChains() {
 		return(this.chains);
 	}
-    /// Print out Get chains from SNHA run.
-    public void PrintChains() {
-        int i = 0;
-        foreach (List<int> chain in this.chains) {
-            i++;
-            Console.Write($" Chain {i}: ");
-            PrintChain(chain);
-        }
-    }
 	// Problem with C memory - return a copy of the adj matrix
     /// Get the Adjacency Matrix of the current run.
     public Matrix() GetTheta () {
@@ -245,12 +243,16 @@ public class SNHA {
     protected void RemoveDuplicateChains!(List<List<int>()>() confirmed) {
         SortedDictionary<string(), int>() known;
         List<List<int>()>() unique;
-
+		
         foreach (List<int> chain in confirmed) {
+			
             string() fwd = ChainToString(chain);
+
             List<int>() rev = ReverseList(chain);
+						
             string() bwd = ChainToString(rev);
             string() key = fwd;
+						
             if (bwd.Length < fwd.Length) key = bwd;
             if (!known.ContainsKey(key)) {
                 known[key] = 1;
@@ -259,7 +261,6 @@ public class SNHA {
                 dest.AddRange(chain);
             }
         }
-
         int i = 0;
         foreach (List<int> chainI in unique) {
             bool isRedundant = false;
@@ -292,6 +293,7 @@ public class SNHA {
         //Creation of three matrices - Adjacency for final output, Correlation matrix, Orders for sorting of correlation values
         Matrix() corrMat = Matrix.AsCorrelationMatrix(data, method);
 		int n = corrMat.Nrow();
+		
 		this.sigma.Create(n,n,0.0);
 		for(int i =0; i<n; i++){
 			for(int j=0; j<n;j++){
@@ -379,16 +381,25 @@ public class SNHA {
 
     /// return the label for the given node id
     public string() GetLabel(int i) {
+		
 		if (i < this.nodenames.Count) {
 			return(this.nodenames[i]);
 		} 
         string labels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$";
         return labels.Substring(i, 1);
     }
-
-    protected void PrintChain(List<int> chain) {
+    /// Print out Get chains from SNHA run.
+    public void PrintChains() {
+        int i = 0;
+        foreach (List<int> chain in this.chains) {
+            i++;
+            PrintChain(i,chain);
+        }
+    }
+    protected void PrintChain(int x, List<int> chain) {
         for (int i = 0; i < chain.Count; i++) {
-            Console.Write(GetLabel(chain[i]));
+			if (i == 0) 	Console.Write($"Chain {x}: ");
+			Console.Write(GetLabel(chain[i]));
             if (i + 1 < chain.Count) Console.Write("-");
         }
         Console.WriteLine("");
@@ -405,6 +416,21 @@ public class SNHA {
     }
 	#if SNHAMAIN
 	/// Documentation text.
+	public static void Bootstrap(Matrix data, List<string()> headers) {
+		Rand() rnd;
+		rnd.Seed(123);
+		List<int>() seq = Stats.Sequence(0,data.Nrow()-1);
+		for (int i = 0; i < 3; i++) {
+			List<int>() nsmaple = rnd.SampleInt(seq,data.Nrow(),true);
+			SNHA() sn;
+			sn.Create(data);
+			sn.SetLabels(headers);
+			sn.PrintChains();		
+			Matrix() A = sn.GetTheta();
+			Matrix.PrintMatrix(A);
+		}
+		
+	}
 	public static void Main (string[] args) { // werner-synthetic
 		string() filename = "test/werner-synthetic.csv";
 		if (args.Length > 0) {
@@ -423,6 +449,7 @@ public class SNHA {
 		Matrix() A = sn.GetTheta();
 		Matrix() B = sn.GetSigma();		
 		Matrix.PrintMatrix(A);
+		SNHA.Bootstrap(M,headers);
 	}
 	#endif
 }
