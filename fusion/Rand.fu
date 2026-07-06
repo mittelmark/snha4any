@@ -1,3 +1,5 @@
+/// Class to generated random numbers or to resample current
+/// lists randomly.
 public class Rand {
 	/// Initialize the random number generator.
 	/// Will have same output with the same seed all the time.
@@ -7,8 +9,8 @@ public class Rand {
 		long x) {
 		RandomState = x;
 	}
-	/// Initialize the random number generator.
-	/// Will have different output with every run.
+	/// Initialize the random number generator with the current time.
+	/// Random numbers generated will be different output with every run.
 	public void SeedNow! () {
 		RandomState = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
@@ -108,8 +110,10 @@ public class Rand {
 		}
 		return(samples);
 	}
-	/// Randomize a list of floats;
-	public List<float>() Randomize! (List <float> x) {
+	/// Randomize a list of floats.
+	public List<float>() Randomize! (
+		/// List of floats.
+		List <float> x) {
 
 		List<float>() y = CreateUniformData(0,1,x.Count);
 		List<float>() z;		
@@ -120,8 +124,10 @@ public class Rand {
 		}
 		return(z);
 	}
-	/// Randomize a list of floats;
-	public List<int>() RandomizeInt! (List <int> x) {
+	/// Randomize a list of integers.
+	public List<int>() RandomizeInt! (
+		/// List of integers.
+		List <int> x) {
 
 		List<float>() y = CreateUniformData(0,1,x.Count);
 		List<int>() z ;		
@@ -132,10 +138,55 @@ public class Rand {
 		}
 		return(z);
 	}
-	// you can run this Run method by the Test.fu file:
-	// fut  Rand.fu Test.fu -o pym/rand.py
-	// python3 pym/rand.py
-	public static void Run (string[] args) {
+	/// Sample from a given list if integers a subset with or or without replacement.
+	public List<int>() SampleInt! (
+		/// List of integers.
+		List<int> x,
+		/// number of items to sample
+		int n,
+		/// should sampled items places back, default: false
+		bool replace=false) {
+		List<int>() y = RandomizeInt(x);
+		List<float>() z = CreateUniformData(0,x.Count-1,n);
+		List<int>() res;
+		if (replace) {
+			for (int i = 0; i < n; i++) {
+				int xi = Math.Floor(z[i]);
+				res.Add(y[xi]);
+			}
+			return(res);
+		} else {
+			y.RemoveRange(n,x.Count-n);
+			return(y);
+		}
+	}
+	/// Sample from a given list if floats a subset with or or without replacement.
+	public List<float>() Sample! (
+		/// List of integers.
+		List<float> x, 
+		/// number of items to sample
+		int n, 
+		/// should sampled items places back, default: false
+		bool replace=false) {
+		List<float>() y = Randomize(x);
+		List<float>() z = CreateUniformData(0,x.Count-1,n);
+		List<float>() res;
+		if (replace) {
+			for (int i = 0; i < n; i++) {
+				int xi = Math.Floor(z[i]);
+				res.Add(y[xi]);
+			}
+			return(res);
+		} else {
+			y.RemoveRange(n,x.Count-n);
+			return(y);
+		}
+	}
+	// you can run this Main method of the Rand.fu file:
+	// fut  -D RANDMAIN Rand.fu Stats.fu -o pym/rand.py && python3 pym/rand.py
+    
+    #if RANDMAIN
+	public static void Main(string[] args) {
 		Rand() rnd;
 		rnd.Seed(123);
 		List<float>() x = rnd.CreateNormalData(0,1,10);
@@ -162,13 +213,22 @@ public class Rand {
 		for (int i = 0; i < rseq.Count; i++) {
 			Console.WriteLine($"On position {i} the random int value of 1:20 is {rseq[i]}!");
 		}
-       
+		List<int>() rsam = rnd.SampleInt(seq,seq.Count);
+		for (int i = 0; i < rseq.Count; i++) {
+			Console.WriteLine($"On position {i} the sampled int value of 1:20 is {rsam[i]}!");
+		}
+		List<int>() rsam2 = rnd.SampleInt(seq,seq.Count,true);
+		for (int i = 0; i < rseq.Count; i++) {
+			Console.WriteLine($"On position {i} the sampled int value of 1:20 is {rsam2[i]}!");
+		}
+		Console.WriteLine($"");
+		bool is10 = rsam2[1] == 10 && rsam2[6] == 10 && rsam2[10] == 10;
+		int t = 0;
+		if (is10) t = 1;
+		Console.WriteLine($"true={t}");
+		
+		
 	}
-    
-    #if RANDMAIN
-        public static void Main(string[] args) {
-            Rand.Run(args);
-        }
     #endif
 }
 
