@@ -212,7 +212,7 @@ public class SNHA {
     protected void RemoveDuplicateChains!(List<List<int>()>() confirmed) {
         SortedDictionary<string(), int>() known;
         List<List<int>()>() unique;
-		
+		int x = 0;
         foreach (List<int> chain in confirmed) {
 			
             string() fwd = ChainToString(chain);
@@ -226,8 +226,10 @@ public class SNHA {
             if (!known.ContainsKey(key)) {
                 known[key] = 1;
                 unique.Add();
-                List<int>!? dest = unique.Last();
-                dest.AddRange(chain);
+				for (int j = 0; j < chain.Count; j++) {
+					unique[x].Add(chain[j]);
+				}
+				x=x+1;
             }
         }
         int i = 0;
@@ -243,8 +245,11 @@ public class SNHA {
             }
             if (!isRedundant) {
                 this.chains.Add();
-                List<int>!? dest = this.chains.Last();
-                dest.AddRange(chainI);
+				for (int k = 0; k < chainI.Count; k++) {
+					this.chains[this.chains.Count-1].Add(chainI[k]);
+				}
+                //List<int>!? dest = this.chains.Last();
+                //dest.AddRange(chainI);
             }
             i++;
         }
@@ -303,15 +308,21 @@ public class SNHA {
                 //Addition of chains to List of Lists
                 if (confirmed) {
                     confirmedChains.Add();
-                    List<int>!? dest = confirmedChains.Last();
-                    dest.AddRange(chain);
+					for (int k = 0; k < chain.Count; k++) {
+						confirmedChains[confirmedChains.Count-1].Add(chain[k]);
+					}
+                    // List<int>!? dest = confirmedChains.Last();
+                    // dest.AddRange(chain);
                     break;
                 }
                 List<int>() midChain = FindMiddleChain(chain, orders);
                 if (midChain.Count > 0) {
                     confirmedChains.Add();
-                    List<int>!? dest = confirmedChains.Last();
-                    dest.AddRange(midChain);
+					for (int k = 0; k < midChain.Count; k++) {
+						confirmedChains[confirmedChains.Count-1].Add(midChain[k]);
+					}
+                    //List<int>!? dest = confirmedChains.Last();
+                    //dest.AddRange(midChain);
                     break;
                 }
                 //Weakest variable removal
