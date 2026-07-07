@@ -168,22 +168,26 @@ public class SNHA {
 
     protected List<int>() FindMiddleChain(List<int> nodes, Matrix orders) {
         List<List<int>()>() preFiltered;
-
         for (int i = 0; i < nodes.Count; i++) {
             int targetCol = nodes[i];
             preFiltered.Add();
-            List<int>!? subset = preFiltered.Last();
-            if (nodes.Contains(targetCol)){
+            //List<int>!? subset = preFiltered.Last(); // puts pointer
+			List<int>() subset;
+            if (nodes.Contains(targetCol)) {
                 subset.Add(targetCol);
-                }
+			}
             for (int k = 0; k < orders.Ncol(); k++) {
                 int node = Math.Floor(orders.Get(targetCol, k));
                 if (node == -1) break;
                 if (nodes.Contains(node) && node != targetCol)
-                    subset.Add(node);
-            }
-        }
+				subset.Add(node);
+			}
+			for (int j = 0; j < subset.Count; j++) {
+				preFiltered[i].Add(subset[j]);
+			}
 
+			
+		}
         int fi = 0;
         foreach (List<int> fchain in preFiltered) {
             int si = 0;
