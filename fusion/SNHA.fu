@@ -37,38 +37,9 @@ public class SNHA {
 		/// correlation method, either "pearson" or "spearman", default: "pearson"
 		string method = "pearson", 
 		/// threshold for correlation value to be considered, default: 0.1
-		double threshold = 0.10, 
-		/// should boostrapping of samples performed to test stability of edges, default: false
-		bool boot = false, 
-		/// if boot=true how many resamplings should be done, default: 50
-		int iterations = 50, 
-		/// threshold to check for the presence of an edge ptroportion for an edge
-		/// must be above this threshold, default: 0.60
-		double tolerance = 0.60,
-		/// the random seed number if bootstapping is performed. If not given
-		/// defaults to zero which means the current time in milliseconds is used.
-		long seedval = 0
+		double threshold = 0.10
 	){
-		/*List<string>() empty;
-		empty.Add("");
-		this.nodenames = empty;*/
-        if(boot){
-			Console.WriteLine($"boot 1");
-			
-            /*Matrix() temp = Bootstrap.Run(data, method, threshold, iterations, tolerance,seedval);
-			Console.WriteLine($"boot 2");
-            int n = temp.Nrow();
-            int m = temp.Ncol();
-            this.adj.Create(n,m,0.0);
-            for(int i =0; i<n; i++){
-                for(int j=0; j<m;j++){
-                    this.adj.Set(i,j, temp.Get(i,j));
-                }
-            }*/
-        }else{
-			Console.WriteLine($"noboot ");
-            Run(data, method, threshold);
-        }
+		Run(data, method, threshold);
     }
 	/// Get the Chains of the current run.
 	public List<List<int>()>() GetChains() {
@@ -263,7 +234,8 @@ public class SNHA {
 		/// correlation method, either "pearson" or "spearman"
 		string method, 
 		/// threshold for the absolute r-value, should be 0.1 usually
-		double threshold) {
+		double threshold = 0.1
+	) {
         //Creation of three matrices - Adjacency for final output, Correlation matrix, Orders for sorting of correlation values
         Matrix() corrMat = Matrix.AsCorrelationMatrix(data, method);
 		int n = corrMat.Nrow();
@@ -400,21 +372,34 @@ public class SNHA {
     }
 	#if SNHAMAIN
 	/// Documentation text.
-	public static void Bootstrap(Matrix data, List<string()> headers) {
+	public static Matrix() Bootstrap(
+		/// data matrix with variables in columns and samples in rows
+		Matrix data, 
+		/// correlation method, either "pearson" or "spearman", default: "pearson"
+		string method = "pearson", 
+		/// threshold for correlation value to be considered, default: 0.1
+		double threshold = 0.10, 
+		/// if boot=true how many resamplings should be done, default: 50
+		int iterations = 50, 
+		/// defaults to zero which means the current time in milliseconds is used.
+		long seedval = 0
+
+	) {
 		Rand() rnd;
-		rnd.Seed(123);
+		if (seedval == 0) {
+			rnd.SeedNow();
+		} else {
+			rnd.Seed(seedval);
+		}
 		Matrix() Add;
 		Add.Create(data.Ncol(),data.Ncol(),0);
 		List<int>() seq = Stats.Sequence(0,data.Nrow()-1);
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < iterations; i++) {
 			List<int>() nsample = rnd.SampleInt(seq,data.Nrow(),true);
 			SNHA() sn;
 			Matrix() ndata = data.GetRows(nsample);
-			sn.Create(ndata);
-			sn.SetLabels(headers);
-			sn.PrintChains();		
+			sn.Create(ndata,method, threshold);
 			Matrix() A = sn.GetTheta();
-			Matrix.PrintMatrix(A);
 			for (int j = 0; j < A.Nrow(); j++) {
 				for (int k = 0; k < A.Ncol(); k++) {
 					Add.Set(j,k,Add.Get(j,k)+A.Get(j,k));
@@ -422,9 +407,7 @@ public class SNHA {
 			}
 
 		}
-		Console.WriteLine("");
-		
-		Matrix.PrintMatrix(Add);
+		return(Add);
 	}
 	public static void Main (string[] args) { // werner-synthetic
 		string() filename = "test/werner-synthetic.csv";
@@ -438,13 +421,19 @@ public class SNHA {
 		List<string()>() headers = CSVParser.ReadHeader(csv);
 		Console.WriteLine($"M: {M.Nrow()},{M.Ncol()}");
 		SNHA() sn;
-		sn.Create(M);
+		sn.Create(M,"pearson",0.1);
 		sn.SetLabels(headers);
 		sn.PrintChains();		
 		Matrix() A = sn.GetTheta();
 		Matrix() B = sn.GetSigma();		
 		Matrix.PrintMatrix(A);
-		SNHA.Bootstrap(M,headers);
+		Console.WriteLine($"");
+		Matrix() Bs = SNHA.Bootstrap(M,"pearson",0.1,100,123);
+		
+		Matrix.PrintMatrix(Bs);
+		Console.WriteLine("");
+
+
 	}
 	#endif
 }
