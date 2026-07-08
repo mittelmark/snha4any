@@ -1,7 +1,8 @@
+/// Class to parse CSV text strings. Returning data as Matrix 
+/// or header columns as vector.
 public static class CSVParser {
-    ///Parses only a single line at a time
-
-    public static void ParseLine(string line, FloatVector! values){
+    /// Parses only a single line at a time
+    static void ParseLine(string line, FloatVector! values){
         int start = 0;
         for (int i = 0; i < line.Length; i++){
             if (line[i] == ','){
@@ -18,7 +19,8 @@ public static class CSVParser {
         }
     }
 	
-    //Check if substring is float before entering to parse float
+    /// Check if substring is float before entering to parse float.
+	/// Returns true if the given string is a float value.
     static bool IsFloat(string s){
         if(s.Length == 0){
             return false;
@@ -42,6 +44,8 @@ public static class CSVParser {
         }
         return true;
     }
+	/// Parse a string into a float value.
+	/// Returns a float value
     static float ParseFloat(string s){
         float result = 0.0;
         int i =0;
@@ -69,7 +73,9 @@ public static class CSVParser {
         return result;
     }
 	/// Return the headers of a CSV string
-	public static List<string()>() ReadHeader(string csv) {
+	public static List<string()>() ReadHeader(
+		/// csv string where fields are separated by comma
+		string csv) {
 		int start = 0;
 		List<string()>() headers;
         for (int i = 0; i < csv.Length; i++){
@@ -90,7 +96,13 @@ public static class CSVParser {
         }
 		return headers;
 	}
-	public static Matrix() ReadData(string csv, bool skipHeader = true){
+	/// Read data from a CSV string.
+	public static Matrix() ReadData(
+		/// csv string where fields are separated by comma
+		string csv, 
+		/// should the first line being skipped as this contains the column headers
+		/// default: true
+		bool skipHeader = true) {
         //variables local to Mat
         int RowCount = 0;
         int ColCount = 0;
