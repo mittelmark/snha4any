@@ -371,7 +371,9 @@ public class SNHA {
         return s;
     }
 	#if SNHAMAIN
-	/// Documentation text.
+	/// Run the SNHA algorith with bootstrapping to check the
+	/// the stability of edges.
+	/// Returns Matrix with the proportions how often an edge was found.
 	public static Matrix() Bootstrap(
 		/// data matrix with variables in columns and samples in rows
 		Matrix data, 
@@ -406,6 +408,12 @@ public class SNHA {
 				}
 			}
 
+		}
+		// normalize to proportions
+		for (int j = 0; j < Add.Nrow(); j++) {
+			for (int k = 0; k < Add.Ncol(); k++) {
+				Add.Set(j,k,Add.Get(j,k)/iterations);
+			}
 		}
 		return(Add);
 	}

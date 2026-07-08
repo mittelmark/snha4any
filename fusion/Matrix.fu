@@ -101,7 +101,12 @@ public class Matrix {
 	public static void PrintMatrix(Matrix M) {
 		for (int i = 0; i < M.Nrow(); i++) {
 			for (int j = 0; j < M.Ncol(); j++) {
-				Console.Write($"{M.Get(i, j)}\t");
+				float val = M.Get(i, j);
+				Console.Write($"{val:F2}");
+				if (j < M.Ncol()-1) {
+					Console.Write($"\t");
+				}
+					
 			}
 			Console.WriteLine("");
 		}
