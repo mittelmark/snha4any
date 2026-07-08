@@ -51,7 +51,7 @@ cs:
 d:
 	[ -d dm ] || mkdir dm
 	fut -D $(MAIN) -D D $(FUFILES) -o dm/$(app).d 
-	$(dcom) dm/$(app).d -of=dm/$(app)-d 
+	$(dcom) -O dm/$(app).d -of=dm/$(app)-d 
 	./dm/$(app)-d $(ARGS)
 java:
 	[ -d javam ] || mkdir javam
@@ -83,30 +83,30 @@ bjs:
 swift:
 	[ -d swiftm/Sources/swift ] || mkdir -p swiftm/Sources/swift
 	fut -D $(MAIN) -D SWIFT $(FUFILES) -o swiftm/Sources/swift/swift.swift
-	cd swiftm && swift build
+	cd swiftm && swift build -c release
 	#cd swiftm && swift run
-	./swiftm/.build/x86_64-unknown-linux-gnu/debug/swift $(ARGS)
+	./swiftm/.build/x86_64-unknown-linux-gnu/release/swift $(ARGS)
 rand:
-	make FUFILES="Rand.fu Stats.fu" MAIN="RANDMAIN" APP=Rand c | $(RANDC) && echo   "C     OK" || echo "C     Fail"
-	@make FUFILES="Rand.fu Stats.fu" MAIN="RANDMAIN" APP=Rand cpp |  $(RANDC) && echo   "C++   OK" || echo "C++   Fail"	
-	@make FUFILES="Rand.fu Stats.fu" MAIN="RANDMAIN" APP=Rand cs |  $(RANDC) && echo   "C#    OK" || echo "C#   Fail"		
-	@make FUFILES="Rand.fu Stats.fu" MAIN="RANDMAIN" APP=Rand d |  $(RANDC) && echo   "D     OK" || echo "D    Fail"			
-	@make FUFILES="Rand.fu Stats.fu" MAIN="RANDMAIN" APP=Rand java |  $(RANDC) && echo   "Java  OK" || echo "Java  Fail"				
-	@make FUFILES="Rand.fu Stats.fu" MAIN="RANDMAIN" APP=Rand js  |  $(RANDC) && echo   "Js    OK" || echo "Js   Fail"					
-	@make FUFILES="Rand.fu Stats.fu" MAIN="RANDMAIN" APP=Rand ts  |  $(RANDC) && echo   "Ts    OK" || echo "Ts   Fail"						
-	@make FUFILES="Rand.fu Stats.fu" MAIN="RANDMAIN" APP=Rand py  |  $(RANDC) && echo   "Py    OK" || echo "Py   Fail"							
-	@make FUFILES="Rand.fu Stats.fu" MAIN="RANDMAIN" LANG=SWIFT APP=Rand swift 2>/dev/null |  $(RANDC) && echo   "Swift OK" || echo "Swift  Fail"
+	make FUFILES="Rand.fu Stats.fu Matrix.fu" MAIN="RANDMAIN" APP=Rand c | $(RANDC) && echo   "C     OK" || echo "C     Fail"
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu" MAIN="RANDMAIN" APP=Rand cpp |  $(RANDC) && echo   "C++   OK" || echo "C++   Fail"	
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu" MAIN="RANDMAIN" APP=Rand cs |  $(RANDC) && echo   "C#    OK" || echo "C#   Fail"		
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu" MAIN="RANDMAIN" APP=Rand d |  $(RANDC) && echo   "D     OK" || echo "D    Fail"			
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu" MAIN="RANDMAIN" APP=Rand java |  $(RANDC) && echo   "Java  OK" || echo "Java  Fail"				
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu" MAIN="RANDMAIN" APP=Rand js  |  $(RANDC) && echo   "Js    OK" || echo "Js   Fail"					
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu" MAIN="RANDMAIN" APP=Rand ts  |  $(RANDC) && echo   "Ts    OK" || echo "Ts   Fail"						
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu" MAIN="RANDMAIN" APP=Rand py  |  $(RANDC) && echo   "Py    OK" || echo "Py   Fail"							
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu" MAIN="RANDMAIN" LANG=SWIFT APP=Rand swift 2>/dev/null |  $(RANDC) && echo   "Swift OK" || echo "Swift  Fail"
 
 stats:
-	@make FUFILES="Rand.fu Stats.fu" MAIN="STATSMAIN" APP=Stats c | grep -qE $(CHECK) && echo   "C     OK" || echo "C     Fail"
-	@make FUFILES="Rand.fu Stats.fu" MAIN="STATSMAIN" APP=Stats cpp | grep -qE $(CHECK) && echo   "C++   OK" || echo "C++   Fail"	
-	@make FUFILES="Rand.fu Stats.fu" MAIN="STATSMAIN" APP=Stats cs | grep -qE $(CHECK) && echo   "C#    OK" || echo "C#   Fail"		
-	@make FUFILES="Rand.fu Stats.fu" MAIN="STATSMAIN" APP=Stats d | grep -qE $(CHECK) && echo   "D     OK" || echo "D    Fail"			
-	@make FUFILES="Rand.fu Stats.fu" MAIN="STATSMAIN" APP=Stats java | grep -qE $(CHECK) && echo   "Java  OK" || echo "Java  Fail"				
-	@make FUFILES="Rand.fu Stats.fu" MAIN="STATSMAIN" APP=Stats js  | grep -qE $(CHECK) && echo   "Js    OK" || echo "Js   Fail"					
-	@make FUFILES="Rand.fu Stats.fu" MAIN="STATSMAIN" APP=Stats ts  | grep -qE $(CHECK) && echo   "Ts    OK" || echo "Ts   Fail"						
-	@make FUFILES="Rand.fu Stats.fu" MAIN="STATSMAIN" APP=Stats py  | grep -qE $(CHECK) && echo   "Py    OK" || echo "Py   Fail"							
-	@make FUFILES="Rand.fu Stats.fu" MAIN="STATSMAIN" APP=Stats swift 2>/dev/null | grep -qE $(CHECK) && echo   "Swift OK" || echo "Swift  Fail"
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu" MAIN="STATSMAIN" APP=Stats c | grep -qE $(CHECK) && echo   "C     OK" || echo "C     Fail"
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu" MAIN="STATSMAIN" APP=Stats cpp | grep -qE $(CHECK) && echo   "C++   OK" || echo "C++   Fail"	
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu" MAIN="STATSMAIN" APP=Stats cs | grep -qE $(CHECK) && echo   "C#    OK" || echo "C#   Fail"		
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu" MAIN="STATSMAIN" APP=Stats d | grep -qE $(CHECK) && echo   "D     OK" || echo "D    Fail"			
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu" MAIN="STATSMAIN" APP=Stats java | grep -qE $(CHECK) && echo   "Java  OK" || echo "Java  Fail"				
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu" MAIN="STATSMAIN" APP=Stats js  | grep -qE $(CHECK) && echo   "Js    OK" || echo "Js   Fail"					
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu" MAIN="STATSMAIN" APP=Stats ts  | grep -qE $(CHECK) && echo   "Ts    OK" || echo "Ts   Fail"						
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu" MAIN="STATSMAIN" APP=Stats py  | grep -qE $(CHECK) && echo   "Py    OK" || echo "Py   Fail"							
+	@make FUFILES="Rand.fu Stats.fu Matrix.fu" MAIN="STATSMAIN" APP=Stats swift 2>/dev/null | grep -qE $(CHECK) && echo   "Swift OK" || echo "Swift  Fail"
 
 matrix:
 	make FUFILES="Stats.fu Matrix.fu" MAIN="MATRIXMAIN" APP=Matrix c 2>/dev/null | $(CHECKM) && echo   "C     OK" || echo "C     Fail"

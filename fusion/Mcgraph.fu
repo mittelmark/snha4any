@@ -274,7 +274,7 @@ public class Mcgraph {
 	/// Print correlation matrix in CSV format.
 	public void PrintCorrCSV(Mgraph G, Matrix() data) {
 		Matrix() T = Matrix.Transpose(data);
-		Matrix() C = Matrix.AsCorrelationMatrix(T, "pearson");
+		Matrix() C = Stats.CorrelationMatrix(T, "pearson");
 
 		// Header.
 		Console.Write("Node");
@@ -390,7 +390,7 @@ public class Mcgraph {
 
 		// Transpose matrix so variables become columns.
 		Matrix() T = Matrix.Transpose(data);
-		Matrix() C = Matrix.AsCorrelationMatrix(T, "pearson");
+		Matrix() C = Stats.CorrelationMatrix(T, "pearson");
 
 		// Total SVG canvas size.
 		int width = margin + nvars * cell + 40;
@@ -510,7 +510,7 @@ public class Mcgraph {
 		MC.PrintData(G, data, 10);
 
 		Console.WriteLine("Correlation matrix:");
-		Matrix() corr = Matrix.AsCorrelationMatrix(Matrix.Transpose(data), "pearson");
+		Matrix() corr = Stats.CorrelationMatrix(Matrix.Transpose(data), "pearson");
 		Matrix.PrintMatrix(corr);
 	}
     

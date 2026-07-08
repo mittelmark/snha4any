@@ -64,40 +64,7 @@ public class Matrix {
 	public int Nrow() => M.Count;
 	public int Ncol() => M[0].Count;
 
-	public static Matrix() AsCorrelationMatrix(Matrix data, string method = "pearson") {
-		Matrix() corrMat;
-
-		int n = data.Ncol();
-		corrMat.Create(n, n, 0);
-
-		for (int i = 0; i < n; i++) {
-			corrMat.Set(i, i, 1);
-
-			List<float>() colI = null;
-			colI = data.GetColumn(i);
-
-			for (int j = i + 1; j < n; j++) {
-				List<float>() colJ = null;
-				colJ = data.GetColumn(j);
-
-				float corr = 0;
-
-				if (method == "pearson") {
-					corr = Stats.PearsonCorrelation(colI, colJ);
-				} else if (method == "spearman") {
-					corr = Stats.SpearmanCorrelation(colI,colJ);
-				} else {
-					corr = Math.NaN;
-				}
-
-				corrMat.Set(i, j, corr);
-				corrMat.Set(j, i, corr);
-			}
-		}
-
-		return corrMat;
-	}
-
+	/// Format and print matrix with two digits precicision.
 	public static void PrintMatrix(Matrix M) {
 		for (int i = 0; i < M.Nrow(); i++) {
 			for (int j = 0; j < M.Ncol(); j++) {
@@ -111,7 +78,7 @@ public class Matrix {
 			Console.WriteLine("");
 		}
 	}
-
+	/// Transpose a matrix row to columns and columns to rows.
 	public static Matrix() Transpose(Matrix M) {
 		Matrix() N;
 		int nr = M.Nrow();
