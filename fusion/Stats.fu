@@ -281,6 +281,39 @@ public static class Stats {
 		}
 		return(w);
 	}
+	public static Matrix() CorrelationMatrix(Matrix data, string method = "pearson") {
+		Matrix() corrMat;
+
+		int n = data.Ncol();
+		corrMat.Create(n, n, 0);
+
+		for (int i = 0; i < n; i++) {
+			corrMat.Set(i, i, 1);
+
+			List<float>() colI = null;
+			colI = data.GetColumn(i);
+
+			for (int j = i + 1; j < n; j++) {
+				List<float>() colJ = null;
+				colJ = data.GetColumn(j);
+
+				float corr = 0;
+
+				if (method == "pearson") {
+					corr = Stats.PearsonCorrelation(colI, colJ);
+				} else if (method == "spearman") {
+					corr = Stats.SpearmanCorrelation(colI,colJ);
+				} else {
+					corr = Math.NaN;
+				}
+
+				corrMat.Set(i, j, corr);
+				corrMat.Set(j, i, corr);
+			}
+		}
+
+		return corrMat;
+	}
 	/// Pearson correlation coefficient between paired lists x and y.
 	/// Only indices 0 .. min(x.Count, y.Count) - 1 are considered; pairs with
 	/// NaN in either list are dropped. Returns Math.NaN if no valid pairs remain,

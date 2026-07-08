@@ -237,7 +237,7 @@ public class SNHA {
 		double threshold = 0.1
 	) {
         //Creation of three matrices - Adjacency for final output, Correlation matrix, Orders for sorting of correlation values
-        Matrix() corrMat = Matrix.AsCorrelationMatrix(data, method);
+        Matrix() corrMat = Stats.CorrelationMatrix(data, method);
 		int n = corrMat.Nrow();
 		
 		this.sigma.Create(n,n,0.0);
