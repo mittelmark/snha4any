@@ -1,0 +1,19 @@
+/// Documentation text.
+public static class Test11 {
+	public static void Main () {
+		List<int>() y;
+		y.Add(1);
+		y.Add(2);
+		List<List<int>()>() x;
+		x.Add();
+		for (int i = 0; i < x.Count; i++) {
+			x[0].Add(y[i]);
+		}
+		List<int>() z;
+		z.Add(x.Last()[0]);
+		z.Add(3);
+		Console.WriteLine($"z[0] = {z[0]}!");
+	}
+	
+}
+

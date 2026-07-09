@@ -1,0 +1,18 @@
+
+/// Documentation text.
+public static class Test13 {
+	/// Documentation text.
+	public static void Main () {
+		List<List<int>()>() x;
+		x.Add();
+		for (int i = 1; i < 5; i++) {
+			x[0].Add(i);
+		}
+		List<int>() z;
+		List<int>() temp = x.Last(); 
+		//z.Add(temp); //  GLib-CRITICAL **: 06:30:13.569: g_atomic_ref_count_dec: assertion 'old_value > 0' failed
+		Console.WriteLine($"{temp[0]}");
+		
+	}
+}
+

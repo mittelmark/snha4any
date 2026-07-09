@@ -1,0 +1,23 @@
+/// Documentation text.
+public class Test12 {
+	List<string>() names;
+	public void AddName! (string name) {
+		this.names.Add(name);
+	}
+	public int NumberOfNames () {
+		return this.names.Count;
+	}
+	public string GetName (int i) {
+		return this.names[i];
+	}
+	public static void Main () {
+		Test12() t12;
+		t12.AddName("Hello");
+		t12.AddName("World");
+		Console.WriteLine($"We have {t12.NumberOfNames()} names added!");
+		Console.WriteLine($"First name is: {t12.GetName(0)}");
+		
+	}
+	
+ }
+
