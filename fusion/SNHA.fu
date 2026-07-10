@@ -48,6 +48,7 @@ public class SNHA {
 	// Problem with C memory - return a copy of the adj matrix
     /// Get the Adjacency Matrix of the current run.
     public Matrix() GetTheta () {
+		#if C
         Matrix() copy;
         int n = this.adj.Nrow();
         copy.Create(n,n,0.0);
@@ -57,9 +58,13 @@ public class SNHA {
             }
         }
         return copy;
+		#else
+		return(this.adj);
+		#endif
     }
 	/// Return the Correlation Matrix.
 	public Matrix() GetSigma() {
+		#if C
         Matrix() copy;
         int n = this.sigma.Nrow();
         copy.Create(n,n,0.0);
@@ -69,7 +74,9 @@ public class SNHA {
             }
         }
         return copy;
-		//return(this.sigma); // rec-count issue in C
+		#else
+		return(this.sigma); // rec-count issue in C
+		#endif
 	}
     //New Sorted Orders with insertion sort w/o values under a certain threshold
     protected Matrix() PrecomputeSortedOrders(Matrix corrMat, float threshold) {
@@ -441,6 +448,7 @@ public class SNHA {
 		sn.Create(M,"pearson",0.1);
 		sn.SetLabels(headers);
 		sn.PrintChains();		
+		
 		Matrix() A = sn.GetTheta();
 		Matrix() B = sn.GetSigma();		
 		Matrix.PrintMatrix(A);
