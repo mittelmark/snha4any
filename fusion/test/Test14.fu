@@ -1,0 +1,64 @@
+/// Documentation text.
+public class Vector {
+	internal List<float>() L;
+	public int Count = 0;
+	internal float lst ;
+	public void Add!(float f) {
+		L.Add(f);
+		Count = L.Count;
+		lst = f;
+	}
+	public float Get(int index) {
+		return(L[index]);
+	}
+	
+	public void Insert!(int index, float value) {
+		L.Insert(index,value);
+		if (index == L.Count) {
+			this.lst = value;
+		}
+		Count = L.Count;
+	}
+	public float Last () {
+		// float f = L.Last();
+		// calling L.Last() crashes C;
+		return(this.lst);
+	}
+	public void Clear!() {
+		L.Clear();
+		this.Count = L.Count;
+		this.lst = L.Last();
+	}
+}
+
+public static class Test14 {
+//	#if SWIFT
+//	public static float Mean (List<float>() x) {
+//	#else
+	public static float Mean (List<float> x) {
+//	#endif
+		float sum = 0.0;
+		int n = 0;
+		for (int i = 0; i < x.Count; i++) {
+			if (!Math.IsNaN(x[i])){
+				sum = sum + x[i];
+				n = n + 1 ;
+			}
+		}
+		return(sum/n);
+	}
+	/// Documentation text.
+	public static void Main () {
+		List<float>() x;
+		x.Add(1.0);
+		x.Add(2.0);
+		x.Add(3.0);
+		x.Add(4.0);
+		Console.WriteLine($"{x.Count}");
+		float m = Test14.Mean(x);
+		Console.WriteLine($"mean = {m:F2}");
+		Console.WriteLine($"{x.Count}");
+		Console.WriteLine($"{x.Count}");		
+		Console.WriteLine($"{x.Last()}"); // core dump C
+	}
+}

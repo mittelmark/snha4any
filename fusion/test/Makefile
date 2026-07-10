@@ -68,7 +68,7 @@ ts:
 	
 swift:
 	[ -d swiftm/Sources/swift ] || mkdir -p swiftm/Sources/swift
-	fut -D $(MAIN) $(FUFILES) -o swiftm/Sources/swift/swift.swift
+	fut -D $(MAIN) -D SWIFT $(FUFILES) -o swiftm/Sources/swift/swift.swift
 	cd swiftm && swift build
 	cd swiftm && swift run
 	./swiftm/.build/x86_64-unknown-linux-gnu/debug/swift
