@@ -60,7 +60,16 @@ public class SNHA {
     }
 	/// Return the Correlation Matrix.
 	public Matrix() GetSigma() {
-		return(this.sigma);
+        Matrix() copy;
+        int n = this.sigma.Nrow();
+        copy.Create(n,n,0.0);
+        for(int i=0; i < n; i++){
+            for(int j = 0; j < n; j++){
+                copy.Set(i,j, this.sigma.Get(i,j));
+            }
+        }
+        return copy;
+		//return(this.sigma); // rec-count issue in C
 	}
     //New Sorted Orders with insertion sort w/o values under a certain threshold
     protected Matrix() PrecomputeSortedOrders(Matrix corrMat, float threshold) {
@@ -180,7 +189,7 @@ public class SNHA {
         return empty;
     }
     // Remove duplicate chains, builds this.chains(adj) directly.
-    protected void RemoveDuplicateChains!(List<List<int>()>() confirmed) {
+    protected void RemoveDuplicateChains!(List<List<int>()> confirmed) {
         SortedDictionary<string(), int>() known;
         List<List<int>()>() unique;
 		int x = 0;
@@ -246,14 +255,12 @@ public class SNHA {
 				this.sigma.Set(i,j, corrMat.Get(i,j));
 			}
 		}
-
         this.adj.Create(n, n, 0.0);
         this.chains.Clear();
 
         Matrix() orders = PrecomputeSortedOrders(corrMat, threshold);
         //Creation of a List of Lists for chains that are found to be equal forward and reverse
         List<List<int>()>() confirmedChains;
-
         for (int col = 0; col < n; col++) {
             //Consideration of active nodes at a given point, decreases by one with removal of weakest abs correlation value every iteration
             List<int>() activeNodes;
@@ -326,6 +333,8 @@ public class SNHA {
                 this.adj.Set(to, from, 1);
             }
         }
+		/*
+		*/
     }
 	public void SetLabels!(List<string()> headers) {
 		for (int i = 0; i < headers.Count; i++) {
@@ -437,9 +446,10 @@ public class SNHA {
 		Matrix.PrintMatrix(A);
 		Console.WriteLine($"");
 		Matrix() Bs = SNHA.Bootstrap(M,"pearson",0.1,100,123);
-		
 		Matrix.PrintMatrix(Bs);
 		Console.WriteLine("");
+		/*
+		*/
 
 
 	}
