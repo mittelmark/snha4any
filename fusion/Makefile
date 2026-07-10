@@ -59,7 +59,7 @@ java:
 	fut -D $(MAIN) -D JAVA $(FUFILES) -n javam -o javam/$(APP).java
 	javac javam/*.java
 	java -cp . javam.$(APP) $(ARGS)
-	jar cfe $(APP).jar javam.$(APP) javam/*.class
+	jar cfe $(APP).jar javam.$(APP) javam/*.class 2>/dev/null
 js:
 	[ -d jsm ] || mkdir jsm
 	fut -D $(MAIN) -D JS $(FUFILES) -o jsm/$(app).js
@@ -100,7 +100,7 @@ rand:
 	@make FUFILES="Rand.fu Stats.fu Matrix.fu" MAIN="RANDMAIN" LANG=SWIFT APP=Rand swift 2>/dev/null |  $(RANDC) && echo   "Swift OK" || echo "Swift  Fail"
 
 stats:
-	@make FUFILES="Rand.fu Stats.fu Matrix.fu" MAIN="STATSMAIN" APP=Stats c | grep -qE $(CHECK) && echo   "C     OK" || echo "C     Fail"
+	make FUFILES="Rand.fu Stats.fu Matrix.fu" MAIN="STATSMAIN" APP=Stats c | grep -qE $(CHECK) && echo   "C     OK" || echo "C     Fail"
 	@make FUFILES="Rand.fu Stats.fu Matrix.fu" MAIN="STATSMAIN" APP=Stats cpp | grep -qE $(CHECK) && echo   "C++   OK" || echo "C++   Fail"	
 	@make FUFILES="Rand.fu Stats.fu Matrix.fu" MAIN="STATSMAIN" APP=Stats cs | grep -qE $(CHECK) && echo   "C#    OK" || echo "C#   Fail"		
 	@make FUFILES="Rand.fu Stats.fu Matrix.fu" MAIN="STATSMAIN" APP=Stats d | grep -qE $(CHECK) && echo   "D     OK" || echo "D    Fail"			
@@ -145,7 +145,7 @@ mcgraph:
 
 
 csvparser:
-	@make FUFILES="FileSystem.fu FloatVector.fu Matrix.fu Stats.fu CSVParser.fu" ARGS=test/testm.csv APP=CSVParser MAIN=CSVPARSERMAIN c     2> /dev/null| $(CSVREADERCHECK) && echo "C     OK" || echo "C     Fail"
+	make FUFILES="FileSystem.fu FloatVector.fu Matrix.fu Stats.fu CSVParser.fu" ARGS=test/testm.csv APP=CSVParser MAIN=CSVPARSERMAIN c     2> /dev/null| $(CSVREADERCHECK) && echo "C     OK" || echo "C     Fail"
 	@make FUFILES="FileSystem.fu FloatVector.fu Matrix.fu Stats.fu CSVParser.fu" ARGS=test/testm.csv APP=CSVParser MAIN=CSVPARSERMAIN cpp   2> /dev/null| $(CSVREADERCHECK) && echo "C++   OK" || echo "C++   Fail"
 	@make FUFILES="FileSystem.fu FloatVector.fu Matrix.fu Stats.fu CSVParser.fu" ARGS=test/testm.csv APP=CSVParser MAIN=CSVPARSERMAIN cs    2> /dev/null| $(CSVREADERCHECK) && echo "C#    OK" || echo "C#    Fail"
 	@make FUFILES="FileSystem.fu FloatVector.fu Matrix.fu Stats.fu CSVParser.fu" ARGS=test/testm.csv APP=CSVParser MAIN=CSVPARSERMAIN d     2> /dev/null| $(CSVREADERCHECK) && echo "D     OK" || echo "D     Fail"
@@ -156,7 +156,7 @@ csvparser:
 	@make FUFILES="FileSystem.fu FloatVector.fu Matrix.fu Stats.fu CSVParser.fu" ARGS=test/testm.csv APP=CSVParser MAIN=CSVPARSERMAIN ts    2> /dev/null| $(CSVREADERCHECK) && echo "Ts    OK" || echo "Ts  Fail"
 
 fsystem:
-	@make FUFILES="FileSystem.fu" APP=FileSystem MAIN=FILESYSTEMMAIN ARGS="test/test.txt test/out-c.txt"     c     2> /dev/null| $(FSYSCHECK) && echo "C     OK" || echo "C     Fail"
+	make FUFILES="FileSystem.fu" APP=FileSystem MAIN=FILESYSTEMMAIN ARGS="test/test.txt test/out-c.txt"     c     2> /dev/null| $(FSYSCHECK) && echo "C     OK" || echo "C     Fail"
 	@make FUFILES="FileSystem.fu" APP=FileSystem MAIN=FILESYSTEMMAIN ARGS="test/test.txt test/out-cpp.txt"   cpp   2> /dev/null| $(FSYSCHECK) && echo "CPP   OK" || echo "Cpp   Fail"
 	@make FUFILES="FileSystem.fu" APP=FileSystem MAIN=FILESYSTEMMAIN ARGS="test/test.txt test/out-cs.txt"    cs    2> /dev/null| $(FSYSCHECK) && echo "C#    OK" || echo "C#    Fail"
 	@make FUFILES="FileSystem.fu" APP=FileSystem MAIN=FILESYSTEMMAIN ARGS="test/test.txt test/out-d.txt"     d     2> /dev/null| $(FSYSCHECK) && echo "D     OK" || echo "D     Fail"
@@ -178,7 +178,7 @@ snha:
 	@make FUFILES="FileSystem.fu FloatVector.fu Rand.fu Matrix.fu CSVParser.fu ListUtils.fu Stats.fu SNHA.fu" APP=SNHA MAIN=SNHAMAIN ts    | $(CHECKSNHA) && echo "Ts    OK" || echo "Ts    Fail"
 
 timeit:
-	@make FUFILES="Timeit.fu" APP=Timeit  MAIN=TIMEITMAIN c     | grep Required && echo "C     OK" || echo "C     Fail"
+	make FUFILES="Timeit.fu" APP=Timeit  MAIN=TIMEITMAIN c     | grep Required && echo "C     OK" || echo "C     Fail"
 	@make FUFILES="Timeit.fu" APP=Timeit  MAIN=TIMEITMAIN cpp   | grep Required && echo "C++   OK" || echo "C++   Fail"
 	@make FUFILES="Timeit.fu" APP=Timeit  MAIN=TIMEITMAIN cs    | grep Required && echo "C#    OK" || echo "C#    Fail"
 	@make FUFILES="Timeit.fu" APP=Timeit  MAIN=TIMEITMAIN d     | grep Required && echo "D     OK" || echo "D     Fail"
