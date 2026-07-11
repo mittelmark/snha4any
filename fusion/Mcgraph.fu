@@ -47,14 +47,6 @@ public class Mcgraph {
 
 	}
 
-	/// Return absolute value of x.
-	public float Abs(float x) {
-		if (x < 0) {
-			return -x;
-		}
-		return x;
-	}
-
 	/// Generate one random value from N(mu, sigma^2) using Box-Muller.
 	public float NormalValue! (float mu = 100, float sigma = 2) {
 		// Generate two uniform random numbers between 0 and 1
@@ -177,7 +169,7 @@ public class Mcgraph {
 						if (weight != 0) {
 							float src = X[csrc];
 							float trg = X[ctrg];
-							float abs_weight = Abs(weight);
+							float abs_weight = Math.Abs(weight);
 
 							float xnew_trg = src * prop * abs_weight
 										 + trg * (1 - prop) * abs_weight;
@@ -458,7 +450,7 @@ public class Mcgraph {
 				float r = C.Get(i, j);
 
 				// Absolute correlation controls circle size.
-				float ar = Abs(r);
+				float ar = Math.Abs(r);
 
 				// Draw square cell background and border.
 				svg = svg + $"<rect x=\"{x0}\" y=\"{y0}\" width=\"{cell}\" height=\"{cell}\" fill=\"white\" stroke=\"#dddddd\" stroke-width=\"1\"/>\n";
