@@ -221,7 +221,7 @@ public class Rand {
 		for (int i = 0; i < rseq.Count; i++) {
 			Console.WriteLine($"On position {i} the sampled int value of 1:20 is {rsam2[i]}!");
 		}
-		Console.WriteLine($"");
+		Console.WriteLine();
 		bool is10 = rsam2[1] == 10 && rsam2[6] == 10 && rsam2[10] == 10;
 		int t = 0;
 		if (is10) t = 1;

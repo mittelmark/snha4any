@@ -200,7 +200,7 @@ public class Mcgraph {
 				// for (int node = 0; node < p; node++) {
 				// Console.Write($"{X[node]} ");
 				// }
-				// Console.WriteLine("");
+				// Console.WriteLine();
 
 				// Add noise after each iteration.
 				for (int node = 0; node < p; node++) {
@@ -227,7 +227,7 @@ public class Mcgraph {
 		for (int j = 0; j < nsamples; j++) {
 			Console.Write($"S{j}\t");
 		}
-		Console.WriteLine("");
+		Console.WriteLine();
 
 		for (int i = 0; i < p; i++) {
 			Console.Write(G.GetName(i) + "\t");
@@ -236,7 +236,7 @@ public class Mcgraph {
 				Console.Write($"{data.Get(i, j)}\t");
 			}
 
-			Console.WriteLine("");
+			Console.WriteLine();
 		}
 	}
 
@@ -258,7 +258,7 @@ public class Mcgraph {
 		for (int j = 0; j < nsamples; j++) {
 			Console.Write($",S{j}");
 		}
-		Console.WriteLine("");
+		Console.WriteLine();
 
 		// Data rows.
 		for (int i = 0; i < G.Size(); i++) {
@@ -267,7 +267,7 @@ public class Mcgraph {
 			for (int j = 0; j < nsamples; j++) {
 				Console.Write($",{data.Get(i, j)}");
 			}
-			Console.WriteLine("");
+			Console.WriteLine();
 		}
 	}
 
@@ -282,7 +282,7 @@ public class Mcgraph {
 		for (int j = 0; j < G.Size(); j++) {
 			Console.Write($",{G.GetName(j)}");
 		}
-		Console.WriteLine("");
+		Console.WriteLine();
 
 		// Rows.
 		for (int i = 0; i < G.Size(); i++) {
@@ -292,7 +292,7 @@ public class Mcgraph {
 				Console.Write($",{C.Get(i,j)}");
 			}
 
-			Console.WriteLine("");
+			Console.WriteLine();
 		}
 	}
 
