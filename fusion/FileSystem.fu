@@ -249,14 +249,14 @@ native {
 			if (!FileSystem.FileExists(args[0])) {
 				Console.WriteLine($"Error: File {args[0]} does not exists!");
 			} else {
-				Console.WriteLine($"{args[0]}");
+				Console.WriteLine(args[0]);
 				string() content = FileSystem.FileRead(args[0]);
-				Console.WriteLine($"{content}");
+				Console.WriteLine(content);
 				content = $"Out:\n{content}";
 				if (args.Length > 1) {
 					FileSystem.FileSave(args[1],content);
 					string() out = FileSystem.FileRead(args[0]);
-					Console.WriteLine($"{content}");
+					Console.WriteLine(content);
 				}
 			}
 			

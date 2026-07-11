@@ -71,7 +71,7 @@ public class Matrix {
 				float val = M.Get(i, j);
 				Console.Write($"{val:F2}");
 				if (j < M.Ncol()-1) {
-					Console.Write($"\t");
+					Console.Write("\t");
 				}
 					
 			}

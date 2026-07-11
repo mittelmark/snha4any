@@ -163,7 +163,7 @@ public static class CSVParser {
     public static void Main(string[] args) {
 		string() content = "Hello CSVParser";
 		//string() content = FileSystem.ReadFile(args[0]);
-		Console.WriteLine($"{content}");
+		Console.WriteLine(content);
 		Matrix() M = CSVParser.ReadData("hello,world\n0.0,0.1\n0.2,0.3\n0.4,0.5\n",true) ;
 		int n = M.Nrow();
 		Console.WriteLine($"{n} {M.Get(0,1)}");

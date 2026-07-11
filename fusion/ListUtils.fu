@@ -103,9 +103,9 @@
 		List<string()>() labels = ListUtils.AutoNames(27);
 		
 		if (a != b && t != s && labels[0] == "A1") {
-			Console.WriteLine($"OK");
+			Console.WriteLine("OK");
 		} else {
-			Console.WriteLine($"Fail");
+			Console.WriteLine("Fail");
 		}
 	}
 	#endif
