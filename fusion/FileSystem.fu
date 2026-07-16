@@ -96,7 +96,8 @@ public static class FileSystem
 	}
 	public static string() FileRead(string() path)
 	{
-		string() content = "";
+		string() content;
+		content = "";
 #if C
 native {
 		 FILE* f = fopen(path, "rb");
