@@ -1,9 +1,42 @@
+/// ---
 /// Class to generated random numbers or to resample current
 /// lists randomly.
+///
+/// Author: Alba de Prada Hernandet, Detlef Groth, University of Potsdam
+/// ---
+///
+/// Random number generation and random sampling methods which can be used
+/// in statistics.
+/// ------------------------------------------------------------------------
+///
+/// Public methods of an object of class Rand defined in file Rand.fu.
+///
+/// Available methods:
+///
+/// * Seed              : Set the random number generator for a specific sequence of random number
+/// * SeedNow           : Use the current time in milliseconds to intialize the random number generator
+/// * CreateNormalData  : Create a set of values which is normally distributed
+/// * CreateUniformData : Create a set of values which is uniformly distributed
+/// * NextRandom        : Create a randome number in the range of 0 to 1
+/// * Randomize         : Randomize a given vector of floats
+/// * RandomizeInt      : Randomize a given vector of integers
+/// * Sample            : Sample from a given vector of floats
+/// * SampleInt         : Sample from a given vector of integers
+/// 
+/// General usage:
+///
+///   		Rand() rnd;List<float>() x;
+///    		rnd.Seed(123);
+///    		List<float>() x = rnd.CreateNormalData(0,1,10);
+///
+/// Notes:
+///
+/// * NaN are just left as they are within sample procedures.
+
 public class Rand {
+	long RandomState = 1;
 	/// Initialize the random number generator.
 	/// Will have same output with the same seed all the time.
-	long RandomState = 1;
 	public void Seed! (
 		/// Initialize the random numbers with a specific value.
 		long x) {
