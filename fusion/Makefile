@@ -19,7 +19,7 @@ dcom=dmd
 endif
 CHECK='val=0.2.* rankmean=2.5'
 CHECKM=grep -E '^(2.+5.+8|0.95|10.+11.+12)' | wc -l | grep -q 4
-FSYSCHECK=grep -E 'test.txt|Hello|World|Out:' | wc -l | grep -q 7
+FSYSCHECK=grep -E 'test.txt|Hello|World|Out:|File dummy.txt does not exists' | wc -l | grep -q 7
 CSVREADERCHECK=grep -E '3 0.1|4 0.5' | wc -l | grep -q 2
 CHECKMGRAPH=grep -v var | grep -v Write | grep -v MainApp | grep -E "A.+B|A.+1|D.+1.+1" | wc -l | grep -q 6
 CHECKSNHA=grep -E 'M: 100,6|Chain 4: E1-F1-D1-B1|Chain 3: B1-C1-A1|Chain 2: B1-C1-D1|96.+98.+55.+9.+14' | wc -l | grep -q 5

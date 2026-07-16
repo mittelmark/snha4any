@@ -256,8 +256,12 @@ native {
 				if (args.Length > 1) {
 					FileSystem.FileSave(args[1],content);
 					string() out = FileSystem.FileRead(args[0]);
-					Console.WriteLine(content);
+					Console.WriteLine(out);
 				}
+				if (!FileSystem.FileExists("dummy.txt")) {
+					Console.WriteLine("File dummy.txt does not exists!");
+				}
+					
 			}
 			
 			
