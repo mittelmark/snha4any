@@ -96,20 +96,19 @@ public static class FileSystem
 	}
 	public static string() FileRead(string() path)
 	{
-		string() content;
-		content = "";
-		
+		string() content = "";
 #if C
 native {
-	
 		 FILE* f = fopen(path, "rb");
-		 if (!f) return "";
+		 if (!f) return content;
+		 free(content);
 		 fseek(f, 0, SEEK_END);
 		 long size = ftell(f);
 		 fseek(f, 0, SEEK_SET);
 		 content = (char*)malloc(size + 1);
 		 fread(content, 1, size, f);
 		 fclose(f);
+		 content[size] = 0;
 		 //return buf;   // returns char*, Fusion converts to string()
 	 }
 #elif CPP
