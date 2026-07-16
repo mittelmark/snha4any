@@ -75,7 +75,7 @@ public class Matrix {
 				}
 					
 			}
-			Console.WriteLine("");
+			Console.WriteLine();
 		}
 	}
 	/// Transpose a matrix row to columns and columns to rows.

@@ -374,7 +374,7 @@ public class SNHA {
 			Console.Write(GetLabel(chain[i]));
             if (i + 1 < chain.Count) Console.Write("-");
         }
-        Console.WriteLine("");
+        Console.WriteLine();
     }
 	/// Return a string representation for a give list
 	/// of node ids.
@@ -452,10 +452,10 @@ public class SNHA {
 		Matrix() A = sn.GetTheta();
 		Matrix() B = sn.GetSigma();		
 		Matrix.PrintMatrix(A);
-		Console.WriteLine($"");
+		Console.WriteLine();
 		Matrix() Bs = SNHA.Bootstrap(M,"pearson",0.1,100,123);
 		Matrix.PrintMatrix(Bs);
-		Console.WriteLine("");
+		Console.WriteLine();
 		/*
 		*/
 

@@ -360,14 +360,14 @@ public class Mgraph {
 		for (int j = 0; j < n; j++) {
 			Console.Write($"{names[j]}\t");
 		}
-		Console.WriteLine("");
+		Console.WriteLine();
 
 		for (int i = 0; i < n; i++) {
 			Console.Write($"{names[i]}\t");
 			for (int j = 0; j < n; j++) {
 				Console.Write($"{A.Get(i, j)}\t");
 			}
-			Console.WriteLine("");
+			Console.WriteLine();
 		}
 	}
 
