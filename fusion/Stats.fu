@@ -22,6 +22,7 @@
 /// * Which               : indices where a boolean mask is true
 /// * PearsonCorrelation  : Pearson r between two paired float lists
 /// * SpearmanCorrelation : Spearman rho (Pearson r on average ranks)
+/// * KendallCorrelation  : Kendall tau-b between two paired float lists
 ///
 /// General usage:
 ///
@@ -303,6 +304,8 @@ public static class Stats {
 					corr = Stats.PearsonCorrelation(colI, colJ);
 				} else if (method == "spearman") {
 					corr = Stats.SpearmanCorrelation(colI,colJ);
+				} else if (method == "kendall") {
+					corr = Stats.KendallCorrelation(colI,colJ);
 				} else {
 					corr = Math.NaN;
 				}
@@ -366,6 +369,59 @@ public static class Stats {
 		}
 		return(PearsonCorrelation(RankMean(validX), RankMean(validY)));
 	}
+	/// Kendall tau-b rank correlation between paired lists x and y.
+	/// Only indices 0 .. min(x.Count, y.Count) - 1 are considered; pairs with
+	/// NaN in either list are dropped. Pairs tied on x, on y, or on both are
+	/// excluded from the concordant/discordant counts and instead corrected
+	/// for in the denominator (tau-b tie correction).
+	/// Returns Math.NaN if no valid pairs remain, and 0.0 if the denominator
+	/// is zero (fewer than two valid pairs, or one variable is constant).
+	public static float KendallCorrelation (List<float> x, List<float> y) {
+		List<float>() validX;
+		List<float>() validY;
+		for (int i = 0; i < Math.Min(x.Count, y.Count); i++) {
+			if (!Math.IsNaN(x[i]) && !Math.IsNaN(y[i])) {
+				validX.Add(x[i]);
+				validY.Add(y[i]);
+			}
+		}
+		if (validX.Count == 0) {
+			return(Math.NaN);
+		}
+		int n = validX.Count;
+		float concordant = 0.0;
+		float discordant = 0.0;
+		float tiesX = 0.0;
+		float tiesY = 0.0;
+		for (int i = 0; i < n; i++) {
+			for (int j = i + 1; j < n; j++) {
+				float dx = validX[i] - validX[j];
+				float dy = validY[i] - validY[j];
+				bool tieX = (dx == 0.0);
+				bool tieY = (dy == 0.0);
+				if (tieX) {
+					tiesX = tiesX + 1.0;
+				}
+				if (tieY) {
+					tiesY = tiesY + 1.0;
+				}
+				if (tieX || tieY) {
+					continue;
+				}
+				if (dx * dy > 0.0) {
+					concordant = concordant + 1.0;
+				} else {
+					discordant = discordant + 1.0;
+				}
+			}
+		}
+		float n0 = n * (n - 1) / 2.0;
+		float denominator = Math.Sqrt((n0 - tiesX) * (n0 - tiesY));
+		if (denominator == 0.0) {
+			return(0.0);
+		}
+		return((concordant - discordant) / denominator);
+	}
 	public static List<int>() FloatToInt(List<float> x, string mode="round") {
 		List<int>() y;
 		int NA = int.MinValue;
@@ -402,9 +458,9 @@ public static class Stats {
 			Console.WriteLine($"On position {nas[i]} the numeric value is NA!");
 		}
 		Console.WriteLine($"Standard Deviation is: {Stats.StandardDeviation(x)}");
-		List<int>() range = Stats.Sequence(1,20);
-		for (int i = 0; i < range.Count; i++) {
-			Console.WriteLine($"{range[i]} ");
+		List<int>() seq = Stats.Sequence(1,20);
+		for (int i = 0; i < seq.Count; i++) {
+			Console.WriteLine($"{seq[i]} ");
 		}
 		Console.WriteLine("\n");
 		List<int>() ord = Stats.Order(x);
@@ -425,6 +481,19 @@ public static class Stats {
 		}
 		Console.WriteLine("\n");
 
+		List<float>() kx;
+		kx.Add(1.0);
+		kx.Add(2.0);
+		kx.Add(2.0);
+		kx.Add(3.0);
+		kx.Add(4.0);
+		List<float>() ky;
+		ky.Add(2.0);
+		ky.Add(1.0);
+		ky.Add(3.0);
+		ky.Add(3.0);
+		ky.Add(5.0);
+		Console.WriteLine($"kendall={Stats.KendallCorrelation(kx,ky)}");
 	}
 #if STATSMAIN
 	public static void Main (string[] args) {
