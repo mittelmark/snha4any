@@ -76,28 +76,40 @@ $(BIN_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 # --- Tcl Build ---
-tcl8: $(OFILES) $(TFILES)
+tcl8: $(OFILES) $(TFILES) $(BIN_DIR)/tcl8
 	$(SWIG) -tcl8 -namespace -o $(BIN_DIR)/$@/mglib_wrap.c $(SWIG_DIR)/mglib.i
 	$(CC) $(CFLAGS) $(TCL8_INC) -c $(BIN_DIR)/$@/mglib_wrap.c -o $(BIN_DIR)/$@/mglib_wrap.o
 	$(CC) -shared $(OFILES) $(TFILES) $(BIN_DIR)/$@/mglib_wrap.o -o $(BIN_DIR)/$@/mglib.so $(LIBS) $(TCL_LIB)
 
-tcl9: $(OFILES) $(TFILES)
+$(BIN_DIR)/tcl8:
+	mkdir -p $(BIN_DIR)/tcl8
+	
+tcl9: $(OFILES) $(TFILES) $(BIN_DIR)/tcl9
 	$(SWIG) -tcl -namespace -o $(BIN_DIR)/$@/mglib_wrap.c $(SWIG_DIR)/mglib.i
 	$(CC) $(CFLAGS) $(TCL9_INC) -c $(BIN_DIR)/$@/mglib_wrap.c -o $(BIN_DIR)/$@/mglib_wrap.o
 	$(CC) -shared $(OFILES) $(TFILES) $(BIN_DIR)/$@/mglib_wrap.o -o $(BIN_DIR)/$@/mglib.so $(LIBS) $(TCL9_LIB)
 
+$(BIN_DIR)/tcl9:
+	mkdir -p $(BIN_DIR)/tcl9
+
 # --- Lua Build ---
-lua: $(OFILES) $(TFILES)
+lua: $(OFILES) $(TFILES) $(BIN_DIR)/lua
 	$(SWIG) -lua -o $(BIN_DIR)/lua/mglib_wrap.c $(SWIG_DIR)/mglib.i
 	$(CC) $(CFLAGS) $(LUA_INC) -c $(BIN_DIR)/lua/mglib_wrap.c -o $(BIN_DIR)/lua/mglib_wrap.o
 	$(CC) -shared $(OFILES) $(TFILES) $(BIN_DIR)/lua/mglib_wrap.o -o $(BIN_DIR)/lua/mglib.so $(LIBS) $(LUA_LIB)
 
+$(BIN_DIR)/lua:
+	mkdir -p $(BIN_DIR)/lua
+	
 # --- Python Build ---
-py: $(OFILES) $(TFILES)
+py: $(OFILES) $(TFILES) $(BIN_DIR)/python
 	$(SWIG) -python -o $(BIN_DIR)/python/mglib_wrap.c $(SWIG_DIR)/mglib.i
 	$(CC) $(CFLAGS) $(PY_INC) -c $(BIN_DIR)/python/mglib_wrap.c -o $(BIN_DIR)/python/mglib_wrap.o
 	$(CC) -shared $(OFILES) $(TFILES) $(BIN_DIR)/python/mglib_wrap.o -o $(BIN_DIR)/python/_mglib.so $(LIBS) $(PY_LIB)
 
+$(BIN_DIR)/python:
+	mkdir -p $(BIN_DIR)/python
+	
 clean:
 	rm -rf $(BIN_DIR)
 
