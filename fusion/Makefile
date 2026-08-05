@@ -55,7 +55,7 @@ d:
 	./dm/$(app)-d $(ARGS)
 java:
 	[ -d javam ] || mkdir javam
-	rm javam/*.java
+	-rm javam/*.java
 	fut -D $(MAIN) -D JAVA $(FUFILES) -n javam -o javam/$(APP).java
 	javac javam/*.java
 	java -cp . javam.$(APP) $(ARGS)
