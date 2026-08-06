@@ -24,6 +24,22 @@ CSVREADERCHECK=grep -E '3 0.1|4 0.5' | wc -l | grep -q 2
 CHECKMGRAPH=grep -v var | grep -v Write | grep -v MainApp | grep -E "A.+B|A.+1|D.+1.+1" | wc -l | grep -q 6
 CHECKSNHA=grep -E 'M: 100,6|Chain 4: E1-F1-D1-B1|Chain 3: B1-C1-A1|Chain 2: B1-C1-D1|96.+98.+55.+9.+14' | wc -l | grep -q 5
 RANDC=grep -E '(position 19.+ is 15|position 12.+13|true=1)' | wc -l | grep -q 4
+ifeq (,$(shell which javac 2>/dev/null))
+javac := ""
+else
+javac := "javac"
+endif
+ifeq (,$(shell which dotnet 2>/dev/null))
+dotnet := ""
+else
+dotnet := "dotnet"
+endif
+ifeq (,$(shell which swift 2>/dev/null))
+swift := ""
+else
+swift := "swift"
+endif
+
 ## default: list existing tasks 
 .PHONY: tasks
 tasks:  ## list all tasks
@@ -41,25 +57,32 @@ cpp:	## compile Cpp
 	g++ -O3 -std=c++20 cppm/$(app).cpp -o cppm/$(app)-cpp
 	./cppm/$(app)-cpp $(ARGS)
 cs:
+ifeq ($(dotnet),"")
+	echo "C# dotnet not installed!" 1>&2
+else
 	[ -d MainApp ] && rm -rf MainApp
 	dotnet new console -n MainApp --no-restore --force
 	rm MainApp/Program.cs
 	fut -D $(MAIN) -D CSHARP $(FUFILES) -o MainApp/$(app).cs
 	cd MainApp && dotnet build -c Release
 	./MainApp/bin/Release/net10.0/MainApp $(ARGS)
-	
+endif	
 d:
 	[ -d dm ] || mkdir dm
 	fut -D $(MAIN) -D D $(FUFILES) -o dm/$(app).d 
 	$(dcom) -O dm/$(app).d -of=dm/$(app)-d 
 	./dm/$(app)-d $(ARGS)
 java:
+ifeq ($(javac),"")
+	echo "Java   no javac installed!" 1>&2
+else
 	[ -d javam ] || mkdir javam
 	-rm javam/*.java
 	fut -D $(MAIN) -D JAVA $(FUFILES) -n javam -o javam/$(APP).java
 	javac javam/*.java
 	java -cp . javam.$(APP) $(ARGS)
 	jar cfe $(APP).jar javam.$(APP) javam/*.class 2>/dev/null
+endif
 js:
 	[ -d jsm ] || mkdir jsm
 	fut -D $(MAIN) -D JS $(FUFILES) -o jsm/$(app).js
@@ -83,11 +106,15 @@ bjs:
 
 	
 swift:
+ifeq ($(swift),"")
+	echo "Swift not installed!" 1>&2
+else
 	[ -d swiftm/Sources/swift ] || mkdir -p swiftm/Sources/swift
 	fut -D $(MAIN) -D SWIFT $(FUFILES) -o swiftm/Sources/swift/swift.swift
 	cd swiftm && swift build -c release
 	#cd swiftm && swift run
 	./swiftm/.build/x86_64-unknown-linux-gnu/release/swift $(ARGS)
+endif
 rand:
 	make FUFILES="Rand.fu Stats.fu Matrix.fu" MAIN="RANDMAIN" APP=Rand c | $(RANDC) && echo   "C     OK" || echo "C     Fail"
 	@make FUFILES="Rand.fu Stats.fu Matrix.fu" MAIN="RANDMAIN" APP=Rand cpp |  $(RANDC) && echo   "C++   OK" || echo "C++   Fail"	
