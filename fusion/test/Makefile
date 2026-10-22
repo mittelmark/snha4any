@@ -29,7 +29,7 @@ c:	## compile C
 cpp:	## compile Cpp
 	[ -d cppm ] || mkdir cppm
 	fut -D $(MAIN) $(FUFILES) -o cppm/$(app).cpp
-	g++ -std=c++20 cppm/$(app).cpp -o cppm/$(app)-cpp
+	g++ -std=c++23 cppm/$(app).cpp -o cppm/$(app)-cpp
 	./cppm/$(app)-cpp | tail -n 20
 
 cs:     ## compile C#

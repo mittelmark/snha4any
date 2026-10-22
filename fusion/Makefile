@@ -42,10 +42,10 @@ cpp:	## compile Cpp
 	./cppm/$(app)-cpp $(ARGS)
 cs:
 	[ -d MainApp ] && rm -rf MainApp
-	dotnet new console -n MainApp --no-restore --force
+	DOTNET_CLI_TELEMETRY_OPTOUT=1 dotnet new console -n MainApp --no-restore --force
 	rm MainApp/Program.cs
 	fut -D $(MAIN) -D CSHARP $(FUFILES) -o MainApp/$(app).cs
-	cd MainApp && dotnet build -c Release
+	cd MainApp && DOTNET_CLI_TELEMETRY_OPTOUT=1 dotnet build -c Release
 	./MainApp/bin/Release/net10.0/MainApp $(ARGS)
 	
 d:

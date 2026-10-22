@@ -387,7 +387,7 @@ public class SNHA {
         return s;
     }
 	#if SNHAMAIN
-	/// Run the SNHA algorith with bootstrapping to check the
+	/// Run the SNHA algorithm with bootstrapping to check the
 	/// the stability of edges.
 	/// Returns Matrix with the proportions how often an edge was found.
 	public static Matrix() Bootstrap(
@@ -453,8 +453,12 @@ public class SNHA {
 		Matrix() B = sn.GetSigma();		
 		Matrix.PrintMatrix(A);
 		Console.WriteLine();
+		Console.WriteLine("Bootstrap 1:");
 		Matrix() Bs = SNHA.Bootstrap(M,"pearson",0.1,100,123);
 		Matrix.PrintMatrix(Bs);
+		Console.WriteLine("Bootstrap 2:");
+		Matrix() Bs2 = SNHA.Bootstrap(M,"pearson",0.1,100,1234);
+		Matrix.PrintMatrix(Bs2);
 		Console.WriteLine();
 		/*
 		*/
