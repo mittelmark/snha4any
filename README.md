@@ -40,7 +40,7 @@ will be placed here:
 Using generated C code, for instance create by Fusion, we might then use the [Swig](https://www.swig.org) interface 
 generator to add support for more languages, here an example for that workflow:
 
-![](https://kroki.io/graphviz/svg/eNqFkk1vgkAQhu_-is16FI16aZNmvUBq05hK1BvxsMAIG0eW8KElTf97WUAzBJPuZed9ZuZl2N1QRZlMYxaxnxGrV6O8mwqLWLzO58cGZjI5hyoTfLPjb4YkOgQvj2UKAhBVmoOVFxWCOClECK22fzFbWjGoKC7EfPZimVygUWciP1c-lnA0Xu9lrnQyXX2ViF5rwlVyVTk3335O2x42XTFuTya8R9yqiHWyrFkXeSh9QNGqfrezZLV27iXcGbiPfePe7Pciezyo6k_wKa9yMSD7IFNp0cOHKoUneH9Tpz7ZppDYmxo11vdBjOBHZn7B7vqiOjZbNzyn0qFqrWlqXSoEmjbWRG5Kqra2vCDVQSGvQIALGc27Hy5VzT0QsKNx6VdEHgJ8nEP33Livvzl9ShIv7bWapn-Kfkd_vfXfyg==)
+![](assets/fusion.svg)
 
 The following features will be implemented:
 

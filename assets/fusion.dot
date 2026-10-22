@@ -1,0 +1,39 @@
+digraph g {
+  graph[width=800]
+    rankdir="LR";
+   node[shape=ellipse,style=filled,width=1.2,height=0.7,fillcolor=skyblue];
+  Fusion->Null[style="invis"]
+  Null[style="invis"]
+  Fusion -> "C++"
+  Fusion -> Python2
+  Python2[label=Python]
+  Fusion -> D2 
+  D2[label="D"]
+  Fusion -> "C#b"
+  "C#b"[label="C#"]
+  Fusion -> "C"
+  Fusion -> Java1
+  Fusion -> JavaScript
+  Fusion -> TypeScript
+  Fusion -> Swift
+  Fusion -> OpenCL
+  Java1[label="Java"]  
+  C -> Swig
+  Swig -> "C#"
+  Swig -> "D"
+  Swig -> Go
+  Swig -> "Guile"
+  Swig -> Java
+  Swig -> Lua
+  Swig -> OCaml
+  Swig -> Octave
+  Swig -> Perl
+  Swig -> PHP
+  Swig -> Python
+  Swig -> R
+  Swig -> Ruby
+  Swig -> Tcl
+  Fusion[shape="box",fillcolor=salmon]
+  Swig[shape="box",fillcolor=salmon]
+}
+
