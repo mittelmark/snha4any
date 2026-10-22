@@ -5,7 +5,7 @@ SNHA algorithm implemented in various programming languages.
 Already existing are implementations in:
 
 - [R](https://github.com/mittelmark/snha) - by Detlef Groth
-- [Python](https//github.com/thake93/snah4py) - Tim Hake
+- [Python](https://github.com/thake93/snha4py) - Tim Hake
 - [Julia](https://github.com/nono-zarazua/snha4jl) - Roberto Zarazua
 
 ## References
