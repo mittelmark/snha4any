@@ -18,12 +18,12 @@ several programming languages from one code base:
 
 - [Fusion](https://github.com/fusionlanguage/fut) - Fusion programming
   language, it should create code for C, Cpp, C#, D, Java, Javascript,
-  Python, Swift, Typescript and OpenCL C
+  Python, Swift, TypeScript and OpenCL C
 - [Haxe](https://haxe.org/) - Haxe programming language it
   should create code for C++, C-sharp, the Haxe interpreter, Java, Lua,
   Python and Neko
 - [Temper](https://temperlang.dev/) - Temper programming language transpiles to
-  C-Sharp, Java, Javascript, Typescript, Lua, Python and Rust (C++)
+  C-Sharp, Java, Javascript, TypeScript, Lua, Python and Rust (C++)
 - [Py2many](https://github.com/py2many/py2many) - using the Python programming
   language it should create code for C, C++, D, Dart, Go, Julia, Kotlin, Nim,
   Rust and V - where C++ and Rust are currently considered production ready, however not ready to be used yet
@@ -40,7 +40,7 @@ will be placed here:
 Using generated C code, for instance create by Fusion, we might then use the [Swig](https://www.swig.org) interface 
 generator to add support for more languages, here an example for that workflow:
 
-![](https://kroki.io/graphviz/svg/eNqFkk1vgzAMhu_9FVF6LKsYl02asgtonSakorY3xCGAC1Fdgvhoh6b99xGgk1kPyyV-Xr-2nI9UZZUsc5axrwXr10DhVaVNLp5tOxrEShanVFWC-zv-YpRCpxDWuSxBAKIqa7DqpkMQR4UIqTXWP64dKweV5Y2w10-WySUadSXqUxdjC5Hp9dbWShfs4ZVxd7XiMyXomlwXTq9NUYgyBhQjRTOv57CevZuFezz6030Zm-7DfjO5yzvXfIIPeZH7pFJlM5MPXQn1vby_quNc2ZZQuD4zo7mTI-tjs01DcYoepY2mqU2rEGjajEbQbyltXXlGykkjL0CEACqaD94DSsP9EmFH4zbuCB4S_D3x9CV4rD85fW6J5_G5TNE_pu_FDwyfwkc=)
+![](https://kroki.io/graphviz/svg/eNqFkk1vgkAQhu_-is16FI16aZNmvUBq05hK1BvxsMAIG0eW8KElTf97WUAzBJPuZed9ZuZl2N1QRZlMYxaxnxGrV6O8mwqLWLzO58cGZjI5hyoTfLPjb4YkOgQvj2UKAhBVmoOVFxWCOClECK22fzFbWjGoKC7EfPZimVygUWciP1c-lnA0Xu9lrnQyXX2ViF5rwlVyVTk3335O2x42XTFuTya8R9yqiHWyrFkXeSh9QNGqfrezZLV27iXcGbiPfePe7Pciezyo6k_wKa9yMSD7IFNp0cOHKoUneH9Tpz7ZppDYmxo11vdBjOBHZn7B7vqiOjZbNzyn0qFqrWlqXSoEmjbWRG5Kqra2vCDVQSGvQIALGc27Hy5VzT0QsKNx6VdEHgJ8nEP33Livvzl9ShIv7bWapn-Kfkd_vfXfyg==)
 
 The following features will be implemented:
 
