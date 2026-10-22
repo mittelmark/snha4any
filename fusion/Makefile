@@ -10,6 +10,15 @@ APP=Stats
 LANG=ALL
 ARGS=
 app=$(shell echo $(APP) | tr A-Z a-z)
+OS=$(uname)
+SWFIFT=""
+JSCRIPT="node"
+ifeq (, $(shell which node))
+JSCRIPT="bun"
+endif
+ifeq ($(OS),"Linux")
+SWIFT="/x86_64-unknown-linux-gnu"
+endif
 MAIN=STATSMAIN
 ## D compiler check
 ifeq (, $(shell which dmd 2>/dev/null))
@@ -63,7 +72,7 @@ java:
 js:
 	[ -d jsm ] || mkdir jsm
 	fut -D $(MAIN) -D JS $(FUFILES) -o jsm/$(app).js
-	node jsm/$(app).js $(ARGS)
+	$(JSCRIPT) jsm/$(app).js $(ARGS)
 
 	
 py:
@@ -87,7 +96,7 @@ swift:
 	fut -D $(MAIN) -D SWIFT $(FUFILES) -o swiftm/Sources/swift/swift.swift
 	cd swiftm && swift build -c release
 	#cd swiftm && swift run
-	./swiftm/.build/x86_64-unknown-linux-gnu/release/swift $(ARGS)
+	./swiftm/.build$(SWIFT)/release/swift $(ARGS)
 rand:
 	make FUFILES="Rand.fu Stats.fu Matrix.fu" MAIN="RANDMAIN" APP=Rand c | $(RANDC) && echo   "C     OK" || echo "C     Fail"
 	@make FUFILES="Rand.fu Stats.fu Matrix.fu" MAIN="RANDMAIN" APP=Rand cpp |  $(RANDC) && echo   "C++   OK" || echo "C++   Fail"	
