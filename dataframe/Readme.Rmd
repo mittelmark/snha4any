@@ -1,0 +1,144 @@
+---
+title: CSV Reader and DataFrame in Python Test
+author: Merve Sule Yildirim, University of Potsdam
+date: 2026-11-12
+---
+
+## Introduction
+
+This is a Python prototype of a CSV reader that stores a dataset in a simple
+`DataFrame` structure. It is part of the project _Graph Prediction in
+Comparison with the St. Nicolas House Algorithm Using Fusion and SWIG_, where
+datasets have to be read before they can be analysed.
+
+Following the structure suggested by the supervisor, numeric and categorical
+(factor) columns are stored separately instead of storing every column in the
+same way, similar to data frames in R. This also prepares the later
+implementation in Fusion, where a list can only hold values of one type.
+
+The files relevant for this documentation are:
+
+- `csv_reader.py` - the CSV reader
+- `survey-2021-11.tab.txt` - tab-separated survey data used for testing
+
+## Usage
+
+The script only needs Python 3, no additional packages are required.
+
+```
+python3 csv_reader.py
+```
+
+The script reads `survey-2021-11.tab.txt` from the same folder and prints the
+resulting `DataFrame`, a summary and the numeric matrix. The reader can also
+be imported:
+
+```
+from csv_reader import read_csv, summary
+df = read_csv("survey-2021-11.tab.txt")
+summary(df)
+```
+
+## csv_reader.py
+
+### DataFrame class
+
+The `DataFrame` class has the following fields:
+
+- `nrow`, `ncol` - number of rows and columns
+- `names` - column names in the original order
+- `types` - `"numeric"` or `"factor"` for each column
+- `index` - position of each column inside `numeric` or `factors`
+- `numeric` - the numeric columns, each with a `name` and a list of `values`
+- `factors` - the factor columns, each with a `name`, `codes` and `levels`
+- `row_names` - row names, if the file contains them
+- `bad_rows` - number of rows with a wrong number of fields
+
+### Functions
+
+- `read_csv(filename, separator=None)` reads the file and returns a
+  `DataFrame`. If no separator is given, tab is used when the header contains
+  a tab, otherwise comma.
+- `get_column(df, name)` returns a column by its name.
+- `numeric_matrix(df)` returns the names and the values of all numeric
+  columns as a matrix (one list per row).
+- `summary(df)` prints a short summary of every column, similar to
+  `summary()` in R.
+- `print_dataframe(df)` prints the column types and the first values.
+- `is_missing(value)`, `is_number(value)` and `make_factor(values)` are
+  helper functions.
+
+### Column types
+
+A column is numeric if all its values are numbers or missing, otherwise it is
+a factor. Numeric values are stored as floats:
+
+```
+cm:  163  180  158  179  NA   ->  [163.0, 180.0, 158.0, 179.0, nan]
+```
+
+A factor is stored as a list of sorted `levels` and one integer `code` per
+row:
+
+```{py}
+from csv_reader import make_factor
+codes, levels = make_factor(["M", "F", "", "F", "M"])
+print("levels:", levels)
+print("codes: ", codes)
+```
+
+The code of a value is its position in `levels`, starting at `1`, so `F` is
+`1` and `M` is `2`. The original value is `levels[code - 1]`.
+
+### Missing values
+
+The texts `""`, `NA`, `NaN`, `nan` and `.` are treated as missing values. In
+numeric columns they are stored as `nan`, in factor columns as the code `0`.
+
+### Column mapping
+
+Because numeric and factor columns are stored in two separate lists, the
+field `index` remembers where each column is stored. `get_column` uses
+`types` and `index` to find a column by its name:
+
+```
+names:  gender  cm       kg       ssize    smoker  ...
+types:  factor  numeric  numeric  numeric  factor  ...
+index:  0       0        1        2        1       ...
+```
+
+So `kg` is found in `numeric[1]` and `smoker` in `factors[1]`.
+
+### Row names
+
+In the survey file the header has 10 column names, but every data line has
+11 fields, because each line starts with a row number. As in R's
+`read.table`, `read_csv` detects this and stores the first field of each line
+in `row_names` instead of treating it as a data column.
+
+### Rows with a wrong number of fields
+
+Rows with too few fields are filled with missing values, rows with too many
+fields are cut. These rows are counted in `bad_rows` and a warning is
+printed.
+
+## Test with the survey dataset
+
+```{py}
+from csv_reader import read_csv, summary, get_column, numeric_matrix
+df = read_csv("survey-2021-11.tab.txt")
+summary(df)
+```
+
+The dataset was read with `py df.nrow` rows and `py df.ncol` columns, of which
+`py len(df.numeric)` are numeric and `py len(df.factors)` are factors.
+
+A single column and the numeric matrix, which is the input for the
+correlation analysis of the SNHA:
+
+```{py}
+print(get_column(df, "kg")["values"][:5])
+names, matrix = numeric_matrix(df)
+print(names)
+print(matrix[0])
+```

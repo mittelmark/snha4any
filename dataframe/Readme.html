@@ -1,0 +1,189 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="title" content="CSV Reader and DataFrame in Python Test">
+<meta name="author" content="Merve Sule Yildirim, University of Potsdam">
+    
+<title>CSV Reader and DataFrame in Python Test</title>
+    
+    
+
+
+<style>
+@import url("data:text/css;base64,QGltcG9ydCB1cmwoJ2h0dHBzOi8vZm9udHMuYnVubnkubmV0L2Nzcz9mYW1pbHk9QW5kaWthJmRpc3BsYXk9c3dhcCcpOyAKQGltcG9ydCB1cmwoJ2h0dHBzOi8vZm9udHMuYnVubnkubmV0L2Nzcz9mYW1pbHk9VWJ1bnR1K01vbm8mZGlzcGxheT1zd2FwJyk7IC8qICcgKi8KCmJvZHkgewogIHBhZGRpbmc6IDMwcHg7CiAgbWF4LXdpZHRoOiAxMDAwcHg7CiAgZm9udC1mYW1pbHk6IEFuZGlrYSwgc2Fucy1zZXJpZjsKICBtYXJnaW46IDAgYXV0bzsKfQoKaDEudGl0bGUsIHAuYXV0aG9yLCBwLmRhdGUsIGgyLmF1dGhvciwgaDIuZGF0ZSB7CiAgICB0ZXh0LWFsaWduOiBjZW50ZXI7Cn0KYSB7IHRleHQtZGVjb3JhdGlvbjogbm9uZSA7IH0KcHJlIHsKICAgIHBhZGRpbmc6IDEwcHggOwogICAgYm9yZGVyLXRvcDogMnB4IHNvbGlkICNDQ0NDQ0M7CiAgICBib3JkZXItYm90dG9tOiAycHggc29saWQgI0NDQ0NDQzsgCiAgICBmb250LWZhbWlseTogIlVidW50dSBNb25vIiwgbW9ub3NwYWNlOwp9CnByZTpoYXMoY29kZSkgewogICAgYmFja2dyb3VuZDogI2VmZWZlZjsKfQpwcmU6aGFzKGNvZGUudGNsY29kZSkgewogICAgYmFja2dyb3VuZDogY29ybnNpbGs7ICAgCn0KCnByZTpoYXMoY29kZS50Y2xvdXQpIHsgICAgCiAgICBiYWNrZ3JvdW5kOiAjQ0NFRUZGOwp9CnByZTpoYXMoY29kZS50Y2xlcnIpIHsgICAgCiAgICBiYWNrZ3JvdW5kOiAjRkZDQ0NDOwp9CnByZTpoYXMoY29kZS5lcnJvcikgeyAgICAKICAgIGJhY2tncm91bmQ6ICNGRkNDQ0M7Cn0KCnRhYmxlIHsgICAgCiAgYm9yZGVyLWNvbGxhcHNlOiBjb2xsYXBzZTsKICBib3JkZXItYm90dG9tOiAycHggc29saWQ7CiAgYm9yZGVyLXNwYWNpbmc6IDVweDsKICBtaW4td2lkdGg6IDUwMHB4Owp9CnRhYmxlIHRoZWFkIHRyIHRoIHsgCiAgYmFja2dyb3VuZC1jb2xvcjogI2ZkZTlkOTsKICB0ZXh0LWFsaWduOiBsZWZ0OyAKICBwYWRkaW5nOiA1cHg7CiAgYm9yZGVyLXRvcDogMnB4IHNvbGlkOwogIGJvcmRlci1ib3R0b206IDJweCBzb2xpZDsKfQp0YWJsZSB0ciB0ZCB7IAogIGJhY2tncm91bmQtY29sb3I6ICNmNmY2ZjY7CiAgdGV4dC1hbGlnbjogbGVmdDsgCiAgcGFkZGluZzogNXB4Owp9CgovKiBodHRwczovL2NvZGVwZW4uaW8vSGFycml4L3Blbi9wWlpaeGcgKi8KCmtiZCB7CiAgbWFyZ2luOiAwOwogIHBhZGRpbmc6IDA7CiAgYm9yZGVyOiAwOwogIG91dGxpbmU6IDA7CiAgY29sb3I6IGdyZXkyMDsKICBmb250LXNpemU6IDEwMCU7CiAgZm9udC1mYW1pbHk6IG1vbm9zcGFjZSwgc2Fucy1zZXJpZjsKICB2ZXJ0aWNhbC1hbGlnbjogYmFzZWxpbmU7CiAgYmFja2dyb3VuZDogdHJhbnNwYXJlbnQ7CiAgYm9yZGVyLWNvbG9yOiAjZTZlNmU2ICNiZWJlYmUgI2JlYmViZSAjZTZlNmU2OwogIGJvcmRlci1zdHlsZTogc29saWQ7CiAgYm9yZGVyLXdpZHRoOiAxcHggM3B4IDRweDsKICBwYWRkaW5nOiAwIDVweDsKICBiYWNrZ3JvdW5kLWNvbG9yOiAjZDJkMmQyOwogIGJhY2tncm91bmQtY29sb3I6IHJnYmEoMjEwLCAyMTAsIDIxMCwgMC45KTsKICAtd2Via2l0LWJvcmRlci1yYWRpdXM6IDRweDsKICAtbW96LWJvcmRlci1yYWRpdXM6IDRweDsKICBib3JkZXItcmFkaXVzOiA0cHg7Cn0KCmtiZC5tZW51IHsKICAtbW96LWJvcmRlci1yYWRpdXM6IDNweDsKICAtbW96LWJveC1zaGFkb3c6IDAgMXB4IDAgcmdiYSgwLCAwLCAwLCAwLjIpLCAwIDAgMCAycHggI2ZmZiBpbnNldDsKICAtd2Via2l0LWJvcmRlci1yYWRpdXM6IDNweDsKICAtd2Via2l0LWJveC1zaGFkb3c6IDAgMXB4IDAgcmdiYSgwLCAwLCAwLCAwLjIpLCAwIDAgMCAycHggI2ZmZiBpbnNldDsKICBiYWNrZ3JvdW5kLWNvbG9yOiAjZjdmN2Y3OwogIGJvcmRlcjogMXB4IHNvbGlkICNjY2M7CiAgYm9yZGVyLXJhZGl1czogM3B4OwogIGJveC1zaGFkb3c6IDAgMXB4IDAgcmdiYSgwLCAwLCAwLCAwLjIpLCAwIDAgMCAycHggI2ZmZiBpbnNldDsKICBjb2xvcjogIzMzMzsKICBkaXNwbGF5OiBpbmxpbmUtYmxvY2s7CiAgZm9udC1mYW1pbHk6IG1vbm9zcGFjZSwgc2Fucy1zZXJpZjsKICBmb250LXNpemU6IDEwMCU7CiAgbGluZS1oZWlnaHQ6IDEuNDsKICBtYXJnaW46IDAgMC4xZW07CiAgcGFkZGluZzogMC4xZW0gMC42ZW07CiAgdGV4dC1zaGFkb3c6IDAgMXB4IDAgI2ZmZjsKfQoKdSB7CiAgdGV4dC1kZWNvcmF0aW9uOiBub25lOwogIGZvbnQtd2VpZ2h0OiBib2xkOwogIGJvcmRlci1ib3R0b206MXB4IHNvbGlkIGJsYWNrOwp9CnNwYW4uZ3JleTcwIHsKICBiYWNrZ3JvdW5kLWNvbG9yOiAjYWFhOwogIHBhZGRpbmc6IDRweDsKfQovKiBBbGVydHM6ICovCgouc2lkZS13YXJuaW5nLCAuc2lkZS1jYXV0aW9uLCAuc2lkZS1pbmZvLCAuc2lkZS1xdWVzdGlvbiwgLnNpZGUtZXJyb3IsIC5zaWRlLW5vdGUsIC5zaWRlLXRpcCwgLnNpZGUtaW1wb3J0YW50LCAuc2lkZS1oaW50ICB7CiAgY29sb3I6IHZhcigtLXVzZWQtY29sb3IpOwogIG1hcmdpbi1ib3R0b206IDMycHg7CiAgbWFyZ2luLXRvcDogMTZweDsKICBwYWRkaW5nOiAxNnB4OwogIHBhZGRpbmctbGVmdDogNDhweDsKICBib3JkZXItcmFkaXVzOiA1cHggMCAwIDVweDsKICBwb3NpdGlvbjogcmVsYXRpdmU7ICAKfQouc2lkZS1lcnJvciwgLnNpZGUtY2F1dGlvbiB7CiAgYm9yZGVyLWxlZnQ6IHNvbGlkIDdweCAjYWEzMzIyOwogIGJvcmRlci10b3A6IHNvbGlkIDFweCAjZmZmMGYwOyAKICBib3JkZXItcmlnaHQ6IHNvbGlkIDFweCAjZmZmMGYwOyAKICBib3JkZXItYm90dG9tOiBzb2xpZCAxcHggI2ZmZjBmMDsgCiAgYmFja2dyb3VuZC1jb2xvcjogI2ZmZjBmMDsKICAKfQoKLnNpZGUtaW1wb3J0YW50LCAuc2lkZS1oaW50IHsKICBib3JkZXItbGVmdDogc29saWQgN3B4ICNhYTMzYWE7CiAgYm9yZGVyLXRvcDogc29saWQgMXB4ICNmZmYwZmY7IAogIGJvcmRlci1yaWdodDogc29saWQgMXB4ICNmZmYwZmY7IAogIGJvcmRlci1ib3R0b206IHNvbGlkIDFweCAjZmZmMGZmOyAKICBiYWNrZ3JvdW5kLWNvbG9yOiAjZmZmMGZmOwp9Cgouc2lkZS1ub3RlLCAuc2lkZS10aXAgewogIGJvcmRlci1sZWZ0OiBzb2xpZCA3cHggIzIyMzM5OTsKICBib3JkZXItdG9wOiBzb2xpZCAxcHggI2YwZjdmZjsgCiAgYm9yZGVyLXJpZ2h0OiBzb2xpZCAxcHggI2YwZjdmZjsgCiAgYm9yZGVyLWJvdHRvbTogc29saWQgMXB4ICNmMGY3ZmY7IAogIGJhY2tncm91bmQtY29sb3I6ICNmMGY3ZmY7CiAgCn0KCi5zaWRlLWluZm8gewogIGJvcmRlci1sZWZ0OiBzb2xpZCA3cHggIzMzOTkyMjsKICBib3JkZXItdG9wOiBzb2xpZCAxcHggI2Y3ZmZmMDsgCiAgYm9yZGVyLXJpZ2h0OiBzb2xpZCAxcHggI2Y3ZmZmMDsgCiAgYm9yZGVyLWJvdHRvbTogc29saWQgMXB4ICNmN2ZmZjA7IAogIGJhY2tncm91bmQtY29sb3I6ICNmN2ZmZjA7CiAgCn0KLnNpZGUtcXVlc3Rpb24gewogIGJvcmRlci1sZWZ0OiBzb2xpZCA3cHggIzk5OTkyMjsKICBib3JkZXItdG9wOiBzb2xpZCAxcHggI2ZmZmZmMDsgCiAgYm9yZGVyLXJpZ2h0OiBzb2xpZCAxcHggI2ZmZmZmMDsgCiAgYm9yZGVyLWJvdHRvbTogc29saWQgMXB4ICNmZmZmZjA7IAogIGJhY2tncm91bmQtY29sb3I6ICNmZmZmZjA7Cn0KLnNpZGUtd2FybmluZyB7CiAgYm9yZGVyLWxlZnQ6IHNvbGlkIDdweCAjZmY5OTMzOwogIGJvcmRlci10b3A6IHNvbGlkIDFweCAjZmZmN2YwOyAKICBib3JkZXItcmlnaHQ6IHNvbGlkIDFweCAjZmZmN2YwOyAKICBib3JkZXItYm90dG9tOiBzb2xpZCAxcHggI2ZmZjdmMDsgCiAgYmFja2dyb3VuZC1jb2xvcjogI2ZmZjdmMDsKfQoKLnNpZGUtaW5mbzo6YmVmb3JlLCAuc2lkZS13YXJuaW5nOjpiZWZvcmUsIC5zaWRlLWNhdXRpb246OmJlZm9yZSwgLnNpZGUtcXVlc3Rpb246OmJlZm9yZSwgLnNpZGUtZXJyb3I6OmJlZm9yZSwgLnNpZGUtbm90ZTo6YmVmb3JlLCAuc2lkZS10aXA6OmJlZm9yZSwgLnNpZGUtaW1wb3J0YW50OjpiZWZvcmUsIC5zaWRlLWhpbnQ6OmJlZm9yZSAgewogIGFsaWduLWl0ZW1zOiBjZW50ZXI7CiAgYm9yZGVyLXJhZGl1czogNTAlOwogIGRpc3BsYXk6IGZsZXg7CiAgZm9udC1mYW1pbHk6ICJVYnVudHUgTW9ubyIsIG1vbm9zcGFjZTsKICBmb250LXNpemU6IDE2cHg7CiAgZm9udC13ZWlnaHQ6IDcwMDsKICBoZWlnaHQ6IDI0cHg7CiAganVzdGlmeS1jb250ZW50OiBjZW50ZXI7CiAgbGVmdDogMTJweDsKICBsaW5lLWhlaWdodDogMTsKICBwb3NpdGlvbjogYWJzb2x1dGU7CiAgdG9wOiAxNXB4OwogIHdpZHRoOiAyNHB4Owp9Cgouc2lkZS1ub3RlOjpiZWZvcmUsIC5zaWRlLXRpcDo6YmVmb3JlIHsKICBiYWNrZ3JvdW5kLWNvbG9yOiAjMjIzMzk5OwogIGNvbG9yOiAjZmZmOwogIGNvbnRlbnQ6ICJOIjsKICAKfQoKLnNpZGUtaGludDo6YmVmb3JlIHsKICBiYWNrZ3JvdW5kLWNvbG9yOiAjOTkyMjk5OwogIGNvbG9yOiAjZmZmOwogIGNvbnRlbnQ6ICIhIjsKICAKfQoKLnNpZGUtaW1wb3J0YW50OjpiZWZvcmUgewogIGJhY2tncm91bmQtY29sb3I6ICM5OTMzOTk7CiAgY29sb3I6ICNmZmY7CiAgY29udGVudDogIiEiOwp9Cgouc2lkZS10aXA6OmJlZm9yZSB7CiAgYmFja2dyb3VuZC1jb2xvcjogIzIyMzM5OTsgCiAgY29udGVudDogIlwyNjFCIjsKICBmb250LXNpemU6IDExMCU7CiAgCn0KCi5zaWRlLWluZm86OmJlZm9yZSB7CiAgYmFja2dyb3VuZC1jb2xvcjogIzMzOTkyMjsKICBjb2xvcjogI2ZmZjsKICBjb250ZW50OiAiaSI7CiAgCn0KLnNpZGUtZXJyb3I6OmJlZm9yZSB7CiAgYmFja2dyb3VuZC1jb2xvcjogI2ZmZjBmMDsKICBjb2xvcjogI2ZmZjsKICBjb250ZW50OiAiXDI2RDQiOwogIGZvbnQtc2l6ZTogMTIwJTsKfQouc2lkZS1jYXV0aW9uOjpiZWZvcmUgewogIGJhY2tncm91bmQtY29sb3I6ICNhYTMzMjI7CiAgY29sb3I6ICNmZmY7CiAgY29udGVudDogIiEiOwp9Cgouc2lkZS1xdWVzdGlvbjo6YmVmb3JlIHsKICBiYWNrZ3JvdW5kLWNvbG9yOiAjOTk5OTIyOwogIGNvbG9yOiAjZmZmOwogIGNvbnRlbnQ6ICI/IjsKICAKfQoKLnNpZGUtd2FybmluZzo6YmVmb3JlIHsKICBiYWNrZ3JvdW5kLWNvbG9yOiAjZGQ2NjIyOwogIGNvbG9yOiAjZmZmOwogIGNvbnRlbnQ6ICIhIjsKICAKfQovKiBmaXggZm9yIEFzY2lpRG9jIHRhYmxlcyB3aXRoIHBhcmFncmFwaHMgKi8KcC50YWJsZWJsb2NrIHsgcGFkZGluZzogMHB4OyBtYXJnaW46IDBweDt9Cg==");
+</style>
+
+
+<style>
+</style>
+    
+</head>
+<body>
+    
+
+
+
+    <div class="document-header">
+<h1 class="title">CSV Reader and DataFrame in Python Test</h1>
+<h2 class="author">Merve Sule Yildirim, University of Potsdam</h2>
+<h2 class="date">2026-11-12</h2>
+    </div>
+
+<p><a href="https://htmlpreview.github.io/?https://github.com/mervesuleyd/snha4any/blob/dataframe-prototype/dataframe/Readme.html">View this documentation as a web page</a></p>
+<h2>Introduction</h2>
+
+<p>This is a Python prototype of a CSV reader that stores a dataset in a simple
+<code>DataFrame</code> structure. It is part of the project <em>Graph Prediction in
+Comparison with the St. Nicolas House Algorithm Using Fusion and SWIG</em>, where
+datasets have to be read before they can be analysed.</p>
+
+<p>Following the structure suggested by the supervisor, numeric and categorical
+(factor) columns are stored separately instead of storing every column in the
+same way, similar to data frames in R. This also prepares the later
+implementation in Fusion, where a list can only hold values of one type.</p>
+
+<p>The files relevant for this documentation are:</p>
+
+<ul>
+<li><code>csv_reader.py</code> - the CSV reader</li>
+<li><code>survey-2021-11.tab.txt</code> - tab-separated survey data used for testing
+</li></ul>
+
+<h2>Usage</h2>
+
+<p>The script only needs Python 3, no additional packages are required.</p>
+
+<pre class='code'><code>python3 csv_reader.py</code></pre>
+
+<p>The script reads <code>survey-2021-11.tab.txt</code> from the same folder and prints the
+resulting <code>DataFrame</code>, a summary and the numeric matrix. The reader can also
+be imported:</p>
+
+<pre class='code'><code>from csv_reader import read_csv, summary
+df = read_csv(&quot;survey-2021-11.tab.txt&quot;)
+summary(df)</code></pre>
+
+<h2>csv_reader.py</h2>
+
+<h3>DataFrame class</h3>
+
+<p>The <code>DataFrame</code> class has the following fields:</p>
+
+<ul>
+<li><code>nrow</code>, <code>ncol</code> - number of rows and columns</li>
+<li><code>names</code> - column names in the original order</li>
+<li><code>types</code> - <code>&quot;numeric&quot;</code> or <code>&quot;factor&quot;</code> for each column</li>
+<li><code>index</code> - position of each column inside <code>numeric</code> or <code>factors</code></li>
+<li><code>numeric</code> - the numeric columns, each with a <code>name</code> and a list of <code>values</code></li>
+<li><code>factors</code> - the factor columns, each with a <code>name</code>, <code>codes</code> and <code>levels</code></li>
+<li><code>row_names</code> - row names, if the file contains them</li>
+<li><code>bad_rows</code> - number of rows with a wrong number of fields
+</li></ul>
+
+<h3>Functions</h3>
+
+<ul>
+<li><code>read_csv(filename, separator=None)</code> reads the file and returns a
+  <code>DataFrame</code>. If no separator is given, tab is used when the header contains
+  a tab, otherwise comma.</li>
+<li><code>get_column(df, name)</code> returns a column by its name.</li>
+<li><code>numeric_matrix(df)</code> returns the names and the values of all numeric
+  columns as a matrix (one list per row).</li>
+<li><code>summary(df)</code> prints a short summary of every column, similar to
+  <code>summary()</code> in R.</li>
+<li><code>print_dataframe(df)</code> prints the column types and the first values.</li>
+<li><code>is_missing(value)</code>, <code>is_number(value)</code> and <code>make_factor(values)</code> are
+  helper functions.
+</li></ul>
+
+<h3>Column types</h3>
+
+<p>A column is numeric if all its values are numbers or missing, otherwise it is
+a factor. Numeric values are stored as floats:</p>
+
+<pre class='code'><code>cm:  163  180  158  179  NA   -&gt;  [163.0, 180.0, 158.0, 179.0, nan]</code></pre>
+
+<p>A factor is stored as a list of sorted <code>levels</code> and one integer <code>code</code> per
+row:</p>
+
+<pre class='code'><code class='python'>from csv_reader import make_factor
+codes, levels = make_factor([&quot;M&quot;, &quot;F&quot;, &quot;&quot;, &quot;F&quot;, &quot;M&quot;])
+print(&quot;levels:&quot;, levels)
+print(&quot;codes: &quot;, codes)</code></pre>
+
+<pre class='code'><code class='python'>levels: ['F', 'M']
+codes:  [2, 1, 0, 1, 2]</code></pre>
+
+<p>The code of a value is its position in <code>levels</code>, starting at <code>1</code>, so <code>F</code> is
+<code>1</code> and <code>M</code> is <code>2</code>. The original value is <code>levels[code - 1]</code>.</p>
+
+<h3>Missing values</h3>
+
+<p>The texts <code>&quot;&quot;</code>, <code>NA</code>, <code>NaN</code>, <code>nan</code> and <code>.</code> are treated as missing values. In
+numeric columns they are stored as <code>nan</code>, in factor columns as the code <code>0</code>.</p>
+
+<h3>Column mapping</h3>
+
+<p>Because numeric and factor columns are stored in two separate lists, the
+field <code>index</code> remembers where each column is stored. <code>get_column</code> uses
+<code>types</code> and <code>index</code> to find a column by its name:</p>
+
+<pre class='code'><code>names:  gender  cm       kg       ssize    smoker  ...
+types:  factor  numeric  numeric  numeric  factor  ...
+index:  0       0        1        2        1       ...</code></pre>
+
+<p>So <code>kg</code> is found in <code>numeric[1]</code> and <code>smoker</code> in <code>factors[1]</code>.</p>
+
+<h3>Row names</h3>
+
+<p>In the survey file the header has 10 column names, but every data line has
+11 fields, because each line starts with a row number. As in R's
+<code>read.table</code>, <code>read_csv</code> detects this and stores the first field of each line
+in <code>row_names</code> instead of treating it as a data column.</p>
+
+<h3>Rows with a wrong number of fields</h3>
+
+<p>Rows with too few fields are filled with missing values, rows with too many
+fields are cut. These rows are counted in <code>bad_rows</code> and a warning is
+printed.</p>
+
+<h2>Test with the survey dataset</h2>
+
+<pre class='code'><code class='python'>from csv_reader import read_csv, summary, get_column, numeric_matrix
+df = read_csv(&quot;survey-2021-11.tab.txt&quot;)
+summary(df)</code></pre>
+
+<pre class='code'><code class='python'>gender   factor   F: 375  M: 235  NA 7
+cm       numeric  min   150.0  mean   172.4  max   203.0  NA 8
+kg       numeric  min    40.0  mean    66.4  max   123.0  NA 28
+ssize    numeric  min    34.0  mean    40.5  max    49.0  NA 56
+smoker   factor   N: 540  Y: 74  NA 3
+meat     numeric  min     0.0  mean     3.1  max     7.0  NA 197
+symbol   factor   A: 2  AB: 59  AC: 14  AD: 53  AE: 6  B: 24  BC: 24  BD: 97  BDD: 1  BE: 2  C: 2  CD: 21  CE: 3  D: 8  DE: 1  E: 2  NA 298
+gp       numeric  min     1.0  mean     3.4  max     5.0  NA 10
+month    numeric  min     1.0  mean     6.4  max    12.0  NA 15
+girl     factor   O: 48  Y: 119  YO: 135  NA 315</code></pre>
+
+<p>The dataset was read with 617 rows and 10 columns, of which
+6 are numeric and 4 are factors.</p>
+
+<p>A single column and the numeric matrix, which is the input for the
+correlation analysis of the SNHA:</p>
+
+<pre class='code'><code class='python'>print(get_column(df, &quot;kg&quot;)[&quot;values&quot;][:5])
+names, matrix = numeric_matrix(df)
+print(names)
+print(matrix[0])</code></pre>
+
+<pre class='code'><code class='python'>[62.5, 80.0, 52.0, 79.0, 80.0]
+['cm', 'kg', 'ssize', 'meat', 'gp', 'month']
+[163.0, 62.5, 38.0, 3.0, 2.0, 7.0]</code></pre>
+
+
+
+</body>
+</html>
+
